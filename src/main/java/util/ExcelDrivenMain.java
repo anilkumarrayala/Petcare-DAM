@@ -7,15 +7,40 @@ public class ExcelDrivenMain {
 
     public static void main(String[] args) throws IOException {
 
-        String filePath = "C://Users//anil.kumar.rayala//Downloads//test-data-new.xlsx";
+        String filePath = "C://Project//MARS//test-1-PN-1.xlsx";
         String sourceSheetName = "Data";
-        String destinationSheetName = "Transforming";
-        String sourceColumnName = "ID";
-        String destinationColumnName = "AssetID";
-        int destinationColumnIndex = 0;
+        String destinationSheetName = "Transformed";
+        String sourceColumnName = "VERP";
+        String destinationColumnName = "VERP";
 
-        ExcelTransformationUtility.fieldToFieldColumnMapping(filePath, sourceSheetName, destinationSheetName, sourceColumnName, destinationColumnName);
-        ExcelTransformationUtility.splitAndMap(filePath, sourceSheetName, destinationSheetName,sourceColumnName, destinationColumnName);
+        /*
+        Field to Field Mapping
+         */
+
+        //ExcelTransformationUtility.fieldToFieldColumnMapping(filePath, sourceSheetName, destinationSheetName, sourceColumnName, destinationColumnName);
+
+
+        /*
+        Split with Delimeter and map the values into diff columns
+         */
+
+        String destinationColumnName1 = "Region";
+        String destinationColumnName2 = "Marketing Country";
+        //String destinationColumnName3 = "Sub-Type";
+        //ExcelTransformationUtility.splitAndMap(filePath, sourceSheetName, destinationSheetName,sourceColumnName, destinationColumnName1, destinationColumnName2);
+
+
+        /*
+        Split the values with delimeter "||" and append with "~" with unique values
+        (or) change the delimiter to be appended as per requirement in parseAndMapCellValues method
+        Split the values with delimeter "||" and append with "," with unique values
+
+        Ex: AVO||AVO||Music License||Music License -> AVO~Music License
+         */
+
+        ExcelTransformationUtility.parseAndMap(filePath, sourceSheetName, destinationSheetName, sourceColumnName, destinationColumnName);
+
+
 
 
     }
