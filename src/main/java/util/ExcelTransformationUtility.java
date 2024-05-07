@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class ExcelTransformationUtility {
@@ -47,19 +48,7 @@ public class ExcelTransformationUtility {
         } catch (IOException | IllegalArgumentException | IllegalStateException ex) {
             ex.printStackTrace();
         } finally {
-            try {
-                if (outputStream != null) {
-                    outputStream.close();
-                }
-                if (fis != null) {
-                    fis.close();
-                }
-                if (workbook != null) {
-                    workbook.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            closeResources(fis, outputStream, workbook);
         }
     }
 
@@ -152,24 +141,12 @@ public class ExcelTransformationUtility {
         } catch (IOException | IllegalArgumentException | IllegalStateException ex) {
             ex.printStackTrace();
         } finally {
-            try {
-                if (outputStream != null) {
-                    outputStream.close();
-                }
-                if (fis != null) {
-                    fis.close();
-                }
-                if (workbook != null) {
-                    workbook.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            closeResources(fis, outputStream, workbook);
         }
     }
 
     /*
-    Split the cell values based on delimeter and set the cell values w.r.t destination column index
+    Split the cell values based on delimiter and set the cell values w.r.t destination column index
      */
     private static void splitCellValueBasedOnDelimiter(Sheet sourceSheet, Sheet destinationSheet, int sourceColumnIndex, int... destinationColumnIndexes) {
         for (int i = 1; i <= sourceSheet.getLastRowNum(); i++) {
@@ -224,19 +201,7 @@ public class ExcelTransformationUtility {
         } catch (IOException | IllegalArgumentException | IllegalStateException ex) {
             ex.printStackTrace();
         } finally {
-            try {
-                if (outputStream != null) {
-                    outputStream.close();
-                }
-                if (fis != null) {
-                    fis.close();
-                }
-                if (workbook != null) {
-                    workbook.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            closeResources(fis, outputStream, workbook);
         }
     }
 
@@ -261,8 +226,8 @@ public class ExcelTransformationUtility {
                         value = value.trim();
                         if (!uniqueValues.contains(value)) {
                             if (concatenatedValue.length() > 0) {
-                                //concatenatedValue.append("~"); // Adding delimiter "~" between values
-                                concatenatedValue.append(","); // Adding delimiter "," between values
+                                concatenatedValue.append("~"); // Adding delimiter "~" between values
+                                //concatenatedValue.append(","); // Adding delimiter "," between values
                             }
                             concatenatedValue.append(value);
                             uniqueValues.add(value);
@@ -274,4 +239,177 @@ public class ExcelTransformationUtility {
             }
         }
     }
+
+    /*
+    Cleansing Example:Christmas^2018||Christmas^2018||Holiday^2019
+            -> Occasion = Christmas~Holiday
+            -> Year = 2018~2019
+     */
+
+    public static void parseAndMap(String filePath, String sourceSheetName, String destinationSheetName,
+                                   String sourceColumnName, String destinationColumnName1, String destinationColumnName2) throws IOException {
+        FileInputStream fis = null;
+        FileOutputStream outputStream = null;
+        Workbook workbook = null;
+
+        try {
+            fis = new FileInputStream(filePath);
+            workbook = WorkbookFactory.create(fis);
+
+            Sheet sourceSheet = workbook.getSheet(sourceSheetName);
+            Sheet destinationSheet = workbook.getSheet(destinationSheetName);
+
+            int sourceColumnIndex = getColumnIndex(sourceSheet, sourceColumnName);
+
+            int destinationColumnIndex1 = createColumn(destinationSheet, destinationColumnName1);
+            int destinationColumnIndex2 = createColumn(destinationSheet, destinationColumnName2);
+
+            if (sourceColumnIndex == -1) {
+                throw new IllegalArgumentException("Given source column name not found in the source sheet.");
+            }
+
+            parseAndMapCellValues(sourceSheet, destinationSheet, sourceColumnIndex, destinationColumnIndex1, destinationColumnIndex2);
+
+            outputStream = new FileOutputStream(filePath);
+            workbook.write(outputStream);
+        } finally {
+            closeResources(fis, outputStream, workbook);
+        }
+    }
+
+    private static void parseAndMapCellValues(Sheet sourceSheet, Sheet destinationSheet, int sourceColumnIndex,
+                                              int destinationColumnIndex1, int destinationColumnIndex2) {
+        for (int i = 1; i <= sourceSheet.getLastRowNum(); i++) {
+            Row sourceRow = sourceSheet.getRow(i);
+            Row destinationRow = destinationSheet.getRow(i);
+            if (destinationRow == null) {
+                destinationRow = destinationSheet.createRow(i);
+            }
+            Cell sourceCell = sourceRow.getCell(sourceColumnIndex);
+            if (sourceCell != null) {
+                String cellValue = sourceCell.getStringCellValue();
+                if (cellValue != null && !cellValue.isEmpty()) {
+                    Set<String> uniqueValues1 = new HashSet<>();
+                    Set<String> uniqueValues2 = new HashSet<>();
+                    StringBuilder destinationColName1 = new StringBuilder();
+                    StringBuilder destinationColName2 = new StringBuilder();
+                    String[] values = cellValue.split("\\|\\|");
+                    for (String value : values) {
+                        String[] subParts = value.split("\\^");
+                        if (subParts.length == 2) {
+                            String v1 = subParts[0].trim();
+                            String v2 = subParts[1].trim();
+                            if (!uniqueValues1.contains(v1)) {
+                                if (destinationColName1.length() > 0) {
+                                    destinationColName1.append("~");
+                                }
+                                destinationColName1.append(v1);
+                                uniqueValues1.add(v1);
+                            }
+                            if (!uniqueValues2.contains(v2)) {
+                                if (destinationColName2.length() > 0) {
+                                    destinationColName2.append("~");
+                                }
+                                destinationColName2.append(v2);
+                                uniqueValues2.add(v2);
+                            }
+                        }
+                    }
+                    Cell destinationCell1 = destinationRow.createCell(destinationColumnIndex1);
+                    destinationCell1.setCellValue(destinationColName1.toString());
+                    Cell destinationCell2 = destinationRow.createCell(destinationColumnIndex2);
+                    destinationCell2.setCellValue(destinationColName2.toString());
+                }
+            }
+        }
+    }
+
+    /*
+    Cleansing Example:Christmas^2018||Christmas^2018||Holiday^2018
+            -> Occasion = Christmas~Holiday
+     */
+
+    public static void parseAndMap1(String filePath, String sourceSheetName, String destinationSheetName,
+                                   String sourceColumnName, String destinationColumnName) throws IOException {
+        try (FileInputStream fis = new FileInputStream(filePath);
+             Workbook workbook = new XSSFWorkbook(fis)) {
+
+            Sheet sourceSheet = workbook.getSheet(sourceSheetName);
+            Sheet destinationSheet = workbook.getSheet(destinationSheetName);
+
+            if (sourceSheet == null || destinationSheet == null) {
+                System.out.println("Source or Destination sheet not found.");
+                return;
+            }
+
+            int sourceColumnIndex = getColumnIndex(sourceSheet, sourceColumnName);
+            int destinationColumnIndex = createColumn(destinationSheet, destinationColumnName);
+
+            if (sourceColumnIndex == -1) {
+                throw new IllegalArgumentException("Given source column name not found in the source sheet.");
+            }
+
+            // Process each row in the source sheet
+            for (int i = sourceSheet.getFirstRowNum()+1; i <= sourceSheet.getLastRowNum(); i++) {
+                Row sourceRow = sourceSheet.getRow(i);
+                if (sourceRow != null) {
+                    Cell sourceCell = sourceRow.getCell(sourceColumnIndex);
+                    if (sourceCell != null) {
+                        String cellValue = sourceCell.getStringCellValue();
+                        if (cellValue != null && !cellValue.isEmpty()) {
+                            Set<String> uniqueValues = parseAndExtractUniqueValues(cellValue);
+                            String concatenatedValues = String.join("~", uniqueValues);
+
+                            // Write the concatenated values to the destination column
+                            Row destinationRow = destinationSheet.getRow(i);
+                            if (destinationRow == null) {
+                                destinationRow = destinationSheet.createRow(i);
+                            }
+                            Cell destinationCell = destinationRow.createCell(destinationColumnIndex);
+                            destinationCell.setCellValue(concatenatedValues);
+                        }
+                    }
+                }
+            }
+
+            // Save changes to the workbook
+            try (FileOutputStream fos = new FileOutputStream(filePath)) {
+                workbook.write(fos);
+                System.out.println("Excel file updated successfully.");
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static Set<String> parseAndExtractUniqueValues(String cellValue) {
+        Set<String> uniqueValues = new HashSet<>();
+        String[] parts = cellValue.split("\\|\\|");
+        for (String part : parts) {
+            String[] subParts = part.split("\\^");
+            if (subParts.length == 2) {
+                uniqueValues.add(subParts[0]);
+            }
+        }
+        return uniqueValues;
+    }
+
+    private static void closeResources(FileInputStream fis, FileOutputStream outputStream, Workbook workbook) {
+        try {
+            if (outputStream != null) {
+                outputStream.close();
+            }
+            if (fis != null) {
+                fis.close();
+            }
+            if (workbook != null) {
+                workbook.close();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
+
+
