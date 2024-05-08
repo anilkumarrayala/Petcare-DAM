@@ -464,6 +464,77 @@ public class ExcelTransformationUtility {
         }
     }
 
+    /*
+    Columns = Region/Marketing Country 1, Region/Marketing Country 2
+    append with path = /DAM/MarketingRegionMarketingCountry/
+     */
+    public static void pickAndConcatenate(String filePath, String sourceSheetName, String destinationSheetName,
+                                          String sourceColumnName1, String sourceColumnName2, String destinationColumnName) throws IOException {
+        try {
+            FileInputStream fis = new FileInputStream(filePath);
+            Workbook workbook = WorkbookFactory.create(fis);
+
+            Sheet sourceSheet = workbook.getSheet(sourceSheetName);
+            Sheet destinationSheet = workbook.getSheet(destinationSheetName);
+
+            // Get column indices by column names
+            int sourceColumnIndex1 = getColumnIndex(sourceSheet, sourceColumnName1);
+            int sourceColumnIndex2 = getColumnIndex(sourceSheet, sourceColumnName2);
+
+            int destinationColumnIndex = createColumn(destinationSheet, destinationColumnName);
+
+            if (sourceColumnIndex1 == -1) {
+                throw new IllegalArgumentException("Given source column name not found in the source sheet.");
+            }
+
+            if (sourceColumnIndex2 == -1) {
+                throw new IllegalArgumentException("Given source column name not found in the source sheet.");
+            }
+
+            // Iterate through each row in the source sheet
+            for (int i = 1; i <= sourceSheet.getLastRowNum(); i++) {
+                Row sourceRow = sourceSheet.getRow(i);
+                Row destinationRow = destinationSheet.getRow(i);
+                if (destinationRow == null) {
+                    destinationRow = destinationSheet.createRow(i);
+                }
+                // Get values from the two columns
+                String value1 = sourceRow.getCell(sourceColumnIndex1).getStringCellValue();
+                String value2 = sourceRow.getCell(sourceColumnIndex2).getStringCellValue();
+
+                // Split value1 and value2 into parts based on the delimiter ||
+                String[] parts1 = value1.split("\\|\\|");
+                String[] parts2 = value2.split("\\|\\|");
+
+                // Create StringBuilder to accumulate concatenated values
+                StringBuilder concatenatedValues = new StringBuilder();
+
+                // Iterate over parts of value1 and value2
+                for (int j = 0; j < Math.min(parts1.length, parts2.length); j++) {
+                    // Append concatenated value to StringBuilder
+                    concatenatedValues.append("/DAM/MarketingRegionMarketingCountry/")
+                            .append(parts1[j]).append("/")
+                            .append(parts1[0]).append(parts2[j]).append(";");
+                }
+
+                // Create new cell in destination sheet and set the concatenated value
+                Cell destCell = destinationRow.createCell(destinationColumnIndex);
+                destCell.setCellValue(concatenatedValues.toString());
+            }
+
+           // Write the destination workbook to a file
+            FileOutputStream outputStream = new FileOutputStream(filePath);
+            workbook.write(outputStream);
+            System.out.println("Column mapped successfully");
+            // Close resources
+            outputStream.close();
+            fis.close();
+            workbook.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     private static void closeResources(FileInputStream fis, FileOutputStream outputStream, Workbook workbook) {
         try {

@@ -10,7 +10,7 @@ public class ExcelDrivenMain {
         String filePath = "C://Project//MARS//test-1-PN-1.xlsx";
         String sourceSheetName = "Data";
         String destinationSheetName = "Transformed";
-        String sourceColumnName = "Occasion";
+        //String sourceColumnName = "Occasion";
         //String destinationColumnName = "Occasion";
 
         /*
@@ -67,8 +67,18 @@ public class ExcelDrivenMain {
         -> Year = 2018~2019
          */
 
-        String destinationColumnName = "Year";
-        ExcelTransformationUtility.parseAndMap2(filePath, sourceSheetName, sourceColumnName, destinationSheetName, destinationColumnName);
+//        String destinationColumnName = "Year";
+//        ExcelTransformationUtility.parseAndMap2(filePath, sourceSheetName, sourceColumnName, destinationSheetName, destinationColumnName);
+
+        /*
+        Columns = Region/Marketing Country 1, Region/Marketing Country 2
+        append with path = /DAM/MarketingRegionMarketingCountry/
+         */
+
+        String sourceColumnName1 = "Region/Marketing Country 1";
+        String sourceColumnName2 = "Region/Marketing Country 2";
+        String destinationColumnName = "MarketingRegionMarketingCountry";
+        ExcelTransformationUtility.pickAndConcatenate(filePath, sourceSheetName, destinationSheetName,sourceColumnName1, sourceColumnName2, destinationColumnName);
 
     }
 
