@@ -3,8 +3,7 @@ package util;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -107,6 +106,7 @@ public class ExcelTransformationUtility {
 
     /*
     Logic to map split values separated w.r.t delimiter with n number of column names in destination sheet
+    Columns: Category/Type/Sub-Type, Region/Marketing Country,
      */
     public static void splitAndMap(String filePath, String sourceSheetName, String destinationSheetName, String sourceColumnName, String... destinationColumnNames) throws IOException {
         FileInputStream fis = null;
@@ -172,7 +172,9 @@ public class ExcelTransformationUtility {
         }
     }
 
-
+    /*
+    Columns = Product Image Angle, FERT, Language
+     */
     public static void parseAndMap(String filePath, String sourceSheetName, String destinationSheetName, String sourceColumnName, String destinationColumnName) throws IOException {
         FileInputStream fis = null;
         FileOutputStream outputStream = null;
@@ -241,6 +243,7 @@ public class ExcelTransformationUtility {
     }
 
     /*
+    Column = Occasion
     Cleansing Example:Christmas^2018||Christmas^2018||Holiday^2019
             -> Occasion = Christmas~Holiday
             -> Year = 2018~2019
@@ -325,8 +328,9 @@ public class ExcelTransformationUtility {
     }
 
     /*
-    Cleansing Example:Christmas^2018||Christmas^2018||Holiday^2018
-            -> Occasion = Christmas~Holiday
+    Cleansing Example: Occasion
+           Christmas^2018||Christmas^2018||Holiday^2018
+           -> Occasion = Christmas~Holiday
      */
 
     public static void parseAndMap1(String filePath, String sourceSheetName, String destinationSheetName,
@@ -394,6 +398,72 @@ public class ExcelTransformationUtility {
         }
         return uniqueValues;
     }
+
+        /*
+        Column = Occasion year
+        Christmas^2018||Christmas^2018||Holiday^2019
+        -> Year = 2018~2019
+        */
+
+    public static void parseAndMap2(String filePath, String sourceSheetName, String sourceColumnName,
+                                   String destinationSheetName, String destinationColumnName) throws IOException {
+        FileInputStream fis = new FileInputStream(filePath);
+        Workbook workbook = WorkbookFactory.create(fis);
+
+        Sheet sourceSheet = workbook.getSheet(sourceSheetName);
+        Sheet destinationSheet = workbook.getSheet(destinationSheetName);
+
+        int sourceColumnIndex = getColumnIndex(sourceSheet, sourceColumnName);
+        int destinationColumnIndex = createColumn(destinationSheet, destinationColumnName);
+
+        if (sourceColumnIndex == -1) {
+            throw new IllegalArgumentException("Given source column name not found in the source sheet.");
+        }
+
+        parseAndMapCellValues2(sourceSheet, destinationSheet, sourceColumnIndex, destinationColumnIndex);
+
+        // Write changes to the workbook
+        FileOutputStream outputStream = new FileOutputStream(filePath);
+        workbook.write(outputStream);
+        System.out.println("Column Mapped Successfully");
+        // Close resources
+        outputStream.close();
+        fis.close();
+        workbook.close();
+    }
+
+    private static void parseAndMapCellValues2(Sheet sourceSheet, Sheet destinationSheet,
+                                              int sourceColumnIndex, int destinationColumnIndex) {
+        for (int i = 1; i <= sourceSheet.getLastRowNum(); i++) {
+            Row sourceRow = sourceSheet.getRow(i);
+            Row destinationRow = destinationSheet.getRow(i);
+            if (destinationRow == null) {
+                destinationRow = destinationSheet.createRow(i);
+            }
+            Cell sourceCell = sourceRow.getCell(sourceColumnIndex);
+            if (sourceCell != null) {
+                String cellValue = sourceCell.getStringCellValue();
+                if (cellValue != null && !cellValue.isEmpty()) {
+                    Set<String> uniqueValues = new HashSet<>();
+                    String[] values = cellValue.split("\\|\\|");
+                    for (String value : values) {
+                        String[] subParts = value.split("\\^");
+                        if (subParts.length >= 2) {
+                            String year = subParts[1].trim();
+                            uniqueValues.add(year);
+                        }
+                    }
+                    //To sort the values in ascending order (Ex: 2018~2019)
+                    List<String> sortedValues = new ArrayList<>(uniqueValues);
+                    Collections.sort(sortedValues);
+                    String concatenatedValue = String.join("~", sortedValues);
+                    Cell destinationCell = destinationRow.createCell(destinationColumnIndex);
+                    destinationCell.setCellValue(concatenatedValue);
+                }
+            }
+        }
+    }
+
 
     private static void closeResources(FileInputStream fis, FileOutputStream outputStream, Workbook workbook) {
         try {
