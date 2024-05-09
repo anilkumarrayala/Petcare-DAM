@@ -2,6 +2,7 @@ package util;
 
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class ExcelDrivenMain {
 
@@ -14,10 +15,16 @@ public class ExcelDrivenMain {
         //String destinationColumnName = "Occasion";
 
         /*
-        Field to Field Mapping
+        Field to Field Mapping:
+
+        &EXPORT_PATH -> Title, ID -> AssetID, Name -> FileName, Asset Version -> LegacyAssetVersion, Date: Imported -> ImportedDate, Embargo Date -> EmbargoDate,
+        Expiration Date -> ExpirationDate, Is Latest Version -> Is Latest Version, Original Asset ID -> Original Asset ID, Version Description -> Version Description,
+        Agency/Partner/Vendor -> Agency/Partner/Vendor, Asset Creation Date -> Asset Creation Date, Asset Live Date -> AssetDate
+
          */
-        //String destinationColumnName = "Occasion";
-        //ExcelTransformationUtility.fieldToFieldColumnMapping(filePath, sourceSheetName, destinationSheetName, sourceColumnName, destinationColumnName);
+        String sourceColumnName = "Brand";
+        String destinationColumnName = "Brand";
+        ExcelTransformationUtility.fieldToFieldColumnMapping(filePath, sourceSheetName, destinationSheetName, sourceColumnName, destinationColumnName);
 
 
         /*
@@ -75,10 +82,32 @@ public class ExcelDrivenMain {
         append with path = /DAM/MarketingRegionMarketingCountry/
          */
 
-        String sourceColumnName1 = "Region/Marketing Country 1";
-        String sourceColumnName2 = "Region/Marketing Country 2";
-        String destinationColumnName = "MarketingRegionMarketingCountry";
-        ExcelTransformationUtility.pickAndConcatenate(filePath, sourceSheetName, destinationSheetName,sourceColumnName1, sourceColumnName2, destinationColumnName);
+//        String sourceColumnName1 = "Region/Marketing Country 1";
+//        String sourceColumnName2 = "Region/Marketing Country 2";
+//        String destinationColumnName = "MarketingRegionMarketingCountry";
+//        ExcelTransformationUtility.pickAndConcatenate(filePath, sourceSheetName, destinationSheetName,sourceColumnName1, sourceColumnName2, destinationColumnName);
+
+
+        /*
+        Rearranging column order
+
+        we are providing the sourceSheetName of which the the columns are to be rearranged, and the destinationSheetName is the sheetName where it'll create a new sheet with
+        that name in the same workbook and the rearranged data will be stored.
+        Once the rearranged data is stored in Rearranged sheet, the sourceSheet is deleted.
+         */
+
+//        String sourceSheetName = "Transformed";
+//        String destinationSheetName = "Rearranged";
+//
+//        ArrayList<String> columnOrder = new ArrayList<>();
+//        columnOrder.add("Year1");
+//        columnOrder.add("Year2");
+//        columnOrder.add("Year3");
+//        columnOrder.add("Year4");
+//        columnOrder.add("Year5");
+//
+//        ExcelTransformationUtility.rearrangeColumns(filePath, sourceSheetName, destinationSheetName, columnOrder);
+
 
     }
 

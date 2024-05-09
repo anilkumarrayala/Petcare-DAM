@@ -1,12 +1,12 @@
 package util;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.*;
 
 import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class ExcelTransformationUtility {
@@ -514,7 +514,12 @@ public class ExcelTransformationUtility {
                     // Append concatenated value to StringBuilder
                     concatenatedValues.append("/DAM/MarketingRegionMarketingCountry/")
                             .append(parts1[j]).append("/")
-                            .append(parts1[0]).append(parts2[j]).append(";");
+                            .append(parts1[0]).append(parts2[j]);
+
+                    // Append ";" if it's not the last iteration
+                    if (j < Math.min(parts1.length, parts2.length) - 1) {
+                        concatenatedValues.append(";");
+                    }
                 }
 
                 // Create new cell in destination sheet and set the concatenated value
@@ -522,7 +527,7 @@ public class ExcelTransformationUtility {
                 destCell.setCellValue(concatenatedValues.toString());
             }
 
-           // Write the destination workbook to a file
+            // Write the destination workbook to a file
             FileOutputStream outputStream = new FileOutputStream(filePath);
             workbook.write(outputStream);
             System.out.println("Column mapped successfully");
@@ -533,6 +538,72 @@ public class ExcelTransformationUtility {
 
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    public static void rearrangeColumns(String filePath, String sourceSheetName, String destinationSheetName, ArrayList<String> columnOrder) throws IOException {
+        FileInputStream fis = null;
+        FileOutputStream outputStream = null;
+        Workbook workbook = null;
+
+        try {
+            fis = new FileInputStream(filePath);
+            workbook = WorkbookFactory.create(fis);
+            Sheet sourceSheet = workbook.getSheet(sourceSheetName);
+
+            // Create a mapping of column names to their corresponding column indices in the source sheet
+            Map<String, Integer> columnIndexMap = new HashMap<>();
+            Row headerRow = sourceSheet.getRow(0);
+            for (Cell cell : headerRow) {
+                columnIndexMap.put(cell.getStringCellValue(), cell.getColumnIndex());
+            }
+
+            // Create a new sheet with the desired column order
+            Sheet destinationSheet = workbook.createSheet(destinationSheetName);
+            Row destinationHeaderRow = destinationSheet.createRow(0);
+
+            // Copy header row with rearranged columns
+            for (int i = 0; i < columnOrder.size(); i++) {
+                String columnName = columnOrder.get(i);
+                if (columnIndexMap.containsKey(columnName)) {
+                    int sourceColumnIndex = columnIndexMap.get(columnName);
+                    Cell sourceCell = headerRow.getCell(sourceColumnIndex);
+                    Cell destinationCell = destinationHeaderRow.createCell(i);
+                    destinationCell.setCellValue(sourceCell.getStringCellValue());
+                }
+            }
+
+            // Copy data from source sheet to destination sheet
+            for (int rowIndex = 1; rowIndex <= sourceSheet.getLastRowNum(); rowIndex++) {
+                Row sourceRow = sourceSheet.getRow(rowIndex);
+                Row destinationRow = destinationSheet.createRow(rowIndex);
+                for (int i = 0; i < columnOrder.size(); i++) {
+                    String columnName = columnOrder.get(i);
+                    if (columnIndexMap.containsKey(columnName)) {
+                        int sourceColumnIndex = columnIndexMap.get(columnName);
+                        Cell sourceCell = sourceRow.getCell(sourceColumnIndex);
+                        Cell destinationCell = destinationRow.createCell(i);
+                        if (sourceCell != null) {
+                            destinationCell.setCellValue(sourceCell.getStringCellValue());
+                        }
+                    }
+                }
+            }
+
+            // Remove the original sheet and rename the new sheet
+            workbook.removeSheetAt(workbook.getSheetIndex(sourceSheet));
+            workbook.setSheetName(workbook.getSheetIndex(destinationSheet), sourceSheetName);
+
+            // Write the updated workbook to a file
+            outputStream = new FileOutputStream(filePath);
+            workbook.write(outputStream);
+            System.out.println("Columns rearranged successfully!");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            // Close resources
+            closeResources(fis, outputStream, workbook);
         }
     }
 
