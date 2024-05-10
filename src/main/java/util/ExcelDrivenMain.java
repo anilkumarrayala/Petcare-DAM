@@ -3,112 +3,57 @@ package util;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 public class ExcelDrivenMain {
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException,Exception {
 
         String filePath = "C://Project//MARS//test-1-PN-1.xlsx";
         String sourceSheetName = "Data";
         String destinationSheetName = "Transformed";
-        //String sourceColumnName = "Occasion";
-        //String destinationColumnName = "Occasion";
+        String destinationSheetName1 = "Final";
+        ProjectConstants projectConstants = new ProjectConstants();
+        // Parse and map
+        List LHSplitColumnName =  projectConstants.getLHSplitReplaceColumnNames();
+        List AprimoSplitColumnName =  projectConstants.getAprimoSplitReplaceColumnNames();
+        Iterator<String> it5 = LHSplitColumnName.iterator();
+        Iterator<String> it6 = AprimoSplitColumnName.iterator();
+        while(it5.hasNext() && it6.hasNext())
+        {
+            ExcelTransformationUtility.parseAndMapSingleColumn(filePath,sourceSheetName, destinationSheetName, it5.next(), it6.next(),';');
 
-        /*
-        Field to Field Mapping:
+        }
+        //Field to Field mapping with date transformations
+        List LHDateColumns =  projectConstants.getLHDateColumnName();
+        List AprimoDateColumns =  projectConstants.getAprimoDateColumnName();
+        Iterator<String> it3 = LHDateColumns.iterator();
+        Iterator<String> it4 = AprimoDateColumns.iterator();
+        while(it3.hasNext() && it4.hasNext())
+        {
+            ExcelTransformationUtility.mapDateFields(filePath,sourceSheetName, destinationSheetName, it3.next(), it4.next(),';');
+        }
 
-        &EXPORT_PATH -> Title, ID -> AssetID, Name -> FileName, Asset Version -> LegacyAssetVersion, Date: Imported -> ImportedDate, Embargo Date -> EmbargoDate,
-        Expiration Date -> ExpirationDate, Is Latest Version -> Is Latest Version, Original Asset ID -> Original Asset ID, Version Description -> Version Description,
-        Agency/Partner/Vendor -> Agency/Partner/Vendor, Asset Creation Date -> Asset Creation Date, Asset Live Date -> AssetDate
+        //Field to Field mapping
+        List LHColumnName =  projectConstants.getLightHouseColumnName();
+        List AprimoColumnName =  projectConstants.getAprimoColumnName();
+        Iterator<String> it1 = LHColumnName.iterator();
+        Iterator<String> it2 = AprimoColumnName.iterator();
+        while(it1.hasNext() && it2.hasNext())
+        {
+            ExcelTransformationUtility.fieldToFieldColumnMapping(filePath,sourceSheetName, destinationSheetName, it1.next(), it2.next());
+        }
 
-         */
-        String sourceColumnName = "Brand";
-        String destinationColumnName = "Brand";
-        ExcelTransformationUtility.fieldToFieldColumnMapping(filePath, sourceSheetName, destinationSheetName, sourceColumnName, destinationColumnName);
+        String sourceColumnName1 = "Region/Marketing Country 1";
+        String sourceColumnName2 = "Region/Marketing Country 2";
+        String destinationColumnName1 = "Region/MarketingCountry";
+        ExcelTransformationUtility.pickAndConcatenate(filePath, sourceSheetName, destinationSheetName,sourceColumnName1, sourceColumnName2, destinationColumnName1,';');
 
-
-        /*
-        Split with Delimiter "^" and map the values into diff columns
-        Cleansing Example: Digital^eCommerce Secondary Images^N/A ->
-        Asset Category = Digital
-        Type = eCommerce Secondary Images
-        Sub-Type = N/A
-         */
-
-        //String destinationColumnName1 = "Asset Category";
-        //String destinationColumnName2 = "Type";
-        //String destinationColumnName3 = "Sub-Type";
-        //ExcelTransformationUtility.splitAndMap(filePath, sourceSheetName, destinationSheetName,sourceColumnName, destinationColumnName1, destinationColumnName2);
-
-
-        /*
-        Split the values with delimeter "||" and append with "~" with unique values
-        (or) change the delimiter to be appended as per requirement in parseAndMapCellValues method
-        Split the values with delimeter "||" and append with "," with unique values
-        Cleansing Example: AVO||AVO||Music License||Music License -> AVO~Music License
-         */
-
-        //ExcelTransformationUtility.parseAndMap(filePath, sourceSheetName, destinationSheetName, sourceColumnName, destinationColumnName);
-
-
-        /*
-        Occasion = Christmas^2018||Christmas^2018||Holiday^2019 ->
-            Occasion = Christmas~Holiday
-            Year = 2018~2019
-         */
-        //ExcelTransformationUtility.parseAndMapping(filePath, sourceSheetName,destinationSheetName,sourceColumnName, destinationColumnName1, destinationColumnName2);
-
-
-        /*
-        Cleansing Example:Christmas^2018||Christmas^2018||Holiday^2019
-        -> Occasion = Christmas~Holiday
-        -> Year = 2018~2019
-         */
-        //String destinationColumnName = "Occasion";
-        //String destinationColumnName2 = "Year";
-        //ExcelTransformationUtility.parseAndMap1(filePath, sourceSheetName, destinationSheetName, sourceColumnName,
-                //destinationColumnName);
-
-        /*
-        Cleansing Example:Christmas^2018||Christmas^2018||Holiday^2019
-        -> Year = 2018~2019
-         */
-
-//        String destinationColumnName = "Year";
-//        ExcelTransformationUtility.parseAndMap2(filePath, sourceSheetName, sourceColumnName, destinationSheetName, destinationColumnName);
-
-        /*
-        Columns = Region/Marketing Country 1, Region/Marketing Country 2
-        append with path = /DAM/MarketingRegionMarketingCountry/
-         */
-
-//        String sourceColumnName1 = "Region/Marketing Country 1";
-//        String sourceColumnName2 = "Region/Marketing Country 2";
-//        String destinationColumnName = "MarketingRegionMarketingCountry";
-//        ExcelTransformationUtility.pickAndConcatenate(filePath, sourceSheetName, destinationSheetName,sourceColumnName1, sourceColumnName2, destinationColumnName);
-
-
-        /*
-        Rearranging column order
-
-        we are providing the sourceSheetName of which the the columns are to be rearranged, and the destinationSheetName is the sheetName where it'll create a new sheet with
-        that name in the same workbook and the rearranged data will be stored.
-        Once the rearranged data is stored in Rearranged sheet, the sourceSheet is deleted.
-         */
-
-//        String sourceSheetName = "Transformed";
-//        String destinationSheetName = "Rearranged";
-//
-//        ArrayList<String> columnOrder = new ArrayList<>();
-//        columnOrder.add("Year1");
-//        columnOrder.add("Year2");
-//        columnOrder.add("Year3");
-//        columnOrder.add("Year4");
-//        columnOrder.add("Year5");
-//
-//        ExcelTransformationUtility.rearrangeColumns(filePath, sourceSheetName, destinationSheetName, columnOrder);
-
-
+        //Rearranging column order
+        List columnOrder =  projectConstants.getColumnOrder();
+       ExcelTransformationUtility.rearrangeColumns(filePath, destinationSheetName, destinationSheetName1,  columnOrder);
+    }
     }
 
-}
+
