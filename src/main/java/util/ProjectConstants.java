@@ -25,7 +25,7 @@ public class ProjectConstants {
     }
 
     private    List ColumnOrder =
-            Arrays.asList(new String[] {"AssetID", "Title" , "LegacyAssetVersion","ImportedDate", "EmbargoDate","ExpirationDate","IsLatestVersion",
+            Arrays.asList(new String[] {"AssetID", "Title" , "LegacyAssetVersion", "ExportDate", "ImportedDate", "EmbargoDate","ExpirationDate","IsLatestVersion",
                     "AgencyPartner", "AssetCategory","AssetType","AssetSubType", "AssetCreationDate","AssetDate","Status","CampaignName", "MarsCampaignCode","CampaignEndDate","CampaignStartDate",
                     "CustomerSpecific","DataClassification","Description","Keywords","FileName","HealthBenefit","SourceFile", "TransparentBackground",
                     "NetWeight","PetLifestage","PieceCount","PlatformSpecifications","RightsRestricted","PetSize","Brightcove Asset ID","Brightcove Asset Name","BrightcoveRemovedBy","BrightcoveRemovedDate",
@@ -58,11 +58,11 @@ public class ProjectConstants {
         return LHDateColumnName;
     }
 
-    private  List AprimoDateColumnName = Arrays.asList(new String[] {"AssetCreationDate","ImportedDate", "EmbargoDate","ExpirationDate","AssetDate",
+    private  List AprimoDateColumnName = Arrays.asList(new String[] {"AssetCreationDate","ExportDate","ImportedDate", "EmbargoDate","ExpirationDate","AssetDate",
             "CampaignEndDate","CampaignStartDate", "BrightcoveRemovedDate","CoverageStartDate","CoverageEndDate","is-related-to"});
 
     private    List LHDateColumnName =
-            Arrays.asList(new String[] {"Asset Creation Date","Date: Imported", "Embargo Date","Expiration Date","Asset Live Date",
+            Arrays.asList(new String[] {"Asset Creation Date", "&EXPORT_TIME","Date: Imported","Embargo Date","Expiration Date","Asset Live Date",
                     "Campaign End Date","Campaign Start Date", "Removed Dt", "Coverage Start Date","Coverage End Date", "&LINKS:RELATED"});
 
 

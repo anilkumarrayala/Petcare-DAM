@@ -1,10 +1,10 @@
 package util;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -655,21 +655,61 @@ public class ExcelTransformationUtility {
             e.printStackTrace();
         }
     }
-    public static String dateFormatter(String dateColumnValue) {
-        DateFormat targetFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss a");
-        DateFormat originalFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+//    public static String dateFormatter(String dateColumnValue) {
+//        DateFormat targetFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss a");
+//        DateFormat originalFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+//        String formattedDate = null;
+//        Date date = new Date();
+//        try {
+//            if(!dateColumnValue.isEmpty()){
+//                date = originalFormat.parse(dateColumnValue);
+//                formattedDate = targetFormat.format(date);
+//            }} catch (Exception pe) {
+//            System.out.println(pe);
+//        }
+//        return formattedDate;
+//    }
+
+    public static String dateFormatter(String dateColumnValue) throws ParseException {
+        String targetFormatStr = "dd/MM/yyyy hh:mm:ss a";
+        String originalFormatStr1 = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
+        String originalFormatStr2 = "yyyy-MM-dd HH:mm:ss.SSS";
+        DateFormat targetFormat = new SimpleDateFormat(targetFormatStr);
         String formattedDate = null;
-        Date date = new Date();
         try {
-            if(!dateColumnValue.isEmpty()){
-                date = originalFormat.parse(dateColumnValue);
-                formattedDate = targetFormat.format(date);
-            }} catch (Exception pe) {
-            System.out.println(pe);
+            if (!dateColumnValue.isEmpty()) {
+                Date date = null;
+                boolean parsed = false;
+                if (originalFormatStr1.equals("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")) {
+                    DateFormat originalFormat1 = new SimpleDateFormat(originalFormatStr1);
+                    originalFormat1.setTimeZone(TimeZone.getTimeZone("UTC"));
+                    try {
+                        date = originalFormat1.parse(dateColumnValue);
+                        parsed = true;
+                    } catch (ParseException e) {
+                        // Parsing failed, try the next format
+                    }
+                }
+                if (!parsed && originalFormatStr2.equals("yyyy-MM-dd HH:mm:ss.SSS")) {
+                    DateFormat originalFormat2 = new SimpleDateFormat(originalFormatStr2);
+                    try {
+                        date = originalFormat2.parse(dateColumnValue);
+                        parsed = true;
+                    } catch (ParseException e) {
+                        // Parsing failed for both formats
+                        throw new ParseException("Unparseable date: " + dateColumnValue, 0);
+                    }
+                }
+                if (parsed) {
+                    formattedDate = targetFormat.format(date);
+                }
+            }
+        } catch (ParseException pe) {
+            // If parsing fails, print the error and return null
+            pe.printStackTrace();
         }
         return formattedDate;
     }
-
 
     public static Date stringToDateConversion(String formattedDate) {
         DateFormat targetFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss a");
@@ -737,7 +777,7 @@ public class ExcelTransformationUtility {
             workbook.write(outputStream);
 
             System.out.println("Dates Tranformation applied in column " + sourceColumnName + "mapped successfully to " + destinationColumnName);
-        } catch(IOException | IllegalArgumentException | IllegalStateException ex){
+        } catch(IOException | IllegalArgumentException | IllegalStateException | ParseException ex){
             ex.printStackTrace();
         } finally{
             try {
