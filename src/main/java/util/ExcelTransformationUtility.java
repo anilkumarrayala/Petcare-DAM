@@ -682,7 +682,6 @@ public class ExcelTransformationUtility {
                 boolean parsed = false;
                 if (originalFormatStr1.equals("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")) {
                     DateFormat originalFormat1 = new SimpleDateFormat(originalFormatStr1);
-                    originalFormat1.setTimeZone(TimeZone.getTimeZone("UTC"));
                     try {
                         date = originalFormat1.parse(dateColumnValue);
                         parsed = true;
