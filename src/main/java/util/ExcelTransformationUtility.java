@@ -5,7 +5,12 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 import org.apache.poi.ss.usermodel.*;
@@ -504,7 +509,7 @@ public class ExcelTransformationUtility {
     append with path = /DAM/MarketingRegionMarketingCountry/
      */
     public static void pickAndConcatenate(String filePath, String sourceSheetName, String destinationSheetName,
-                                          String sourceColumnName1, String sourceColumnName2, String destinationColumnName, char deLimiter) throws IOException {
+                                          String sourceColumnName1, String sourceColumnName2, String destinationColumnName, char deLimiter, String appendStringValue) throws IOException {
         try {
             FileInputStream fis = new FileInputStream(filePath);
             workbook = WorkbookFactory.create(fis);
@@ -545,12 +550,23 @@ public class ExcelTransformationUtility {
                 StringBuilder concatenatedValues = new StringBuilder();
 
                 // Iterate over parts of value1 and value2
-                for (int j = 0; j < Math.min(parts1.length, parts2.length); j++) {
+                for (int j = 0; j < Math.min(parts1.length, parts2.length); j++)
                     // Append concatenated value to StringBuilder
-                    concatenatedValues.append("/DAM/MarketingRegionMarketingCountry/")
-                            .append(parts1[j]).append("/")
-                            .append(parts1[0]).append(parts2[j]);
+                    {
+                        //Concat region and marketing Country field with formula "/DAM/MarketingRegionMarketingCountry/North America/United States (formula)"
+                    if (appendStringValue.contains("MarketingRegionMarketingCountry")){
 
+                        concatenatedValues.append(appendStringValue)
+                                .append(parts1[j]).append("/")
+                                .append(parts2[j]);
+                } else
+                {
+                    //Divide the multifield value in column "/DAM/SegmentBrandSubBrand/MarsWrigley/Snickers/SnickersNA"
+                    concatenatedValues.append(appendStringValue)
+                        .append(parts1[j]).append("/")
+                        .append(parts1[0]).append(parts2[j]);
+
+                }
                     // Append ";" if it's not the last iteration
                     if (j < Math.min(parts1.length, parts2.length) - 1) {
                         concatenatedValues.append(deLimiter);
@@ -656,10 +672,12 @@ public class ExcelTransformationUtility {
         }
     }
     public static String dateFormatter(String dateColumnValue) {
-        DateFormat targetFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss a");
+        DateFormat targetFormat = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss a");
         DateFormat originalFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
         String formattedDate = null;
         Date date = new Date();
+        originalFormat.setLenient(false); // Set to lenient to properly parse leap year dates
+        targetFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
         try {
             if(!dateColumnValue.isEmpty()){
                 date = originalFormat.parse(dateColumnValue);
@@ -669,7 +687,25 @@ public class ExcelTransformationUtility {
         }
         return formattedDate;
     }
-
+    public static String dateFormatterForExportPath(String dateColumnValue) throws ParseException {
+        DateTimeFormatter targetFormat = DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm:ss a");;
+        DateTimeFormatter originalFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSX");
+        //originalFormat.setLenient(false); // Set to lenient to properly parse leap year dates
+        String formattedDate = null;
+        // Parse the input string into an Instant
+        Instant instant = Instant.from(originalFormat.parse(dateColumnValue));
+        // Convert Instant to LocalDateTime for formatting
+        LocalDateTime dateTime = LocalDateTime.ofInstant(instant, ZoneOffset.UTC);
+        Date date = new Date();
+        try {
+            if(!dateColumnValue.isEmpty()){
+                formattedDate = dateTime.format(targetFormat);
+                System.out.println("Formatted Date: " + formattedDate);
+            }} catch (Exception pe) {
+            System.out.println(pe);
+        }
+        return formattedDate;
+    }
 
     public static Date stringToDateConversion(String formattedDate) {
         DateFormat targetFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss a");
@@ -716,14 +752,28 @@ public class ExcelTransformationUtility {
                         Set<String> uniqueValues = new HashSet<>();
                         StringBuilder concatenatedValue = new StringBuilder();
                         String[] values = sourceCellValue.split("\\|\\|"); // Split the cell value with "||" delimiter
-                        for (String value : values) {
-                            value = dateFormatter(value.trim());
-                            if (!uniqueValues.contains(value)) {
-                                if (concatenatedValue.length() > 0) {
-                                    concatenatedValue.append(deLimiter); // Adding delimiter "," between values
+                        if(sourceColumnName.contains("EXPORT_PATH")) {
+                            for (String value : values) {
+                                value = dateFormatterForExportPath(value.trim());
+                                if (!uniqueValues.contains(value)) {
+                                    if (concatenatedValue.length() > 0) {
+                                        concatenatedValue.append(deLimiter); // Adding delimiter "," between values
+                                    }
+                                    concatenatedValue.append(value);
+                                    uniqueValues.add(value);
                                 }
-                                concatenatedValue.append(value);
-                                uniqueValues.add(value);
+                            }
+                        } else
+                        {
+                            for (String value : values) {
+                                value = dateFormatter(value.trim());
+                                if (!uniqueValues.contains(value)) {
+                                    if (concatenatedValue.length() > 0) {
+                                        concatenatedValue.append(deLimiter); // Adding delimiter "," between values
+                                    }
+                                    concatenatedValue.append(value);
+                                    uniqueValues.add(value);
+                                }
                             }
                         }
                         Cell destinationCell = destinationRow.createCell(destinationColumnIndex);
@@ -739,6 +789,8 @@ public class ExcelTransformationUtility {
             System.out.println("Dates Tranformation applied in column " + sourceColumnName + "mapped successfully to " + destinationColumnName);
         } catch(IOException | IllegalArgumentException | IllegalStateException ex){
             ex.printStackTrace();
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
         } finally{
             try {
                 if (outputStream != null) {

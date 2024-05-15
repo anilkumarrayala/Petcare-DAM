@@ -48,7 +48,13 @@ public class ExcelDrivenMain {
         String sourceColumnName1 = "Region/Marketing Country 1";
         String sourceColumnName2 = "Region/Marketing Country 2";
         String destinationColumnName1 = "Region/MarketingCountry";
-        ExcelTransformationUtility.pickAndConcatenate(filePath, sourceSheetName, destinationSheetName,sourceColumnName1, sourceColumnName2, destinationColumnName1,';');
+        ExcelTransformationUtility.pickAndConcatenate(filePath, sourceSheetName, destinationSheetName,sourceColumnName1, sourceColumnName2, destinationColumnName1,';',"/DAM/MarketingRegionMarketingCountry/");
+
+
+        String sourceColumnName_Brand = "Brand";
+        String sourceColumnName_SubBrand = "Sub-Brand";
+        String destinationColumnName_Combined = "BrandandSub-Brand";
+        ExcelTransformationUtility.pickAndConcatenate(filePath, sourceSheetName, destinationSheetName,sourceColumnName_Brand, sourceColumnName_Brand, destinationColumnName_Combined,';',"/DAM/SegmentBrandSubBrand/PetNutrition/");
 
         //Rearranging column order
         List columnOrder =  projectConstants.getColumnOrder();
