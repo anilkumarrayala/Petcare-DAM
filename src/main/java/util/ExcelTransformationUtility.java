@@ -1,6 +1,5 @@
 package util;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -671,38 +670,59 @@ public class ExcelTransformationUtility {
             e.printStackTrace();
         }
     }
-    public static String dateFormatter(String dateColumnValue) {
-        DateFormat targetFormat = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss a");
-        DateFormat originalFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+
+//    public static String dateFormatter(String dateColumnValue) {
+//        DateFormat targetFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss a");
+//        DateFormat originalFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+//        String formattedDate = null;
+//        Date date = new Date();
+//        try {
+//            if(!dateColumnValue.isEmpty()){
+//                date = originalFormat.parse(dateColumnValue);
+//                formattedDate = targetFormat.format(date);
+//            }} catch (Exception pe) {
+//            System.out.println(pe);
+//        }
+//        return formattedDate;
+//    }
+
+    public static String dateFormatter(String dateColumnValue) throws ParseException {
+        String targetFormatStr = "dd/MM/yyyy hh:mm:ss a";
+        String originalFormatStr1 = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
+        String originalFormatStr2 = "yyyy-MM-dd HH:mm:ss.SSS";
+        DateFormat targetFormat = new SimpleDateFormat(targetFormatStr);
         String formattedDate = null;
-        Date date = new Date();
-        originalFormat.setLenient(false); // Set to lenient to properly parse leap year dates
-        targetFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+
         try {
-            if(!dateColumnValue.isEmpty()){
-                date = originalFormat.parse(dateColumnValue);
-                formattedDate = targetFormat.format(date);
-            }} catch (Exception pe) {
-            System.out.println(pe);
-        }
-        return formattedDate;
-    }
-    public static String dateFormatterForExportPath(String dateColumnValue) throws ParseException {
-        DateTimeFormatter targetFormat = DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm:ss a");
-        DateTimeFormatter originalFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSX");
-        //originalFormat.setLenient(false); // Set to lenient to properly parse leap year dates
-        String formattedDate = null;
-        // Parse the input string into an Instant
-        Instant instant = Instant.from(originalFormat.parse(dateColumnValue));
-        // Convert Instant to LocalDateTime for formatting
-        LocalDateTime dateTime = LocalDateTime.ofInstant(instant, ZoneOffset.UTC);
-        Date date = new Date();
-        try {
-            if(!dateColumnValue.isEmpty()){
-                formattedDate = dateTime.format(targetFormat);
-                System.out.println("Formatted Date: " + formattedDate);
-            }} catch (Exception pe) {
-            System.out.println(pe);
+            if (!dateColumnValue.isEmpty()) {
+                Date date = null;
+                boolean parsed = false;
+                if (originalFormatStr1.equals("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")) {
+                    DateFormat originalFormat1 = new SimpleDateFormat(originalFormatStr1);
+                    try {
+                        date = originalFormat1.parse(dateColumnValue);
+                        parsed = true;
+                    } catch (ParseException e) {
+                        // Parsing failed, try the next format
+                    }
+                }
+                if (!parsed && originalFormatStr2.equals("yyyy-MM-dd HH:mm:ss.SSS")) {
+                    DateFormat originalFormat2 = new SimpleDateFormat(originalFormatStr2);
+                    try {
+                        date = originalFormat2.parse(dateColumnValue);
+                        parsed = true;
+                    } catch (ParseException e) {
+                        // Parsing failed for both formats
+                        throw new ParseException("Unparseable date: " + dateColumnValue, 0);
+                    }
+                }
+                if (parsed) {
+                    formattedDate = targetFormat.format(date);
+                }
+            }
+        } catch (ParseException pe) {
+            // If parsing fails, print the error and return null
+            pe.printStackTrace();
         }
         return formattedDate;
     }
@@ -752,19 +772,6 @@ public class ExcelTransformationUtility {
                         Set<String> uniqueValues = new HashSet<>();
                         StringBuilder concatenatedValue = new StringBuilder();
                         String[] values = sourceCellValue.split("\\|\\|"); // Split the cell value with "||" delimiter
-                        if(sourceColumnName.contains("&EXPORT_TIME")) {
-                            for (String value : values) {
-                                value = dateFormatterForExportPath(value.trim());
-                                if (!uniqueValues.contains(value)) {
-                                    if (concatenatedValue.length() > 0) {
-                                        concatenatedValue.append(deLimiter); // Adding delimiter "," between values
-                                    }
-                                    concatenatedValue.append(value);
-                                    uniqueValues.add(value);
-                                }
-                            }
-                        } else
-                        {
                             for (String value : values) {
                                 value = dateFormatter(value.trim());
                                 if (!uniqueValues.contains(value)) {
@@ -775,7 +782,6 @@ public class ExcelTransformationUtility {
                                     uniqueValues.add(value);
                                 }
                             }
-                        }
                         Cell destinationCell = destinationRow.createCell(destinationColumnIndex);
                         //destinationCell.setCellValue(concatenatedValue.toString());
                         destinationCell.setCellValue(concatenatedValue.toString());
@@ -787,10 +793,8 @@ public class ExcelTransformationUtility {
             workbook.write(outputStream);
 
             System.out.println("Dates Tranformation applied in column " + sourceColumnName + "mapped successfully to " + destinationColumnName);
-        } catch(IOException | IllegalArgumentException | IllegalStateException ex){
+        } catch(IOException | IllegalArgumentException | IllegalStateException | ParseException ex){
             ex.printStackTrace();
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
         } finally{
             try {
                 if (outputStream != null) {

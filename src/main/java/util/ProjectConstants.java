@@ -58,11 +58,13 @@ public class ProjectConstants {
         return LHDateColumnName;
     }
 
+
     private  List AprimoDateColumnName = Arrays.asList(new String[] {"&EXPORT_TIME","AssetCreationDate","ImportedDate", "EmbargoDate","ExpirationDate","AssetDate",
             "CampaignEndDate","CampaignStartDate", "BrightcoveRemovedDate","CoverageStartDate","CoverageEndDate","is-related-to"});
 
     private    List LHDateColumnName =
             Arrays.asList(new String[] {"&EXPORT_TIME","Asset Creation Date","Date: Imported", "Embargo Date","Expiration Date","Asset Live Date",
+
                     "Campaign End Date","Campaign Start Date", "Removed Dt", "Coverage Start Date","Coverage End Date", "&LINKS:RELATED"});
 
 
