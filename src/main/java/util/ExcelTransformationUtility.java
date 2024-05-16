@@ -688,7 +688,7 @@ public class ExcelTransformationUtility {
         return formattedDate;
     }
     public static String dateFormatterForExportPath(String dateColumnValue) throws ParseException {
-        DateTimeFormatter targetFormat = DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm:ss a");;
+        DateTimeFormatter targetFormat = DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm:ss a");
         DateTimeFormatter originalFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSX");
         //originalFormat.setLenient(false); // Set to lenient to properly parse leap year dates
         String formattedDate = null;
@@ -752,7 +752,7 @@ public class ExcelTransformationUtility {
                         Set<String> uniqueValues = new HashSet<>();
                         StringBuilder concatenatedValue = new StringBuilder();
                         String[] values = sourceCellValue.split("\\|\\|"); // Split the cell value with "||" delimiter
-                        if(sourceColumnName.contains("EXPORT_PATH")) {
+                        if(sourceColumnName.contains("&EXPORT_TIME")) {
                             for (String value : values) {
                                 value = dateFormatterForExportPath(value.trim());
                                 if (!uniqueValues.contains(value)) {

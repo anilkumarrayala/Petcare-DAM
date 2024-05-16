@@ -10,11 +10,22 @@ public class ExcelDrivenMain {
 
     public static void main(String[] args) throws IOException,Exception {
 
-        String filePath = "C://Project//MARS//test-1-PN-1.xlsx";
+        String filePath = "C://Project//MARS//PN-bulk-1.xlsx";
         String sourceSheetName = "Data";
         String destinationSheetName = "Transformed";
         String destinationSheetName1 = "Final";
         ProjectConstants projectConstants = new ProjectConstants();
+        // Get current size of heap in bytes.
+        long heapSize = Runtime.getRuntime().totalMemory();
+        System.out.println("Java Heap Size "+heapSize);
+        // Get maximum size of heap in bytes. The heap cannot grow beyond this size.
+        // Any attempt will result in an OutOfMemoryException.
+        long heapMaxSize = Runtime.getRuntime().maxMemory();
+        System.out.println("Java Heap Max Size "+heapMaxSize);
+        // Get amount of free memory within the heap in bytes. This size will
+        // increase after garbage collection and decrease as new objects are created.
+        long heapFreeSize = Runtime.getRuntime().freeMemory();
+        System.out.println("Java Heap Free Size "+heapFreeSize);
         // Parse and map
         List LHSplitColumnName =  projectConstants.getLHSplitReplaceColumnNames();
         List AprimoSplitColumnName =  projectConstants.getAprimoSplitReplaceColumnNames();

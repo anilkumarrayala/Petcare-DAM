@@ -42,13 +42,13 @@ public class ProjectConstants {
                     "Agency/Partner/Vendor", "Category/Type/Sub-Type 1","Category/Type/Sub-Type 2", "Category/Type/Sub-Type 3", "Asset Status","Description"
                     ,"Description/Keywords","Original File Name","Health Benefit","Net Weight","Pet Lifestage","Piece Count","Pet Size","Brightcove Asset ID",
                     "Brightcove Asset Name","Removed By","Brightcove Asset Status","Segment/Product Category 2","Segment","Recipe",
-                    "Occasion 1","Occasion Year","Originating Country","Claims","Display/Pack Type","Campaign/Promotional Year","Asset Owner","&EXPORT_TIME"});
+                    "Occasion 1","Occasion Year","Originating Country","Claims","Display/Pack Type","Campaign/Promotional Year","Asset Owner"});
 
     private List AprimoColumnName = Arrays.asList(new String[] {"AssetID", "Title" , "LegacyAssetVersion",
             "AgencyPartner", "AssetCategory","AssetType","AssetSubType","Status","Description","Keywords","FileName","HealthBenefit",
             "NetWeight","PetLifestage","PieceCount","PetSize","Brightcove Asset ID","Brightcove Asset Name","BrightcoveRemovedBy",
             "Brightcove Asset Status","ProductCategory","Segment","Recipe", "Occasion","OccasionYear","OriginatingCountry","Claims",
-            "Display/PackType","CampaignPromotionalYear","AssetEmail","&EXPORT_TIME"});
+            "Display/PackType","CampaignPromotionalYear","AssetEmail"});
 
     public List getAprimoDateColumnName() {
         return AprimoDateColumnName;
@@ -58,11 +58,11 @@ public class ProjectConstants {
         return LHDateColumnName;
     }
 
-    private  List AprimoDateColumnName = Arrays.asList(new String[] {"AssetCreationDate","ImportedDate", "EmbargoDate","ExpirationDate","AssetDate",
+    private  List AprimoDateColumnName = Arrays.asList(new String[] {"&EXPORT_TIME","AssetCreationDate","ImportedDate", "EmbargoDate","ExpirationDate","AssetDate",
             "CampaignEndDate","CampaignStartDate", "BrightcoveRemovedDate","CoverageStartDate","CoverageEndDate","is-related-to"});
 
     private    List LHDateColumnName =
-            Arrays.asList(new String[] {"Asset Creation Date","Date: Imported", "Embargo Date","Expiration Date","Asset Live Date",
+            Arrays.asList(new String[] {"&EXPORT_TIME","Asset Creation Date","Date: Imported", "Embargo Date","Expiration Date","Asset Live Date",
                     "Campaign End Date","Campaign Start Date", "Removed Dt", "Coverage Start Date","Coverage End Date", "&LINKS:RELATED"});
 
 
