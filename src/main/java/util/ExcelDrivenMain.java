@@ -13,7 +13,8 @@ import java.util.TimeZone;
 public class ExcelDrivenMain {
 
     public static void main(String[] args) throws IOException,Exception {
-      String filePath = "C://Project//MARS//test-1-PN-1.xlsx";
+        String filePath = "C://Project//MARS//test-1-PN-1.xlsx";
+        //String filePath = "C://Project//MARS//PN-100k-150k.xlsx";
         String sourceSheetName = "Data";
         String destinationSheetName = "Transformed";
         String destinationSheetName1 = "Final";
@@ -90,6 +91,14 @@ public class ExcelDrivenMain {
 //            String sourceColumnName2 = "Asset Status";
 //            String destinationColumnName = "Status";
 //            ExcelTransformationUtility.mapExportPathAndArchivedValues(filePath, sourceSheetName, sourceColumnName1, sourceColumnName2, destinationSheetName, destinationColumnName);
+
+//            String sourceColumnName = "ProductCategory";
+//            String destinationColumnName = "ProductCategory";
+//            ExcelTransformationUtility.parseAndMapProductCategories(filePath, sourceSheetName, sourceColumnName, destinationSheetName, destinationColumnName);
+
+//            String sourceColumnName = "Flavor";
+//            String destinationColumnName = "Flavor";
+//            ExcelTransformationUtility.parseAndMapFlavors(filePath, sourceSheetName, sourceColumnName, destinationSheetName, destinationColumnName);
     }
 
     }
