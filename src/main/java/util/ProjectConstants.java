@@ -25,15 +25,15 @@ public class ProjectConstants {
     }
 
     private    List ColumnOrder =
-            Arrays.asList(new String[] {"&OBJECT_TYPE",	"&ACTION","&ASSET_ID","&FOLDER_TYPE","&MODEL","&PARENTS","&ASSET_NAME","&POLICIES","&EXPORT_TIME","&EXPORT_PATH","AssetID", "Title" , "LegacyAssetVersion","ImportedDate", "EmbargoDate","ExpirationDate","IsLatestVersion",
+            Arrays.asList(new String[] {"&OBJECT_TYPE",	"&ACTION","&ASSET_ID","&FOLDER_TYPE","&MODEL","&PARENTS","&ASSET_NAME","LighthouseSecurityPolicy","&EXPORT_TIME","&EXPORT_PATH","AssetID", "Title" , "LegacyAssetVersion","ImportedDate", "EmbargoDate","ExpirationDate","IsLatestVersion",
                     "AgencyPartner", "AssetCategory","AssetType","AssetSubType", "AssetCreationDate","AssetDate","Status","CampaignName", "MarsCampaignCode","CampaignEndDate","CampaignStartDate",
                     "CustomerSpecific","DataClassification","Description","Keywords","FileName","HealthBenefit","SourceFile", "TransparentBackground",
                     "NetWeight","PetLifestage","PieceCount","PlatformSpecifications","RightsRestricted","PetSize","Brightcove Asset ID","Brightcove Asset Name","BrightcoveRemovedBy","BrightcoveRemovedDate",
                     "Brightcove Asset Status", "MasterOrLocalizationAdaptation","Segment","Flavor","ProductCategory","RightsManagementType","Recipe", "Region/MarketingCountry","ProductImageAngle",
                     "Occasion","OccasionYear","OriginatingCountry","FERT","Claims", "Display/PackType","CampaignPromotionalYear","AssetEmail", "Tag","InPerpetuity", "Brand","Language","GTIN/EAN/UPC","ImagePosition",
                     "VERP","SubBrand","BrandandSub-Brand","CoverageStartDate","CoverageEndDate","InternalZREP","Global/Regional/Local","IncludedCountries","ExcludedCountries","RestrictionDescription","MediaChannel"
-                    ,"is-related-to","extracted pdf","copy-content-of","extracted pdf child","participant-subscribed","belong-to-video","participant-collection-on-subscribed","extracted xml",
-                    "is-derivative-of","contains","is-child-of","derivative","is-place-graphic-of", "belong-to","has video clips", "copy contains","is-parent-of","extracted xml child","placed graphics"
+                    ,"is-related-to","extracted-pdf","copy-content-of","extracted-pdf-child","participant-subscribed","belong-to-video","participant-collection-on-subscribed","extracted-xml",
+                    "is-derivative-of","contains","is-child-of","derivative","is-place-graphic-of", "belong-to","has-video-clips", "copy-contains","is-parent-of","extracted-xml-child","placed-graphics"
             });
 
 
@@ -46,8 +46,8 @@ public class ProjectConstants {
 
     private List AprimoColumnName = Arrays.asList(new String[] {"AssetID", "Title" , "LegacyAssetVersion",
             "AgencyPartner", "AssetCategory","AssetType","AssetSubType","Status","Description","Keywords","FileName","HealthBenefit",
-            "NetWeight","PetLifestage","PieceCount","PetSize","Brightcove Asset ID","Brightcove Asset Name","BrightcoveRemovedBy",
-            "Brightcove Asset Status","ProductCategory","Segment","Recipe", "Occasion","OccasionYear","OriginatingCountry","Claims",
+            "NetWeight","PetLifestage","PieceCount","PetSize","Brightcove Asset ID","BrightcoveAssetName","BrightcoveRemovedBy",
+            "BrightcoveAssetStatus","ProductCategory","Segment","Recipe", "Occasion","OccasionYear","OriginatingCountry","Claims",
             "Display/PackType","CampaignPromotionalYear","AssetEmail"});
 
     public List getAprimoDateColumnName() {
@@ -80,12 +80,12 @@ public class ProjectConstants {
 
 
 
-    private  List AprimoSplitReplaceColumnNames = Arrays.asList(new String[] { "&OBJECT_TYPE",	"&ACTION","&ASSET_ID","&FOLDER_TYPE","&MODEL","&PARENTS","&ASSET_NAME","&POLICIES","&EXPORT_PATH",
+    private  List AprimoSplitReplaceColumnNames = Arrays.asList(new String[] { "&OBJECT_TYPE",	"&ACTION","&ASSET_ID","&FOLDER_TYPE","&MODEL","&PARENTS","&ASSET_NAME","LighthouseSecurityPolicy","&EXPORT_PATH",
             "FERT","Tag","InPerpetuity","GTIN/EAN/UPC","VERP","Language","SubBrand","CustomerSpecific","CampaignName", "MarsCampaignCode","RightsRestricted","IsLatestVersion",
             "TransparentBackground","PlatformSpecifications","SourceFile","DataClassification","Brand","Language","ImagePosition","SubBrand","Flavor",
-            "MasterOrLocalizationAdaptation","ProductImageAngle", "InternalZREP","Global/Regional/Local","IncludedCountries","ExcludedCountries","MediaChannel","RestrictionDescription","RightsManagementType","extracted pdf","copy-content-of","extracted pdf child",
-            "participant-subscribed","belong-to-video","participant-collection-on-subscribed","extracted xml","is-derivative-of","contains","derivative","is-place-graphic-of",
-            "belong-to", "copy contains","is-parent-of","extracted xml child","placed graphics","is-child-of","has video clips"});
+            "MasterOrLocalizationAdaptation","ProductImageAngle", "InternalZREP","Global/Regional/Local","IncludedCountries","ExcludedCountries","MediaChannel","RestrictionDescription","RightsManagementType","extracted-pdf","copy-content-of","extracted-pdf-child",
+            "participant-subscribed","belong-to-video","participant-collection-on-subscribed","extracted-xml","is-derivative-of","contains","derivative","is-place-graphic-of",
+            "belong-to", "copy-contains","is-parent-of","extracted-xml-child","placed-graphics","is-child-of","has-video-clips"});
 
     private    List LHSplitReplaceColumnNames =
             Arrays.asList(new String[] {"&OBJECT_TYPE",	"&ACTION","&ASSET_ID","&FOLDER_TYPE","&MODEL","&PARENTS","&ASSET_NAME","&POLICIES","&EXPORT_PATH",
