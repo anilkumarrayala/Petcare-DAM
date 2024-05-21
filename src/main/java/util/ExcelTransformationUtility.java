@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
@@ -688,7 +689,7 @@ public class ExcelTransformationUtility {
 //    }
 
     public static String dateFormatter(String dateColumnValue) throws ParseException {
-        String targetFormatStr = "dd/MM/yyyy hh:mm:ss a";
+        String targetFormatStr = "dd/MM/yyyy HH:mm:ss a";
         String originalFormatStr1 = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
         String originalFormatStr2 = "yyyy-MM-dd HH:mm:ss.SSS";
         DateFormat targetFormat = new SimpleDateFormat(targetFormatStr);
@@ -812,7 +813,294 @@ public class ExcelTransformationUtility {
             }
         }
     }
-    
+    public static void parseExponentialFields(String filePath, String sourceSheetName, String sourceColumnName, String destinationSheetName, String destinationColumnName) {
+
+        FileInputStream fis = null;
+        FileOutputStream outputStream = null;
+        Workbook workbook = null;
+
+        try {
+            fis = new FileInputStream(filePath);
+            workbook = new XSSFWorkbook(fis);
+
+            Sheet sourceSheet = workbook.getSheet(sourceSheetName);
+            Sheet destinationSheet = workbook.getSheet(destinationSheetName);
+
+            int sourceColumnIndex = getColumnIndex(sourceSheet, sourceColumnName);
+            int destinationColumnIndex = getColumnIndex(destinationSheet, destinationColumnName);
+
+            if (sourceColumnIndex == -1) {
+                throw new IllegalArgumentException("Given source column name not found in the source sheet.");
+            }
+
+            if (destinationColumnIndex == -1) {
+                destinationColumnIndex = createColumn(destinationSheet, destinationColumnName);
+            }
+
+            DecimalFormat decimalFormat = new DecimalFormat("#");
+
+            for (int i = 1; i <= sourceSheet.getLastRowNum(); i++) {
+                Row sourceRow = sourceSheet.getRow(i);
+                if (sourceRow == null) continue;
+
+                Row destinationRow = destinationSheet.getRow(i);
+                if (destinationRow == null) {
+                    destinationRow = destinationSheet.createRow(i);
+                }
+                Cell sourceCell = sourceRow.getCell(sourceColumnIndex);
+                if (sourceCell != null) {
+                    String formattedValue = null;
+                    if (sourceCell.getCellType() == CellType.NUMERIC) {
+                        double cellValue = sourceCell.getNumericCellValue();
+                        String cellValueAsString = Double.toString(cellValue);
+
+                        if (cellValueAsString.contains("E")) {
+                            formattedValue = decimalFormat.format(cellValue);
+                        } else {
+                            formattedValue = cellValueAsString;
+                        }
+                    } else if (sourceCell.getCellType() == CellType.STRING) {
+                        String cellValueAsString = sourceCell.getStringCellValue();
+                        if (cellValueAsString.matches(".*E\\+.*")) {
+                            try {
+                                double numericValue = Double.parseDouble(cellValueAsString);
+                                formattedValue = decimalFormat.format(numericValue);
+                            } catch (NumberFormatException e) {
+                                formattedValue = cellValueAsString;
+                            }
+                        } else {
+                            formattedValue = cellValueAsString;
+                        }
+                    }
+                    if (formattedValue != null) {
+                        Cell destinationCell = destinationRow.createCell(destinationColumnIndex);
+                        destinationCell.setCellValue(formattedValue);
+                    }
+                }
+            }
+
+            outputStream = new FileOutputStream(filePath);
+            workbook.write(outputStream);
+
+            System.out.println("Formatting completed successfully.");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (fis != null) fis.close();
+                if (outputStream != null) outputStream.close();
+                if (workbook != null) workbook.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public static void mapPoliciesAndPackageValues(String filePath, String sourceSheetName, String sourceColumnName, String destinationSheetName, String destinationColumnName) {
+        FileInputStream fis = null;
+        FileOutputStream outputStream = null;
+        Workbook workbook = null;
+
+        try {
+            fis = new FileInputStream(filePath);
+            workbook = new XSSFWorkbook(fis);
+
+            Sheet sourceSheet = workbook.getSheet(sourceSheetName);
+            Sheet destinationSheet = workbook.getSheet(destinationSheetName);
+
+            int sourceColumnIndex = getColumnIndex(sourceSheet, sourceColumnName);
+            int destinationColumnIndex = getColumnIndex(destinationSheet, destinationColumnName);
+
+            if (sourceColumnIndex == -1) {
+                throw new IllegalArgumentException("Given source column name not found in the source sheet.");
+            }
+
+            if (destinationColumnIndex == -1) {
+                destinationColumnIndex = createColumn(destinationSheet, destinationColumnName);
+            }
+
+            for (int i = 1; i <= sourceSheet.getLastRowNum(); i++) {
+                Row sourceRow = sourceSheet.getRow(i);
+                if (sourceRow == null) continue;
+
+                Row destinationRow = destinationSheet.getRow(i);
+                if (destinationRow == null) {
+                    destinationRow = destinationSheet.createRow(i);
+                }
+
+                Cell sourceCell = sourceRow.getCell(sourceColumnIndex);
+                if (sourceCell != null) {
+                    String sourceValue = sourceCell.getStringCellValue();
+                    String destinationValue;
+
+                    if ("Package".equals(sourceValue)) {
+                        destinationValue = "Final Packaging";
+                    } else {
+                        destinationValue = "Reference";
+                    }
+
+                    Cell destinationCell = destinationRow.createCell(destinationColumnIndex);
+                    destinationCell.setCellValue(destinationValue);
+                }
+            }
+
+            outputStream = new FileOutputStream(filePath);
+            workbook.write(outputStream);
+
+            System.out.println("Mapping completed successfully.");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (fis != null) fis.close();
+                if (outputStream != null) outputStream.close();
+                if (workbook != null) workbook.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    public static void mapPoliciesAndVideoAssetsValues(String filePath, String sourceSheetName, String sourceColumnName, String destinationSheetName, String destinationColumnName) {
+        FileInputStream fis = null;
+        FileOutputStream outputStream = null;
+        Workbook workbook = null;
+
+        try {
+            fis = new FileInputStream(filePath);
+            workbook = new XSSFWorkbook(fis);
+
+            Sheet sourceSheet = workbook.getSheet(sourceSheetName);
+            Sheet destinationSheet = workbook.getSheet(destinationSheetName);
+
+            int sourceColumnIndex = getColumnIndex(sourceSheet, sourceColumnName);
+            int destinationColumnIndex = getColumnIndex(destinationSheet, destinationColumnName);
+
+            if (sourceColumnIndex == -1) {
+                throw new IllegalArgumentException("Given source column name not found in the source sheet.");
+            }
+
+            if (destinationColumnIndex == -1) {
+                destinationColumnIndex = createColumn(destinationSheet, destinationColumnName);
+            }
+
+            for (int i = 1; i <= sourceSheet.getLastRowNum(); i++) {
+                Row sourceRow = sourceSheet.getRow(i);
+                if (sourceRow == null) continue;
+
+                Row destinationRow = destinationSheet.getRow(i);
+                if (destinationRow == null) {
+                    destinationRow = destinationSheet.createRow(i);
+                }
+
+                Cell sourceCell = sourceRow.getCell(sourceColumnIndex);
+                if (sourceCell != null) {
+                    String sourceValue = sourceCell.getStringCellValue();
+                    String destinationValue;
+
+                    if ("Video Localization Assets".equals(sourceValue)) {
+                        destinationValue = "Yes";
+                    } else {
+                        destinationValue = "No";
+                    }
+
+                    Cell destinationCell = destinationRow.createCell(destinationColumnIndex);
+                    destinationCell.setCellValue(destinationValue);
+                }
+            }
+
+            outputStream = new FileOutputStream(filePath);
+            workbook.write(outputStream);
+
+            System.out.println("Mapping completed successfully.");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (fis != null) fis.close();
+                if (outputStream != null) outputStream.close();
+                if (workbook != null) workbook.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public static void mapExportPathAndArchivedValues(String filePath, String sourceSheetName, String sourceColumnName1, String sourceColumnName2, String destinationSheetName, String destinationColumnName) {
+        FileInputStream fis = null;
+        FileOutputStream outputStream = null;
+        Workbook workbook = null;
+
+        try {
+            fis = new FileInputStream(filePath);
+            workbook = new XSSFWorkbook(fis);
+
+            Sheet sourceSheet = workbook.getSheet(sourceSheetName);
+            Sheet destinationSheet = workbook.getSheet(destinationSheetName);
+
+            int sourceColumn1Index = getColumnIndex(sourceSheet, sourceColumnName1);
+            int sourceColumn2Index = getColumnIndex(sourceSheet, sourceColumnName2);
+            int destinationColumnIndex = getColumnIndex(destinationSheet, destinationColumnName);
+
+            if (sourceColumn1Index == -1) {
+                throw new IllegalArgumentException("Given source column 1 name not found in the source sheet.");
+            }
+
+            if (sourceColumn2Index == -1) {
+                throw new IllegalArgumentException("Given source column 2 name not found in the source sheet.");
+            }
+
+            if (destinationColumnIndex == -1) {
+                destinationColumnIndex = createColumn(destinationSheet, destinationColumnName);
+            }
+
+            for (int i = 1; i <= sourceSheet.getLastRowNum(); i++) {
+                Row sourceRow = sourceSheet.getRow(i);
+                if (sourceRow == null) continue;
+
+                Row destinationRow = destinationSheet.getRow(i);
+                if (destinationRow == null) {
+                    destinationRow = destinationSheet.createRow(i);
+                }
+
+                Cell sourceCell1 = sourceRow.getCell(sourceColumn1Index);
+                Cell sourceCell2 = sourceRow.getCell(sourceColumn2Index);
+                if (sourceCell1 != null) {
+                    String sourceValue1 = sourceCell1.getStringCellValue();
+                    String destinationValue;
+
+                    if (sourceValue1.contains("_lhv1") || sourceValue1.contains("_lhv2")) {
+                        destinationValue = "Archived";
+                    } else if (sourceCell2 != null) {
+                        destinationValue = sourceCell2.getStringCellValue();
+                    } else {
+                        destinationValue = "";
+                    }
+
+                    Cell destinationCell = destinationRow.createCell(destinationColumnIndex);
+                    destinationCell.setCellValue(destinationValue);
+                }
+            }
+
+            outputStream = new FileOutputStream(filePath);
+            workbook.write(outputStream);
+
+            System.out.println("Mapping completed successfully.");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (fis != null) fis.close();
+                if (outputStream != null) outputStream.close();
+                if (workbook != null) workbook.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }
 
 

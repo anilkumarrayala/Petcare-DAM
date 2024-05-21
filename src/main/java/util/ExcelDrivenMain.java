@@ -73,6 +73,23 @@ public class ExcelDrivenMain {
         //Rearranging column order
         List columnOrder =  projectConstants.getColumnOrder();
        ExcelTransformationUtility.rearrangeColumns(filePath, destinationSheetName, destinationSheetName1,  columnOrder);
+
+//            String sourceColumnName = "GTIN/EAN/UPC";
+//            String destinationColumnName = "test4";
+//            ExcelTransformationUtility.parseExponentialFields(filePath, sourceSheetName, sourceColumnName, destinationSheetName, destinationColumnName);
+//
+//            String sourceColumnName = "&POLICIES";
+//            String destinationColumnName = "DeliverableType";
+//            ExcelTransformationUtility.mapPoliciesAndPackageValues(filePath, sourceSheetName, sourceColumnName, destinationSheetName, destinationColumnName);
+//
+//            String sourceColumnName = "&POLICIES";
+//            String destinationColumnName = "RestrictDownload";
+//            ExcelTransformationUtility.mapPoliciesAndVideoAssetsValues(filePath, sourceSheetName, sourceColumnName, destinationSheetName, destinationColumnName);
+//
+//            String sourceColumnName1 = "&EXPORT_PATH";
+//            String sourceColumnName2 = "Asset Status";
+//            String destinationColumnName = "Status";
+//            ExcelTransformationUtility.mapExportPathAndArchivedValues(filePath, sourceSheetName, sourceColumnName1, sourceColumnName2, destinationSheetName, destinationColumnName);
     }
 
     }
