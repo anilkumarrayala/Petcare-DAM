@@ -1,4 +1,4 @@
-package util;
+package constants;
 
 
 import java.util.Arrays;
@@ -8,11 +8,11 @@ import java.util.List;
 public class ProjectConstants {
 
 
-    protected List getLightHouseColumnName() {
+    public List getLightHouseColumnName() {
         return LightHouseColumnName;
     }
 
-    protected List getAprimoColumnName() {
+    public List getAprimoColumnName() {
         return AprimoColumnName;
     }
 

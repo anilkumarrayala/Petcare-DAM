@@ -1,19 +1,22 @@
-package util;
+package extractor;
 
+
+import util.ExcelTransformationUtility;
+import constants.ProjectConstants;
 
 import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.TimeZone;
+
+import static workbook.WorkBookCopier.createNewSheet;
 
 public class ExcelDrivenMain {
 
     public static void main(String[] args) throws IOException,Exception {
-      String filePath = "C://Project//MARS//test-1-PN-1.xlsx";
+
+        String filePath = "C://Project//MARS//test-1-PN-1.xlsx";
+        String extension = "Transformed-" +ExcelTransformationUtility.getCurrentTimestamp()+".xlsx";
+        String destFilePath =System.getProperty("user.home")+ extension;
         String sourceSheetName = "Data";
         String destinationSheetName = "Transformed";
         String destinationSheetName1 = "Final";
@@ -73,8 +76,10 @@ public class ExcelDrivenMain {
         //Rearranging column order
         List columnOrder =  projectConstants.getColumnOrder();
        ExcelTransformationUtility.rearrangeColumns(filePath, destinationSheetName, destinationSheetName1,  columnOrder);
-    }
 
+        //Create a new sheet for transformed data
+       createNewSheet(destinationSheetName, filePath, destinationSheetName, destFilePath);
+    }
     }
 
 

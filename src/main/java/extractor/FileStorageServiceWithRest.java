@@ -1,4 +1,4 @@
-package util;
+package extractor;
 
 
 import org.apache.poi.ss.usermodel.Cell;
@@ -30,7 +30,6 @@ public class FileStorageServiceWithRest {
     static String sourceSheetName = "Data";
     static String destinationSheetName = "Transformed";
     String destinationSheetName1 = "Final";
-    static ProjectConstants projectConstants = new ProjectConstants();
     public static Workbook workbook;
 
     public static void main(String args[]) throws Exception{

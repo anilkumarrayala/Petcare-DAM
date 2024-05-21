@@ -19,7 +19,6 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 public class ExcelTransformationUtility {
 
     public static Workbook workbook;
-
     /*
     Logic for Field To Field Mapping
      */
@@ -672,21 +671,6 @@ public class ExcelTransformationUtility {
         }
     }
 
-//    public static String dateFormatter(String dateColumnValue) {
-//        DateFormat targetFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss a");
-//        DateFormat originalFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
-//        String formattedDate = null;
-//        Date date = new Date();
-//        try {
-//            if(!dateColumnValue.isEmpty()){
-//                date = originalFormat.parse(dateColumnValue);
-//                formattedDate = targetFormat.format(date);
-//            }} catch (Exception pe) {
-//            System.out.println(pe);
-//        }
-//        return formattedDate;
-//    }
-
     public static String dateFormatter(String dateColumnValue) throws ParseException {
         String targetFormatStr = "dd/MM/yyyy hh:mm:ss a";
         String originalFormatStr1 = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
@@ -811,6 +795,13 @@ public class ExcelTransformationUtility {
                 e.printStackTrace();
             }
         }
+    }
+    public static String getCurrentTimestamp() {
+        LocalDateTime currentDateTime = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm-ss");
+        // Format the current date and time as a string
+        String formattedTimestamp = currentDateTime.format(formatter);
+        return formattedTimestamp;
     }
 
 }
