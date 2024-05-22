@@ -17,6 +17,7 @@ public class ExcelDrivenMain {
         String filePath = "C://Project//MARS//test-1-PN-1.xlsx";
         String extension = "Transformed-" +ExcelTransformationUtility.getCurrentTimestamp()+".xlsx";
         String destFilePath =System.getProperty("user.home")+ extension;
+        //String destFilePath ="C://Project//MARS//" + extension;
         String sourceSheetName = "Data";
         String destinationSheetName = "Transformed";
         String destinationSheetName1 = "Final";
@@ -79,6 +80,24 @@ public class ExcelDrivenMain {
 
         //Create a new sheet for transformed data
        createNewSheet(destinationSheetName, filePath, destinationSheetName, destFilePath);
+
+//        String sourceColumnName = "GTIN/EAN/UPC";
+//        String destinationColumnName = "ExpoValues";
+//        ExcelTransformationUtility.parseExponentialFields(filePath, sourceSheetName, sourceColumnName, destinationSheetName, destinationColumnName);
+
+//        String sourceColumnName = "&POLICIES";
+//        String destinationColumnName = "DeliverableType";
+//        ExcelTransformationUtility.mapPoliciesAndPackageValues(filePath, sourceSheetName, sourceColumnName, destinationSheetName, destinationColumnName);
+//
+////        String sourceColumnName = "&POLICIES";
+////        String destinationColumnName = "RestrictDownload";
+////        ExcelTransformationUtility.mapPoliciesAndVideoAssetsValues(filePath, sourceSheetName, sourceColumnName, destinationSheetName, destinationColumnName);
+//
+//        String sourceColumnName1 = "&EXPORT_PATH";
+//        String sourceColumnName2 = "Asset Status";
+//        String destinationColumnName = "Status";
+//        ExcelTransformationUtility.mapExportPathAndArchivedValues(filePath, sourceSheetName, sourceColumnName1, sourceColumnName2, destinationSheetName, destinationColumnName);
+
     }
     }
 

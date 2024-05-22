@@ -808,7 +808,6 @@ public class ExcelTransformationUtility {
 
 
     public static void parseExponentialFields(String filePath, String sourceSheetName, String sourceColumnName, String destinationSheetName, String destinationColumnName) {
-
         FileInputStream fis = null;
         FileOutputStream outputStream = null;
         Workbook workbook = null;
@@ -841,9 +840,11 @@ public class ExcelTransformationUtility {
                 if (destinationRow == null) {
                     destinationRow = destinationSheet.createRow(i);
                 }
+
                 Cell sourceCell = sourceRow.getCell(sourceColumnIndex);
                 if (sourceCell != null) {
                     String formattedValue = null;
+
                     if (sourceCell.getCellType() == CellType.NUMERIC) {
                         double cellValue = sourceCell.getNumericCellValue();
                         String cellValueAsString = Double.toString(cellValue);
@@ -866,7 +867,24 @@ public class ExcelTransformationUtility {
                             formattedValue = cellValueAsString;
                         }
                     }
+
                     if (formattedValue != null) {
+                        // Split the value by "||"
+                        String[] parts = formattedValue.split("\\|\\|");
+
+                        if (parts.length > 1) {
+                            // Join the parts with ";"
+                            formattedValue = String.join(";", parts);
+                        } else if (parts.length == 1 && formattedValue.endsWith("||")) {
+                            // Remove the trailing "||" if there's a single part
+                            formattedValue = parts[0];
+                        }
+
+                        // Check if the final formatted value is "||" or "||||"
+                        if (formattedValue.equals("||") || formattedValue.equals("||||")) {
+                            formattedValue = "";
+                        }
+
                         Cell destinationCell = destinationRow.createCell(destinationColumnIndex);
                         destinationCell.setCellValue(formattedValue);
                     }
@@ -1067,10 +1085,21 @@ public class ExcelTransformationUtility {
 
                     if (sourceValue1.contains("_lhv1") || sourceValue1.contains("_lhv2")) {
                         destinationValue = "Archived";
-                    } else if (sourceCell2 != null) {
-                        destinationValue = sourceCell2.getStringCellValue();
                     } else {
-                        destinationValue = "";
+                        String sourceValue2 = sourceCell2 != null ? sourceCell2.getStringCellValue() : "";
+
+                        // Split the value by "||"
+                        String[] parts = sourceValue2.split("\\|\\|");
+
+                        // Join the parts with ";"
+                        String joinedValue = String.join(";", parts);
+
+                        // Check if the resulting value contains only "||" or "||||"
+                        if (joinedValue.equals("||") || joinedValue.equals("||||")) {
+                            destinationValue = ""; // Empty string
+                        } else {
+                            destinationValue = joinedValue; // Joined value
+                        }
                     }
 
                     Cell destinationCell = destinationRow.createCell(destinationColumnIndex);
