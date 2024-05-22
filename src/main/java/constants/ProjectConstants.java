@@ -81,17 +81,21 @@ public class ProjectConstants {
 
 
     private  List AprimoSplitReplaceColumnNames = Arrays.asList(new String[] { "&OBJECT_TYPE",	"&ACTION","&ASSET_ID","&FOLDER_TYPE","&MODEL","&PARENTS","&ASSET_NAME","LighthouseSecurityPolicy","&EXPORT_PATH",
-            "FERT","Tag","InPerpetuity","GTIN/EAN/UPC","VERP","Language","SubBrand","CustomerSpecific","CampaignName", "MarsCampaignCode","RightsRestricted","IsLatestVersion",
-            "TransparentBackground","PlatformSpecifications","SourceFile","DataClassification","Brand","Language","ImagePosition","SubBrand","Flavor",
-            "MasterOrLocalizationAdaptation","ProductImageAngle", "InternalZREP","Global/Regional/Local","IncludedCountries","ExcludedCountries","MediaChannel","RestrictionDescription","RightsManagementType","extracted-pdf","copy-content-of","extracted-pdf-child",
-            "participant-subscribed","belong-to-video","participant-collection-on-subscribed","extracted-xml","is-derivative-of","contains","derivative","is-place-graphic-of",
+            "Tag","InPerpetuity","Language","SubBrand","CustomerSpecific","CampaignName", "MarsCampaignCode","RightsRestricted","IsLatestVersion",
+            "TransparentBackground","PlatformSpe2cifications","SourceFile","DataClassification","Brand","Language","ImagePosition","SubBrand",
+            "MasterOrLocalizationAdaptation","ProductImageAngle", "InternalZREP","Global/Regional/Local","IncludedCountries","ExcludedCountries","MediaChannel","RestrictionDescription",
+            "RightsManagementType","extracted-pdf","copy-content-of","extracted-pdf-child",
+            "participant-subscribed","belong-to-video","participant-collection-on-subscribed","extracted-xml","is-derivative-of","contains",
+            "derivative","is-place-graphic-of",
             "belong-to", "copy-contains","is-parent-of","extracted-xml-child","placed-graphics","is-child-of","has-video-clips"});
 
     private    List LHSplitReplaceColumnNames =
-            Arrays.asList(new String[] {"&OBJECT_TYPE",	"&ACTION","&ASSET_ID","&FOLDER_TYPE","&MODEL","&PARENTS","&ASSET_NAME","&POLICIES","&EXPORT_PATH",
-                    "FERT","Tag","Asset in Perpetuity?","GTIN/EAN/UPC","VERP","Language","Sub-Brand","Customer Specific","Campaign/Promotional Name", "Mars Campaign Code","Rights Restricted?","Is Latest Version",
-                    "Transparent Background?","Platform Specifications","Source File?","Data Classification","Brand","Language","Image Position/Slot", "Sub-Brand","Segment/Flavor 2",
-                    "Master or Localization/Adaptation?","Product Image Angle", "Internal ZREP","Global/Regional/Local","Included Countries","Excluded Countries","Media Channel","Restriction Description","Rights Management Type","&LINKS:ARTESIA.LINKTYPE.EXTRACTEDPDF", "&LINKS:ARTESIA.LINKTYPE.COPYCONTENTOF","&LINKS:ARTESIA.LINKTYPE.EXTRACTEDPDF.CHILD","&LINKS:USR-AST",
+            Arrays.asList(new String[] {"&OBJECT_TYPE",	"&ACTION","&ASSET_ID","&FOLDER_TYPE","&MODEL","&PARENTS","&ASSET_NAME","&POLICIES","&EXPORT_PATH"
+                    ,"Tag","Asset in Perpetuity?","Language","Sub-Brand","Customer Specific","Campaign/Promotional Name", "Mars Campaign Code","Rights Restricted?","Is Latest Version",
+                    "Transparent Background?","Platform Specifications","Source File?","Data Classification","Brand","Language","Image Position/Slot", "Sub-Brand",
+                    "Master or Localization/Adaptation?","Product Image Angle", "Internal ZREP","Global/Regional/Local","Included Countries","Excluded Countries",
+                    "Media Channel","Restriction Description","Rights Management Type","&LINKS:ARTESIA.LINKTYPE.EXTRACTEDPDF", "&LINKS:ARTESIA.LINKTYPE.COPYCONTENTOF",
+                    "&LINKS:ARTESIA.LINKTYPE.EXTRACTEDPDF.CHILD","&LINKS:USR-AST",
                     "&LINKS:PV","&LINKS:USR-CST","&LINKS:ARTESIA.LINKTYPE.EXTRACTEDXML","&LINKS:DERIVATIVE_OF","&LINKS:CONTAINS","&LINKS:DERIVATIVE","&LINKS:ARTESIA.LINKTYPE.ISPLACEDGROF",
                     "&LINKS:BELONGTO", "&LINKS:COPYCONTENT","&LINKS:PARENT","&LINKS:ARTESIA.LINKTYPE.EXTRACTEDXML.CHILD","&LINKS:PLACEDGR","&LINKS:CHILD","&LINKS:CLIP2VID"});
 
