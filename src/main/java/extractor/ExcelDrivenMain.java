@@ -14,7 +14,7 @@ public class ExcelDrivenMain {
 
     public static void main(String[] args) throws IOException,Exception {
 
-        String filePath = "C://Project//MARS//test-1-PN-1.xlsx";
+        String filePath = "C://Project//MARS//test-1-PN-test.xlsx";
         String extension = "Transformed-" +ExcelTransformationUtility.getCurrentTimestamp()+".xlsx";
         String destFilePath =System.getProperty("user.home")+ extension;
         String sourceSheetName = "Data";
@@ -75,7 +75,33 @@ public class ExcelDrivenMain {
 
         //Rearranging column order
         List columnOrder =  projectConstants.getColumnOrder();
-       ExcelTransformationUtility.rearrangeColumns(filePath, destinationSheetName, destinationSheetName1,  columnOrder);
+        ExcelTransformationUtility.rearrangeColumns(filePath, destinationSheetName, destinationSheetName1,  columnOrder);
+
+        //Additional Transformations
+        String sourceColumnName_Expo = "GTIN/EAN/UPC";
+        ExcelTransformationUtility.parseExponentialFields(filePath, sourceSheetName, sourceColumnName_Expo,destinationSheetName, sourceColumnName_Expo);
+        String sourceColumnName_VERP = "VERP";
+        ExcelTransformationUtility.parseExponentialFields(filePath, sourceSheetName, sourceColumnName_VERP,destinationSheetName, sourceColumnName_VERP);
+        String sourceColumnName_FERT = "FERT";
+        ExcelTransformationUtility.parseExponentialFields(filePath, sourceSheetName, sourceColumnName_FERT,destinationSheetName, sourceColumnName_FERT);
+
+        String sourceColumnName_Policies = "&POLICIES";
+        String destinationColumnName_Policies = "DeliverableType";
+        ExcelTransformationUtility.mapPoliciesAndPackageValues(filePath, sourceSheetName, sourceColumnName_Policies,destinationSheetName, destinationColumnName_Policies);
+
+        String sourceColumn1Name_Status = "&EXPORT_PATH";
+        String sourceColumn2Name_Status = "Asset Status";
+        String destinationColumnName_Status = "Status";
+        ExcelTransformationUtility.mapExportPathAndArchivedValues(filePath, sourceSheetName, sourceColumn1Name_Status,sourceColumn2Name_Status,destinationSheetName, destinationColumnName_Status);
+
+        String sourceColumnName_Product = "Segment/Product Category 2";
+        String destinationColumnName_Product = "ProductCategory";
+        ExcelTransformationUtility.parseAndMapProductCategories(filePath, sourceSheetName, sourceColumnName_Product,destinationSheetName, destinationColumnName_Product);
+
+        String sourceColumnName_Flavor = "Segment/Flavor 2";
+        String destinationColumnName_Flavor = "Flavor";
+        ExcelTransformationUtility.parseAndMapFlavors(filePath, sourceSheetName, sourceColumnName_Flavor,destinationSheetName, destinationColumnName_Flavor);
+
 
         //Create a new sheet for transformed data
        createNewSheet(destinationSheetName, filePath, destinationSheetName, destFilePath);
