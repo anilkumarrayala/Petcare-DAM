@@ -756,7 +756,7 @@ public class ExcelTransformationUtility {
                         Set<String> uniqueValues = new HashSet<>();
                         StringBuilder concatenatedValue = new StringBuilder();
                         String[] values = sourceCellValue.split("\\|\\|"); // Split the cell value with "||" delimiter
-                            for (String value : values) {
+                            for (String value : values) { //check for null
                                 value = dateFormatter(value.trim());
                                 if (!uniqueValues.contains(value)) {
                                     if (concatenatedValue.length() > 0) {
@@ -873,15 +873,10 @@ public class ExcelTransformationUtility {
                         if (parts.length > 1) {
                             // Join the parts with ";"
                             formattedValue = String.join(";", parts);
-                        } else if (parts.length == 1 && formattedValue.endsWith("||")) {
-                            // Remove the trailing "||" if there's a single part
-                            formattedValue = parts[0];
                         }
 
-                        // Check if the final formatted value is "||" or "||||"
-                        if (formattedValue.equals("||") || formattedValue.equals("||||")) {
-                            formattedValue = "";
-                        }
+                        // Replace any remaining "||" with ";"
+                        formattedValue = formattedValue.replace("||", ";");
 
                         Cell destinationCell = destinationRow.createCell(destinationColumnIndex);
                         destinationCell.setCellValue(formattedValue);
@@ -1082,7 +1077,7 @@ public class ExcelTransformationUtility {
                     String destinationValue;
 
                     if (sourceValue1.contains("_lhv1") || sourceValue1.contains("_lhv2")) {
-                        destinationValue = "Archived";
+                        destinationValue = "ARCHIVED";
                     } else {
                         String sourceValue2 = sourceCell2 != null ? sourceCell2.getStringCellValue() : "";
 
@@ -1178,9 +1173,13 @@ public class ExcelTransformationUtility {
                                     allMatched = false;
                                 }
                             }
+                            Cell destinationCell = destinationRow.createCell(destinationColumnIndex);
                             if (allMatched) {
-                                Cell destinationCell = destinationRow.createCell(destinationColumnIndex);
-                                destinationCell.setCellValue(sourceValue);
+                                // Join the parts with ";" and replace any remaining "||" with ";"
+                                String formattedValue = String.join(";", splitValues).replace("||", ";");
+                                destinationCell.setCellValue(formattedValue);
+                            } else {
+                                destinationCell.setCellValue("");
                             }
                         }
                     }
@@ -1229,7 +1228,7 @@ public class ExcelTransformationUtility {
             int destinationColumnIndex = getColumnIndex(destinationSheet, destinationColumnName);
 
             if (sourceColumnIndex == -1) {
-                throw new IllegalArgumentException("Given Flavor column name not found in the source sheet.");
+                throw new IllegalArgumentException("Given source column name not found in the source sheet.");
             }
 
             if (destinationColumnIndex == -1) {
@@ -1255,16 +1254,19 @@ public class ExcelTransformationUtility {
                         boolean allMatched = true;
                         for (String value : splitValues) {
                             if (!value.isEmpty()) {
-                                // value = value.trim();
                                 value = removeExtraSpaces(value.trim());
                                 if (!flavorNames.contains(value)) {
-                                    System.out.println("No Flavor match found at row " + (i + 1) + ": " + value);
+                                    System.out.println("No Product Category match found at row " + (i + 1) + ": " + value);
                                     allMatched = false;
                                 }
                             }
+                            Cell destinationCell = destinationRow.createCell(destinationColumnIndex);
                             if (allMatched) {
-                                Cell destinationCell = destinationRow.createCell(destinationColumnIndex);
-                                destinationCell.setCellValue(sourceValue);
+                                // Join the parts with ";" and replace any remaining "||" with ";"
+                                String formattedValue = String.join(";", splitValues).replace("||", ";");
+                                destinationCell.setCellValue(formattedValue);
+                            } else {
+                                destinationCell.setCellValue("");
                             }
                         }
                     }
