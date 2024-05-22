@@ -555,15 +555,15 @@ public class ExcelTransformationUtility {
                     if (appendStringValue.contains("MarketingRegionMarketingCountry")){
 
                         concatenatedValues.append(appendStringValue)
-                                .append(parts1[j]).append("/")
-                                .append(parts2[j]);
+                                .append(parts1[j].trim().replace("N/A","NA")).append("/")
+                                .append(parts2[j].trim().replace("N/A","NA"));
                 } else
                 {
                     //Divide the multifield value in column "/DAM/SegmentBrandSubBrand/MarsWrigley/Snickers/SnickersNA"
                     concatenatedValues.append(appendStringValue)
-                        .append(parts1[j]).append("/")
-                        .append(parts1[0]).append(parts2[j]);
-
+                            .append(parts1[j].trim().replace("N/A","NA")).append("/")
+                            .append(parts1[j].trim().replace("N/A","NA"))
+                            .append(parts2[j].trim().replace("N/A","NA"));
                 }
                     // Append ";" if it's not the last iteration
                     if (j < Math.min(parts1.length, parts2.length) - 1) {

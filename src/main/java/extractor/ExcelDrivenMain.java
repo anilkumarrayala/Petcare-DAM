@@ -14,7 +14,7 @@ public class ExcelDrivenMain {
 
     public static void main(String[] args) throws IOException,Exception {
 
-        String filePath = "C://Project//MARS//test-1-PN-2.xlsx";
+        String filePath = "C://Project//MARS//test-1-PN-1.xlsx";
         String extension = "Transformed-" +ExcelTransformationUtility.getCurrentTimestamp()+".xlsx";
         String destFilePath =System.getProperty("user.home")+ extension;
         //String destFilePath ="C://Project//MARS//" + extension;
@@ -72,7 +72,7 @@ public class ExcelDrivenMain {
         String sourceColumnName_Brand = "Brand";
         String sourceColumnName_SubBrand = "Sub-Brand";
         String destinationColumnName_Combined = "BrandandSub-Brand";
-        ExcelTransformationUtility.pickAndConcatenate(filePath, sourceSheetName, destinationSheetName,sourceColumnName_Brand, sourceColumnName_Brand, destinationColumnName_Combined,';',"/DAM/SegmentBrandSubBrand/PetNutrition/");
+        ExcelTransformationUtility.pickAndConcatenate(filePath, sourceSheetName, destinationSheetName,sourceColumnName_Brand, sourceColumnName_SubBrand, destinationColumnName_Combined,';',"/DAM/SegmentBrandSubBrand/PetNutrition/");
 
         //Rearranging column order
         List columnOrder =  projectConstants.getColumnOrder();
