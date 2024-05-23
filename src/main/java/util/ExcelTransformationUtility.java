@@ -507,7 +507,8 @@ public class ExcelTransformationUtility {
     append with path = /DAM/MarketingRegionMarketingCountry/
      */
     public static void pickAndConcatenate(String filePath, String sourceSheetName, String destinationSheetName,
-                                          String sourceColumnName1, String sourceColumnName2, String destinationColumnName, char deLimiter, String appendStringValue) throws IOException {
+                                          String sourceColumnName1, String sourceColumnName2, String destinationColumnName,
+                                          char deLimiter, String appendStringValue) throws IOException {
         try {
             FileInputStream fis = new FileInputStream(filePath);
             workbook = WorkbookFactory.create(fis);
@@ -548,23 +549,24 @@ public class ExcelTransformationUtility {
                 StringBuilder concatenatedValues = new StringBuilder();
 
                 // Iterate over parts of value1 and value2
-                for (int j = 0; j < Math.min(parts1.length, parts2.length); j++)
-                    // Append concatenated value to StringBuilder
-                    {
-                        //Concat region and marketing Country field with formula "/DAM/MarketingRegionMarketingCountry/North America/United States (formula)"
-                    if (appendStringValue.contains("MarketingRegionMarketingCountry")){
+                for (int j = 0; j < Math.min(parts1.length, parts2.length); j++) {
+                    // Remove spaces from parts
+                    String part1 = removeSpaces(parts1[j].trim().replace("N/A", "NA"));
+                    String part2 = removeSpaces(parts2[j].trim().replace("N/A", "NA"));
 
+                    // Append concatenated value to StringBuilder
+                    //Concat region and marketing Country field with formula "/DAM/MarketingRegionMarketingCountry/North America/United States (formula)"
+                    if (appendStringValue.contains("MarketingRegionMarketingCountry")) {
                         concatenatedValues.append(appendStringValue)
-                                .append(parts1[j].trim().replace("N/A","NA")).append("/")
-                                .append(parts2[j].trim().replace("N/A","NA"));
-                } else
-                {
-                    //Divide the multifield value in column "/DAM/SegmentBrandSubBrand/MarsWrigley/Snickers/SnickersNA"
-                    concatenatedValues.append(appendStringValue)
-                            .append(parts1[j].trim().replace("N/A","NA")).append("/")
-                            .append(parts1[j].trim().replace("N/A","NA"))
-                            .append(parts2[j].trim().replace("N/A","NA"));
-                }
+                                .append(part1).append("/")
+                                .append(part2);
+                    } else {
+                        //Divide the multifield value in column "/DAM/SegmentBrandSubBrand/MarsWrigley/Snickers/SnickersNA"
+                        concatenatedValues.append(appendStringValue)
+                                .append(part1).append("/")
+                                .append(part1)
+                                .append(part2);
+                    }
                     // Append ";" if it's not the last iteration
                     if (j < Math.min(parts1.length, parts2.length) - 1) {
                         concatenatedValues.append(deLimiter);
@@ -579,7 +581,7 @@ public class ExcelTransformationUtility {
             // Write the destination workbook to a file
             FileOutputStream outputStream = new FileOutputStream(filePath);
             workbook.write(outputStream);
-            System.out.println("Pick and Concatenate --> LH Column "+sourceColumnName1+" and " +sourceColumnName2+" mapped successfully to Aprimo Column "+ destinationColumnName);
+            System.out.println("Pick and Concatenate --> LH Column " + sourceColumnName1 + " and " + sourceColumnName2 + " mapped successfully to Aprimo Column " + destinationColumnName);
             // Close resources
             outputStream.close();
             fis.close();
@@ -1310,6 +1312,10 @@ public class ExcelTransformationUtility {
         String cleanedString = input.replaceAll("\\s{2,}", " ");
 
         return cleanedString;
+    }
+    // Method to remove spaces from a string
+    private static String removeSpaces(String input) {
+        return input.replaceAll("\\s+", "");
     }
 }
 
