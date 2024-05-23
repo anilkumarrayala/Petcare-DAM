@@ -1210,11 +1210,11 @@ public class ExcelTransformationUtility {
         }
     }
 
-    public static void parseAndMapFlavors(String filePath, String sourceSheetName, String sourceColumnName, String destinationSheetName, String destinationColumnName) {
+    public static void parseAndLookup(String filePath, String sourceSheetName, String sourceColumnName, String destinationSheetName, String destinationColumnName, List<String> LookUpTable) {
 
         // Create the ArrayList with given flavor names
 
-        List<String> flavorNames = LookupConstants.getFlavorNames();
+
         FileInputStream fis = null;
         FileOutputStream outputStream = null;
         Workbook workbook = null;
@@ -1230,7 +1230,7 @@ public class ExcelTransformationUtility {
             int destinationColumnIndex = getColumnIndex(destinationSheet, destinationColumnName);
 
             if (sourceColumnIndex == -1) {
-                throw new IllegalArgumentException("Given source column name not found in the source sheet.");
+                throw new IllegalArgumentException("Given source column name "+sourceColumnName+"not found in the source sheet.");
             }
 
             if (destinationColumnIndex == -1) {
@@ -1257,8 +1257,8 @@ public class ExcelTransformationUtility {
                         for (String value : splitValues) {
                             if (!value.isEmpty()) {
                                 value = removeExtraSpaces(value.trim());
-                                if (!flavorNames.contains(value)) {
-                                    System.out.println("No Product Category match found at row " + (i + 1) + ": " + value);
+                                if (!LookUpTable.contains(value)) {
+                                    System.out.println("No "+destinationColumnName+" match found at row " + (i + 1) + ": " + value);
                                     allMatched = false;
                                 }
                             }
@@ -1282,7 +1282,7 @@ public class ExcelTransformationUtility {
             outputStream = new FileOutputStream(filePath);
             workbook.write(outputStream);
 
-            System.out.println("Mapping completed successfully.");
+            System.out.println("Column "+destinationColumnName+" Mapping completed successfully.");
 
         } catch (IOException e) {
             e.printStackTrace();

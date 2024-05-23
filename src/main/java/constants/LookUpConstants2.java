@@ -5,7 +5,7 @@ import java.util.Arrays;
 
 public class LookUpConstants2 {
 
-    ArrayList<String> languages = new ArrayList<>(Arrays.asList(
+    static ArrayList<String> languages = new ArrayList<>(Arrays.asList(
             "Albanian",
             "Arabic",
             "Armenian",
@@ -64,7 +64,7 @@ public class LookUpConstants2 {
             "Chinese Traditional"
     ));
 
-    ArrayList<String> customerSpecific = new ArrayList<>(Arrays.asList(
+    static ArrayList<String> customerSpecific = new ArrayList<>(Arrays.asList(
             "JD",
             "Tmall",
             "Amazon",
@@ -81,22 +81,22 @@ public class LookUpConstants2 {
             "Coles",
             "N/A"
     ));
-    ArrayList<String> rightsRestricted = new ArrayList<>(Arrays.asList(
+    static ArrayList<String> rightsRestricted = new ArrayList<>(Arrays.asList(
             "Yes",
             "No"));
-    ArrayList<String> rightsManagementType = new ArrayList<>(Arrays.asList(
+    static ArrayList<String> rightsManagementType = new ArrayList<>(Arrays.asList(
             "AVO",
             "Image Rights",
             "Music License",
             "Musicians",
             "On-Camera Talent/Model"
     ));
-    ArrayList<String> MasterOrLocalised = new ArrayList<>(Arrays.asList(
+    static ArrayList<String> MasterOrLocalised = new ArrayList<>(Arrays.asList(
             "Master File",
             "Localized File",
             "Adapted File"
     ));
-    ArrayList<String> PetLifeStage = new ArrayList<>(Arrays.asList(
+    static ArrayList<String> PetLifeStage = new ArrayList<>(Arrays.asList(
             "All",
             "Adult",
             "Senior",
@@ -104,7 +104,7 @@ public class LookUpConstants2 {
             "Puppy",
             "N/A"
     ));
-    ArrayList<String> PetSizes = new ArrayList<>(Arrays.asList(
+    static ArrayList<String> PetSizes = new ArrayList<>(Arrays.asList(
             "Small",
             "Medium",
             "Large",
@@ -115,7 +115,7 @@ public class LookUpConstants2 {
             "Extra Large",
             "N/A"
     ));
-    ArrayList<String> healthBenefits = new ArrayList<>(Arrays.asList(
+    static ArrayList<String> healthBenefits = new ArrayList<>(Arrays.asList(
             "Small",
             "Medium",
             "Large",
@@ -127,13 +127,13 @@ public class LookUpConstants2 {
             "N/A"
     ));
 
-    ArrayList<String> species = new ArrayList<>(Arrays.asList(
+    static ArrayList<String> species = new ArrayList<>(Arrays.asList(
             "Cat",
             "Dog",
             "Rabbit" ));
 
 
-    ArrayList<String> displayPackTypes = new ArrayList<>(Arrays.asList(
+    static ArrayList<String> displayPackTypes = new ArrayList<>(Arrays.asList(
             "Stand Up Pouch", "Shipper", "Tub", "Shipper - Product as It Ships", "Shipper - Product Inside Box",
             "Shipper - Product Outside Box", "Multi-Wall Bag", "Polybag", "Can", "Displayable Cases/Trays",
             "Carton", "Box", "Gravity Display", "Flowwrap", "Tube", "Pouch", "Shrink Wrap", "Tray", "Bag",
@@ -147,7 +147,7 @@ public class LookUpConstants2 {
             "Shelf Ready Packaging", "Label Canister Wraparound", "N/A"
     ));
 
-    ArrayList<String> breeds = new ArrayList<>(Arrays.asList(
+    static ArrayList<String> breeds = new ArrayList<>(Arrays.asList(
             "Abyssinian", "American Bobtail", "American Burmese", "American Curl", "American Longhair", "American Polydactyl",
             "American Shorthair", "American Wirehair", "Aphrodite Giant", "Arabian Mau", "Asian", "Australian Bombay",
             "Australian Mist", "Balinese", "Bambino", "Bengal", "Bombay", "Brazilian Shorthair", "British Longhair",
@@ -541,7 +541,7 @@ public class LookUpConstants2 {
             "N/A"));
 
 
-    ArrayList<String> GlobalRegionalLocal = new ArrayList<>(Arrays.asList(
+    static ArrayList<String> GlobalRegionalLocal = new ArrayList<>(Arrays.asList(
             "Global",
             "Regional",
             "Local",
@@ -552,7 +552,7 @@ public class LookUpConstants2 {
             "Middle East & Africa"
     ));
 
-    ArrayList<String> OccasionyYears = new ArrayList<>(Arrays.asList(
+    static ArrayList<String> OccasionyYears = new ArrayList<>(Arrays.asList(
             "2015",
             "2016",
             "2017",
@@ -567,7 +567,67 @@ public class LookUpConstants2 {
             "N/A"
     ));
 
-    ArrayList<String> Occasion = new ArrayList<>(Arrays.asList(
+    public static ArrayList<String> getLanguages() {
+        return languages;
+    }
+
+    public static  ArrayList<String> getCustomerSpecific() {
+        return customerSpecific;
+    }
+
+    public static ArrayList<String> getRightsRestricted() {
+        return rightsRestricted;
+    }
+
+    public static ArrayList<String> getRightsManagementType() {
+        return rightsManagementType;
+    }
+
+    public static ArrayList<String> getMasterOrLocalised() {
+        return MasterOrLocalised;
+    }
+
+    public static ArrayList<String> getPetLifeStage() {
+        return PetLifeStage;
+    }
+
+    public static ArrayList<String> getPetSizes() {
+        return PetSizes;
+    }
+
+    public static ArrayList<String> getHealthBenefits() {
+        return healthBenefits;
+    }
+
+    public static ArrayList<String> getSpecies() {
+        return species;
+    }
+
+    public static ArrayList<String> getDisplayPackTypes() {
+        return displayPackTypes;
+    }
+
+    public static ArrayList<String> getBreeds() {
+        return breeds;
+    }
+
+    public static ArrayList<String> getGlobalRegionalLocal() {
+        return GlobalRegionalLocal;
+    }
+
+    public static ArrayList<String> getOccasionyYears() {
+        return OccasionyYears;
+    }
+
+    public static ArrayList<String> getOccasion() {
+        return Occasion;
+    }
+
+    public static ArrayList<String> getAssetStatus() {
+        return assetStatus;
+    }
+
+    static ArrayList<String> Occasion = new ArrayList<>(Arrays.asList(
             "Back To School",
             "Christmas",
             "Dental Health Month",
@@ -590,7 +650,7 @@ public class LookUpConstants2 {
             "CNY",
             "Winter"
     ));
-    ArrayList<String> assetStatus = new ArrayList<>(Arrays.asList(
+    static ArrayList<String> assetStatus = new ArrayList<>(Arrays.asList(
             "In Revisions",
             "Approved",
             "Embargoed",

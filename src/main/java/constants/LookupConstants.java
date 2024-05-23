@@ -95,7 +95,39 @@ public class LookupConstants {
             "Seafood Flavor"
     ));
 
-    ArrayList<String> brands = new ArrayList<>(Arrays.asList(
+    public static ArrayList<String> getBrands() {
+        return brands;
+    }
+
+    public static ArrayList<String> getSubBrandNames() {
+        return SubBrandNames;
+    }
+
+    public static ArrayList<String> getAssetCategories() {
+        return AssetCategories;
+    }
+
+    public static ArrayList<String> getAssetTypes() {
+        return AssetTypes;
+    }
+
+    public static ArrayList<String> getAssetSubType() {
+        return AssetSubType;
+    }
+
+    public static ArrayList<String> getRegions() {
+        return regions;
+    }
+
+    public static ArrayList<String> getMarketingCountries() {
+        return marketingCountries;
+    }
+
+    public static ArrayList<String> getOriginatingCountries() {
+        return originatingCountries;
+    }
+
+    static ArrayList<String> brands = new ArrayList<>(Arrays.asList(
             "Aquarian",
             "Canigou",
             "Catsan",
@@ -141,7 +173,7 @@ public class LookupConstants {
             "Nuzzle"
     ));
 
-    ArrayList<String> SubBrandNames = new ArrayList<>(Arrays.asList(
+    static ArrayList<String> SubBrandNames = new ArrayList<>(Arrays.asList(
             "N/A",
             "Active Fresh",
             "Bianco Fresh",
@@ -355,7 +387,7 @@ public class LookupConstants {
             "Creamy Purrr-ee",
             "Vitality Plus"
     ));
-    ArrayList<String> AssetCategories = new ArrayList<>(Arrays.asList(
+    static ArrayList<String> AssetCategories = new ArrayList<>(Arrays.asList(
             "3D Renders",
             "Brand Assets",
             "Corporate Assets",
@@ -365,7 +397,7 @@ public class LookupConstants {
             "Sales Materials",
             "Video"
     ));
-    ArrayList<String> AssetTypes = new ArrayList<>(Arrays.asList(
+    static ArrayList<String> AssetTypes = new ArrayList<>(Arrays.asList(
             "Labelling/Barcodes",
             "Optimized Images",
             "Packaging",
@@ -394,7 +426,7 @@ public class LookupConstants {
             "Traditional Online Video Content"
     ));
 
-    ArrayList<String> AssetSubType = new ArrayList<>(Arrays.asList(
+    static ArrayList<String> AssetSubType = new ArrayList<>(Arrays.asList(
             "Feeding Guidelines",
             "GTIN/ Barcode",
             "Guaranteed Analysis",
@@ -498,7 +530,7 @@ public class LookupConstants {
             "Short Form: less than 1 minute"
     ));
 
-    ArrayList<String> regions = new ArrayList<>(Arrays.asList(
+    static ArrayList<String> regions = new ArrayList<>(Arrays.asList(
             "Asia Pacific",
             "Europe",
             "Global",
@@ -506,7 +538,7 @@ public class LookupConstants {
             "Middle East & Africa",
             "North America"
     ));
-    ArrayList<String> marketingCountries = new ArrayList<>(Arrays.asList(
+    static ArrayList<String> marketingCountries = new ArrayList<>(Arrays.asList(
             "Asia Pacific",
             "Australia",
             "China",
@@ -633,7 +665,7 @@ public class LookupConstants {
             "North America",
             "United States"
     ));
-    ArrayList<String> originatingCountries = new ArrayList<>(Arrays.asList(
+    static ArrayList<String> originatingCountries = new ArrayList<>(Arrays.asList(
             "United States",
             "United Kingdom",
             "Canada",

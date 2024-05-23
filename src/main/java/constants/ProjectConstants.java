@@ -40,13 +40,13 @@ public class ProjectConstants {
 
     private    List LightHouseColumnName =
             Arrays.asList(new String[] {"ID", "Name" , "Asset Version" ,
-                    "Agency/Partner/Vendor", "Category/Type/Sub-Type 1","Category/Type/Sub-Type 2", "Category/Type/Sub-Type 3", "Asset Status","Description"
+                    "Agency/Partner/Vendor","Category/Type/Sub-Type 2", "Category/Type/Sub-Type 3", "Asset Status","Description"
                     ,"Description/Keywords","Original File Name","Health Benefit","Net Weight","Pet Lifestage","Piece Count","Pet Size","Brightcove Asset ID",
                     "Brightcove Asset Name","Removed By","Brightcove Asset Status","Segment/Product Category 2","Recipe",
                     "Occasion 1","Occasion Year","Originating Country","Claims","Display/Pack Type","Campaign/Promotional Year","Asset Owner"});
 
     private List AprimoColumnName = Arrays.asList(new String[] {"AssetID", "Title" , "LegacyAssetVersion",
-            "AgencyPartner", "AssetCategory","AssetType","AssetSubType","Status","Description","Keywords","FileName","HealthBenefit",
+            "AgencyPartner","AssetType","AssetSubType","Status","Description","Keywords","FileName","HealthBenefit",
             "NetWeight","PetLifestage","PieceCount","PetSize","Brightcove Asset ID","BrightcoveAssetName","BrightcoveRemovedBy",
             "BrightcoveAssetStatus","ProductCategory","Recipe", "Occasion","OccasionYear","OriginatingCountry","Claims",
             "Display/PackType","CampaignPromotionalYear","AssetEmail"});
@@ -83,7 +83,7 @@ public class ProjectConstants {
 
     private  List AprimoSplitReplaceColumnNames = Arrays.asList(new String[] { "&OBJECT_TYPE",	"&ACTION","&ASSET_ID","&FOLDER_TYPE","&MODEL","&PARENTS","&ASSET_NAME","LighthouseSecurityPolicy","&EXPORT_PATH",
             "Tag","InPerpetuity","Language","CustomerSpecific","CampaignName", "MarsCampaignCode","RightsRestricted","IsLatestVersion",
-            "TransparentBackground","PlatformSpecifications","SourceFile","DataClassification","Brand","Language","ImagePosition","SubBrand","Segment",
+            "TransparentBackground","PlatformSpecifications","SourceFile","DataClassification","Language","ImagePosition","SubBrand","Segment",
             "MasterOrLocalizationAdaptation","ProductImageAngle", "InternalZREP","Global/Regional/Local","IncludedCountries","ExcludedCountries","MediaChannel","RestrictionDescription",
             "RightsManagementType","extracted-pdf","copy-content-of","extracted-pdf-child",
             "participant-subscribed","belong-to-video","participant-collection-on-subscribed","extracted-xml","is-derivative-of","contains",
@@ -93,7 +93,7 @@ public class ProjectConstants {
     private    List LHSplitReplaceColumnNames =
             Arrays.asList(new String[] {"&OBJECT_TYPE",	"&ACTION","&ASSET_ID","&FOLDER_TYPE","&MODEL","&PARENTS","&ASSET_NAME","&POLICIES","&EXPORT_PATH"
                     ,"Tag","Asset in Perpetuity?","Language","Customer Specific","Campaign/Promotional Name", "Mars Campaign Code","Rights Restricted?","Is Latest Version",
-                    "Transparent Background?","Platform Specifications","Source File?","Data Classification","Brand","Language","Image Position/Slot", "Sub-Brand","Segment",
+                    "Transparent Background?","Platform Specifications","Source File?","Data Classification","Language","Image Position/Slot", "Sub-Brand","Segment",
                     "Master or Localization/Adaptation?","Product Image Angle", "Internal ZREP","Global/Regional/Local","Included Countries","Excluded Countries",
                     "Media Channel","Restriction Description","Rights Management Type","&LINKS:ARTESIA.LINKTYPE.EXTRACTEDPDF", "&LINKS:ARTESIA.LINKTYPE.COPYCONTENTOF",
                     "&LINKS:ARTESIA.LINKTYPE.EXTRACTEDPDF.CHILD","&LINKS:USR-AST",
