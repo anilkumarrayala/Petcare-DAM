@@ -35,6 +35,8 @@ public class ExcelDrivenMain {
         // increase after garbage collection and decrease as new objects are created.
         long heapFreeSize = Runtime.getRuntime().freeMemory();
         System.out.println("Java Heap Free Size "+heapFreeSize);
+
+
         // Parse and map
         List LHSplitColumnName =  projectConstants.getLHSplitReplaceColumnNames();
         List AprimoSplitColumnName =  projectConstants.getAprimoSplitReplaceColumnNames();
@@ -99,8 +101,6 @@ public class ExcelDrivenMain {
         String destinationColumnName_Policies = "DeliverableType";
         ExcelTransformationUtility.mapPoliciesAndPackageValues(filePath, sourceSheetName, sourceColumnName_Policies,destinationSheetName, destinationColumnName_Policies);
 
-
-
         String sourceColumn1Name_Status = "&EXPORT_PATH";
         String sourceColumn2Name_Status = "Asset Status";
         String destinationColumnName_Status = "Status";
@@ -115,7 +115,6 @@ public class ExcelDrivenMain {
         String sourceColumnName_Flavor = "Segment/Flavor 2";
         String destinationColumnName_Flavor = "Flavor";
         ExcelTransformationUtility.parseAndLookup(filePath, sourceSheetName, sourceColumnName_Flavor,destinationSheetName, destinationColumnName_Flavor, LookupConstants.getFlavorNames());
-
 
         //Lookup for Asset Category
         String sourceColumnName_Category = "Category/Type/Sub-Type 1";
@@ -190,29 +189,17 @@ public class ExcelDrivenMain {
         String destinationColumnName_RightsManagementType = "RightsManagementType";
         ExcelTransformationUtility.parseAndLookup(filePath, sourceSheetName, sourceColumnName_RightsManagementType,destinationSheetName, destinationColumnName_RightsManagementType, LookUpConstants2.getRightsManagementType());
 
+        String sourceSheetName_Transformed = "Transformed";
+        String sourceColumnName_AssetTypes = "AssetType";
+        String destinationColumnName_AssetSubType = "AssetSubType";
+        ExcelTransformationUtility.mapAssetTypeToAssetSubType(filePath, sourceSheetName_Transformed, sourceColumnName_AssetTypes, destinationSheetName, destinationColumnName_AssetSubType);
+
         //Rearranging column order
         List columnOrder =  projectConstants.getColumnOrder();
         ExcelTransformationUtility.rearrangeColumns(filePath, destinationSheetName, destinationSheetName1,  columnOrder);
 
         //Create a new sheet for transformed data
        createNewSheet(destinationSheetName, filePath, destinationSheetName, destFilePath);
-
-//        String sourceColumnName = "GTIN/EAN/UPC";
-//        String destinationColumnName = "ExpoValues";
-//        ExcelTransformationUtility.parseExponentialFields(filePath, sourceSheetName, sourceColumnName, destinationSheetName, destinationColumnName);
-
-//        String sourceColumnName = "&POLICIES";
-//        String destinationColumnName = "DeliverableType";
-//        ExcelTransformationUtility.mapPoliciesAndPackageValues(filePath, sourceSheetName, sourceColumnName, destinationSheetName, destinationColumnName);
-//
-////        String sourceColumnName = "&POLICIES";
-////        String destinationColumnName = "RestrictDownload";
-////        ExcelTransformationUtility.mapPoliciesAndVideoAssetsValues(filePath, sourceSheetName, sourceColumnName, destinationSheetName, destinationColumnName);
-//
-//        String sourceColumnName1 = "&EXPORT_PATH";
-//        String sourceColumnName2 = "Asset Status";
-//        String destinationColumnName = "Status";
-//        ExcelTransformationUtility.mapExportPathAndArchivedValues(filePath, sourceSheetName, sourceColumnName1, sourceColumnName2, destinationSheetName, destinationColumnName);
 
     }
     }

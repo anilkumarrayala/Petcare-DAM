@@ -1297,6 +1297,72 @@ public class ExcelTransformationUtility {
         }
     }
 
+    public static void mapAssetTypeToAssetSubType(String filePath, String sourceSheetName, String sourceColumnName, String destinationSheetName, String destinationColumnName) {
+        FileInputStream fis = null;
+        FileOutputStream outputStream = null;
+        Workbook workbook = null;
+
+        try {
+            fis = new FileInputStream(filePath);
+            workbook = new XSSFWorkbook(fis);
+
+            Sheet sourceSheet = workbook.getSheet(sourceSheetName);
+            Sheet destinationSheet = workbook.getSheet(destinationSheetName);
+
+            int sourceColumnIndex = getColumnIndex(sourceSheet, sourceColumnName);
+            int destinationColumnIndex = getColumnIndex(destinationSheet, destinationColumnName);
+
+            if (sourceColumnIndex == -1) {
+                throw new IllegalArgumentException("Given source column name not found in the source sheet.");
+            }
+
+            if (destinationColumnIndex == -1) {
+                destinationColumnIndex = createColumn(destinationSheet, destinationColumnName);
+            }
+
+            for (int i = 1; i <= sourceSheet.getLastRowNum(); i++) {
+                Row sourceRow = sourceSheet.getRow(i);
+                if (sourceRow == null) continue;
+
+                Row destinationRow = destinationSheet.getRow(i);
+                if (destinationRow == null) {
+                    destinationRow = destinationSheet.createRow(i);
+                }
+
+                Cell sourceCell = sourceRow.getCell(sourceColumnIndex);
+                if (sourceCell != null) {
+                    String sourceValue = sourceCell.getStringCellValue();
+                    String destinationValue;
+
+                    if (sourceValue.equals("eCommerce Enhanced Content")) {
+                        destinationValue = "A+ Content";
+                    } else {
+                        destinationValue = sourceValue;
+                    }
+
+                    Cell destinationCell = destinationRow.createCell(destinationColumnIndex);
+                    destinationCell.setCellValue(destinationValue);
+                }
+            }
+
+            outputStream = new FileOutputStream(filePath);
+            workbook.write(outputStream);
+
+            System.out.println("AssetType To AssetSubType Mapping completed successfully.");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (fis != null) fis.close();
+                if (outputStream != null) outputStream.close();
+                if (workbook != null) workbook.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     /*
      * This method removes extra spaces between words in a given string.
      *
