@@ -30,9 +30,9 @@ public class ProjectConstants {
                     "AgencyPartner", "AssetCategory","AssetType","AssetSubType", "AssetCreationDate","AssetDate","Status","DeliverableType","CampaignName", "MarsCampaignCode","CampaignEndDate","CampaignStartDate",
                     "CustomerSpecific","DataClassification","Description","Keywords","FileName","HealthBenefit","SourceFile", "TransparentBackground",
                     "NetWeight","PetLifestage","PieceCount","PlatformSpecifications","RightsRestricted","PetSize","Brightcove Asset ID","Brightcove Asset Name","BrightcoveRemovedBy","BrightcoveRemovedDate",
-                    "BrightcoveAssetStatus", "MasterOrLocalizationAdaptation","Segment","Flavor","ProductCategory","RightsManagementType","Recipe", "Region/MarketingCountry","ProductImageAngle",
+                    "BrightcoveAssetStatus", "MasterOrLocalizationAdaptation","Segment","Flavor","ProductCategory","RightsManagementType","Recipe","Region/MarketingCountry","ProductImageAngle",
                     "Occasion","OccasionYear","OriginatingCountry","FERT","Claims", "Display/PackType","CampaignPromotionalYear","AssetEmail", "Tag","InPerpetuity", "Brand","Language","GTIN/EAN/UPC","ImagePosition",
-                    "VERP","SubBrand","BrandandSub-Brand","CoverageStartDate","CoverageEndDate","InternalZREP","Global/Regional/Local","IncludedCountries","ExcludedCountries","RestrictionDescription","MediaChannel"
+                    "VERP","SubBrand","BrandSubBrandHierarchy","CoverageStartDate","CoverageEndDate","InternalZREP","Global/Regional/Local","IncludedCountries","ExcludedCountries","RestrictionDescription","MediaChannel"
                     ,"is-related-to","extracted-pdf","copy-content-of","extracted-pdf-child","participant-subscribed","belong-to-video","participant-collection-on-subscribed","extracted-xml",
                     "is-derivative-of","contains","is-child-of","derivative","is-place-graphic-of", "belong-to","has-video-clips", "copy-contains","is-parent-of","extracted-xml-child","placed-graphics"
             });
