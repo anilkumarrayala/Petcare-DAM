@@ -16,7 +16,8 @@ public class ExcelDrivenMain {
 
     public static void main(String[] args) throws IOException,Exception {
 
-        String filePath = "C://Project//MARS//test-1-PN-3.xlsx";
+        String filePath = "C://Project//MARS//PN-50k-100k.xlsx";
+        //String filePath = "C://Project//MARS//test-1-PN-3.xlsx";
         String extension = "Transformed-" +ExcelTransformationUtility.getCurrentTimestamp()+".xlsx";
         String destFilePath =System.getProperty("user.home")+ extension;
         //String destFilePath ="C://Project//MARS//" + extension;
@@ -70,24 +71,25 @@ public class ExcelDrivenMain {
         //Lookup for Region & MarketingCountries
         String sourceColumnName_Region = "Region/Marketing Country 1";
         String destinationColumnName_Region = "Region";
-        ExcelTransformationUtility.parseAndLookup1(filePath, sourceSheetName, sourceColumnName_Region,destinationSheetName, destinationColumnName_Region, LookupConstants.getRegions());
+        //ExcelTransformationUtility.parseAndLookup1(filePath, sourceSheetName, sourceColumnName_Region,destinationSheetName, destinationColumnName_Region, LookupConstants.getRegions());
 
         String sourceColumnName_MarketingCountry = "Region/Marketing Country 2";
         String destinationColumnName_MarketingCountry = "MarketingCountry";
-        ExcelTransformationUtility.parseAndLookup1(filePath, sourceSheetName, sourceColumnName_MarketingCountry,destinationSheetName, destinationColumnName_MarketingCountry, LookupConstants.getMarketingCountries());
+        //ExcelTransformationUtility.parseAndLookup1(filePath, sourceSheetName, sourceColumnName_MarketingCountry,destinationSheetName, destinationColumnName_MarketingCountry, LookupConstants.getMarketingCountries());
 
+        //not working properly ExcelTransformationUtility.pickAndConcatenate(filePath, destinationSheetName, destinationSheetName, destinationColumnName_Region, destinationColumnName_MarketingCountry, destinationColumnName1,';',"/DAM/MarketingRegionMarketingCountry/");
         String destinationColumnName1 = "Region/MarketingCountry";
-        ExcelTransformationUtility.pickAndConcatenate(filePath, destinationSheetName, destinationSheetName,destinationColumnName_Region, destinationColumnName_MarketingCountry, destinationColumnName1,';',"/DAM/MarketingRegionMarketingCountry/");
+        ExcelTransformationUtility.pickAndConcatenate(filePath, sourceSheetName, destinationSheetName,sourceColumnName_Region, sourceColumnName_MarketingCountry, destinationColumnName1,';',"/DAM/MarketingRegionMarketingCountry/",LookupConstants.getRegions(), LookupConstants.getMarketingCountries());
 
         String sourceColumnName_Brand = "Brand";
         String sourceColumnName_SubBrand = "Sub-Brand";
         //Lookup for Brand
-        ExcelTransformationUtility.parseAndLookup1(filePath, sourceSheetName, sourceColumnName_Brand,destinationSheetName, sourceColumnName_Brand, LookupConstants.getBrands());
+        //ExcelTransformationUtility.parseAndLookup1(filePath, sourceSheetName, sourceColumnName_Brand,destinationSheetName, sourceColumnName_Brand, LookupConstants.getBrands());
         //Lookup for Sub Brand
-        ExcelTransformationUtility.parseAndLookup1(filePath, sourceSheetName, sourceColumnName_SubBrand,destinationSheetName, "SubBrand", LookupConstants.getSubBrandNames());
+        //ExcelTransformationUtility.parseAndLookup1(filePath, sourceSheetName, sourceColumnName_SubBrand,destinationSheetName, "SubBrand", LookupConstants.getSubBrandNames());
 
         String destinationColumnName_Combined = "BrandSubBrandHierarchy";
-        ExcelTransformationUtility.pickAndConcatenate(filePath, sourceSheetName, destinationSheetName,sourceColumnName_Brand, sourceColumnName_SubBrand, destinationColumnName_Combined,';',"/DAM/SegmentBrandSubBrand/PetNutrition/");
+        ExcelTransformationUtility.pickAndConcatenate(filePath, sourceSheetName, destinationSheetName,sourceColumnName_Brand, sourceColumnName_SubBrand, destinationColumnName_Combined,';',"/DAM/SegmentBrandSubBrand/PetNutrition/", LookupConstants.getBrands(), LookupConstants.getSubBrandNames());
 
 
         //Additional Transformations

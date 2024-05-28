@@ -508,7 +508,8 @@ public class ExcelTransformationUtility {
      */
     public static void pickAndConcatenate(String filePath, String sourceSheetName, String destinationSheetName,
                                           String sourceColumnName1, String sourceColumnName2, String destinationColumnName,
-                                          char deLimiter, String appendStringValue) throws IOException {
+                                          char deLimiter, String appendStringValue,
+                                          List<String> lookupTable1, List<String> lookupTable2) throws IOException {
         try {
             FileInputStream fis = new FileInputStream(filePath);
             workbook = WorkbookFactory.create(fis);
@@ -519,24 +520,26 @@ public class ExcelTransformationUtility {
             // Get column indices by column names
             int sourceColumnIndex1 = getColumnIndex(sourceSheet, sourceColumnName1);
             int sourceColumnIndex2 = getColumnIndex(sourceSheet, sourceColumnName2);
+            int destinationColumnIndex = getColumnIndex(destinationSheet, destinationColumnName);
 
-            int destinationColumnIndex = createColumn(destinationSheet, destinationColumnName);
-
-            if (sourceColumnIndex1 == -1) {
-                throw new IllegalArgumentException("Given source column name not found in the source sheet.");
+            if (destinationColumnIndex == -1) {
+                destinationColumnIndex = createColumn(destinationSheet, destinationColumnName);
             }
 
-            if (sourceColumnIndex2 == -1) {
+            if (sourceColumnIndex1 == -1 || sourceColumnIndex2 == -1) {
                 throw new IllegalArgumentException("Given source column name not found in the source sheet.");
             }
 
             // Iterate through each row in the source sheet
             for (int i = 1; i <= sourceSheet.getLastRowNum(); i++) {
                 Row sourceRow = sourceSheet.getRow(i);
+                if (sourceRow == null) continue;
+
                 Row destinationRow = destinationSheet.getRow(i);
                 if (destinationRow == null) {
                     destinationRow = destinationSheet.createRow(i);
                 }
+
                 // Get values from the two columns
                 String value1 = sourceRow.getCell(sourceColumnIndex1).getStringCellValue();
                 String value2 = sourceRow.getCell(sourceColumnIndex2).getStringCellValue();
@@ -545,45 +548,61 @@ public class ExcelTransformationUtility {
                 String[] parts1 = value1.split("\\|\\|");
                 String[] parts2 = value2.split("\\|\\|");
 
+                // Eliminate duplicate values in parts1 and parts2
+                parts1 = Arrays.stream(parts1).distinct().toArray(String[]::new);
+                parts2 = Arrays.stream(parts2).distinct().toArray(String[]::new);
+
                 // Create StringBuilder to accumulate concatenated values
                 StringBuilder concatenatedValues = new StringBuilder();
 
-                // Iterate over parts of value1 and value2
-                for (int j = 0; j < Math.min(parts1.length, parts2.length); j++) {
-                    // Remove spaces from parts
-                    String part1 = removeSpaces(parts1[j].trim().replace("N/A", "NA"));
-                    String part2 = removeSpaces(parts2[j].trim().replace("N/A", "NA"));
+                boolean allMatched = true; // To track if all values match the lookup tables
 
-                    // Append concatenated value to StringBuilder
-                    //Concat region and marketing Country field with formula "/DAM/MarketingRegionMarketingCountry/North America/United States (formula)"
-                    if (appendStringValue.contains("MarketingRegionMarketingCountry")) {
-                        concatenatedValues.append(appendStringValue)
-                                .append(part1).append("/")
-                                .append(part2);
-                    } else {
-                        //Divide the multifield value in column "/DAM/SegmentBrandSubBrand/MarsWrigley/Snickers/SnickersNA"
-                        concatenatedValues.append(appendStringValue)
-                                .append(part1).append("/")
-                                .append(part1)
-                                .append(part2);
+                // Iterate over parts of value1 and value2 to form the correct path
+                for (String part1 : parts1) {
+                    part1 = removeSpaces(part1.trim().replace("N/A", "NA"));
+
+                    if (!lookupTable1.contains(part1)) {
+                        System.out.println("No " + sourceColumnName1 + " match found at row " + (i + 1) + ": " + part1);
+                        allMatched = false;
                     }
-                    // Append ";" if it's not the last iteration
-                    if (j < Math.min(parts1.length, parts2.length) - 1) {
-                        concatenatedValues.append(deLimiter);
+
+                    for (String part2 : parts2) {
+                        part2 = removeSpaces(part2.trim().replace("N/A", "NA"));
+
+                        if (!lookupTable2.contains(part2)) {
+                            System.out.println("No " + sourceColumnName2 + " match found at row " + (i + 1) + ": " + part2);
+                            allMatched = false;
+                        }
+
+                        // Append concatenated value to StringBuilder
+                        concatenatedValues.append(appendStringValue)
+                                .append(part1)
+                                .append("/")
+                                .append(part1)
+                                .append(part2)
+                                .append(";");
                     }
                 }
 
-                // Create new cell in destination sheet and set the concatenated value
-                Cell destCell = destinationRow.createCell(destinationColumnIndex);
-                destCell.setCellValue(concatenatedValues.toString());
+                if (allMatched) {
+                    // Remove the last ';' if present
+                    if (concatenatedValues.length() > 0 && concatenatedValues.charAt(concatenatedValues.length() - 1) == ';') {
+                        concatenatedValues.setLength(concatenatedValues.length() - 1);
+                    }
+
+                    // Create new cell in destination sheet and set the concatenated value
+                    Cell destCell = destinationRow.createCell(destinationColumnIndex);
+                    destCell.setCellValue(concatenatedValues.toString());
+                }
             }
 
             // Write the destination workbook to a file
-            FileOutputStream outputStream = new FileOutputStream(filePath);
-            workbook.write(outputStream);
-            System.out.println("Pick and Concatenate --> LH Column " + sourceColumnName1 + " and " + sourceColumnName2 + " mapped successfully to Aprimo Column " + destinationColumnName);
+            try (FileOutputStream outputStream = new FileOutputStream(filePath)) {
+                workbook.write(outputStream);
+                System.out.println("Pick and Concatenate --> LH Column " + sourceColumnName1 + " and " + sourceColumnName2 + " mapped successfully to Aprimo Column " + destinationColumnName);
+            }
+
             // Close resources
-            outputStream.close();
             fis.close();
             workbook.close();
 
