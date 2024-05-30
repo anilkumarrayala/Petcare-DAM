@@ -27,14 +27,14 @@ public class ProjectConstants {
     private    List ColumnOrder =
             Arrays.asList(new String[] {"OriginalAssetID","LighthouseSecurityPolicy","ModifiedFileNames","LighthouseAssetID", "Title" ,
                     "LegacyAssetVersion","ImportedDate", "EmbargoDate","ExpirationDate","IsLatestVersion",
-                    "AgencyPartner", "AssetCategory","AssetType","AssetSubType", "AssetCreationDate","AssetDate","Status","DeliverableType","CampaignPromotionalName", "MarsCampaignCode","CampaignEndDate","CampaignStartDate",
-                    "CustomerSpecific","DataClassification","Description","Keywords","OriginalFileName","HealthBenefit", "TransparentBackground",
+                    "AgencyPartner", "AssetCategory",/*"AssetType","AssetSubType",*/ "ACatATypeASubTypeHierarchy", "AssetCreationDate","AssetDate","Status","DeliverableType","CampaignPromotionalName", "MarsCampaignCode","CampaignEndDate","CampaignStartDate",
+                    "CustomerSpecific","DataClassification","Description" /*,"Keywords"*/,"OriginalFileName","HealthBenefit", "TransparentBackground",
                     "NetWeight","PetLifestage","PieceCount","PlatformSpecifications","RightsRestricted","PetSize","BrightcoveAssetID","BrightcoveAssetName","BrightcoveRemovedBy","BrightcoveRemovedDate",
                     "BrightcoveAssetStatus", "MasterOrLocalizationAdaptation","Flavor","ProductCategory",
                     "RightsManagementType","RightsManagementType1","RightsManagementType2","RightsManagementType3","RightsManagementType4","RightsManagementType5","RightsManagementType6","RightsManagementType7","RightsManagementType8",
                     "Recipe","Region/MarketingCountry","ProductImageAngle",
                     "Occasion","OccasionYear","OriginatingCountry","FERT","Claims", "Display/PackType","CampaignPromotionalYear","AssetEmail",
-                    "Keywords","InPerpetuity","InPerpetuity1","InPerpetuity2","InPerpetuity3","InPerpetuity4","InPerpetuity5","InPerpetuity6","InPerpetuity7","InPerpetuity8","Languages","GTINEANUPC","ImagePosition",
+                    /*"Keywords",*/"InPerpetuity","InPerpetuity1","InPerpetuity2","InPerpetuity3","InPerpetuity4","InPerpetuity5","InPerpetuity6","InPerpetuity7","InPerpetuity8","Languages","GTINEANUPC","ImagePosition",
                     "VERP","BrandSubBrandHierarchy","CoverageStartDate","CoverageStartDate1","CoverageStartDate2","CoverageStartDate3","CoverageStartDate4","CoverageStartDate5",
                     "CoverageStartDate6","CoverageEndDate7","CoverageStartDate8","CoverageEndDate","CoverageEndDate1","CoverageEndDate2","CoverageEndDate3","CoverageEndDate4","CoverageEndDate5","CoverageEndDate6",
                     "CoverageEndDate7","CoverageEndDate8","InternalZREP","Global/Regional/Local","Global/Regional/Local1","Global/Regional/Local2","Global/Regional/Local3","Global/Regional/Local4"

@@ -17,13 +17,14 @@ public class ExcelDrivenMain {
     public static void main(String[] args) throws IOException,Exception {
 
         //String filePath = "C://Project//MARS//PN-50k-100k.xlsx";
-        String filePath = "C://Project//MARS//test-1-PN-1.xlsx";
+        String filePath = "C://Project//MARS//test-1-PN-2.xlsx";
         String extension = "Transformed-" +ExcelTransformationUtility.getCurrentTimestamp()+".xlsx";
         String destFilePath =System.getProperty("user.home")+ extension;
         //String destFilePath ="C://Project//MARS//" + extension;
         String sourceSheetName = "Data";
         String destinationSheetName = "Transformed";
         String destinationSheetName1 = "Final";
+        String sourceSheetName_Transformed = "Transformed";
         ProjectConstants projectConstants = new ProjectConstants();
         // Get current size of heap in bytes.
         long heapSize = Runtime.getRuntime().totalMemory();
@@ -110,6 +111,13 @@ public class ExcelDrivenMain {
         String destinationColumnName_Status = "Status";
         ExcelTransformationUtility.mapExportPathAndArchivedValues(filePath, sourceSheetName, sourceColumn1Name_Status,sourceColumn2Name_Status,destinationSheetName, destinationColumnName_Status);
 
+        ExcelTransformationUtility.mapStatusValues(filePath, sourceSheetName_Transformed, destinationColumnName_Status, destinationSheetName, destinationColumnName_Status);
+
+        String sourceColumnName_Description = "Description";
+        String sourceColumnNmae_Keywords = "Description/Keywords";
+        String destinationColumnName_Description = "Description";
+        ExcelTransformationUtility.concatenateAndMapValues(filePath, sourceSheetName, sourceColumnName_Description, sourceColumnNmae_Keywords,destinationSheetName ,destinationColumnName_Description);
+
         //Lookup for product category
         String sourceColumnName_Product = "Segment/Product Category 2";
         String destinationColumnName_Product = "ProductCategory";
@@ -118,85 +126,87 @@ public class ExcelDrivenMain {
         // Lookup for flavor
         String sourceColumnName_Flavor = "Segment/Flavor 2";
         String destinationColumnName_Flavor = "Flavor";
-        ExcelTransformationUtility.parseAndLookup1(filePath, sourceSheetName, sourceColumnName_Flavor,destinationSheetName, destinationColumnName_Flavor, LookupConstants.getFlavorNames());
+        ExcelTransformationUtility.parseAndLookup(filePath, sourceSheetName, sourceColumnName_Flavor,destinationSheetName, destinationColumnName_Flavor, LookupConstants.getFlavorNames());
 
         //Lookup for Asset Category
         String sourceColumnName_Category = "Category/Type/Sub-Type 1";
         String destinationColumnName_Category = "AssetCategory";
-        ExcelTransformationUtility.parseAndLookup1(filePath, sourceSheetName, sourceColumnName_Category,destinationSheetName, destinationColumnName_Category, LookupConstants.getAssetCategories());
+        ExcelTransformationUtility.parseAndLookup(filePath, sourceSheetName, sourceColumnName_Category,destinationSheetName, destinationColumnName_Category, LookupConstants.getAssetCategories());
 
         //Lookup for Asset SubType
         String sourceColumnName_SubCategory = "Category/Type/Sub-Type 3";
         String destinationColumnName_SubCategor = "AssetSubType";
-        ExcelTransformationUtility.parseAndLookup1(filePath, sourceSheetName, sourceColumnName_SubCategory,destinationSheetName, destinationColumnName_SubCategor, LookupConstants.getAssetSubType());
+        ExcelTransformationUtility.parseAndLookup(filePath, sourceSheetName, sourceColumnName_SubCategory,destinationSheetName, destinationColumnName_SubCategor, LookupConstants.getAssetSubType());
 
         //Lookup for Asset Type
         String sourceColumnName_AssetType = "Category/Type/Sub-Type 2";
         String destinationColumnName_AssetType = "AssetType";
-        ExcelTransformationUtility.parseAndLookup1(filePath, sourceSheetName, sourceColumnName_AssetType,destinationSheetName, destinationColumnName_AssetType, LookupConstants.getAssetTypes());
+        ExcelTransformationUtility.parseAndLookup(filePath, sourceSheetName, sourceColumnName_AssetType,destinationSheetName, destinationColumnName_AssetType, LookupConstants.getAssetTypes());
+
+        String sourceColumnName_AssetTypes = "AssetType";
+        String destinationColumnName_AssetSubType = "AssetSubType";
+        ExcelTransformationUtility.mapAssetTypeToAssetSubType(filePath, sourceSheetName_Transformed, sourceColumnName_AssetTypes, destinationSheetName, destinationColumnName_AssetSubType);
+
+        String destinationColumnName_ACatATypeASubTypeHierarchy = "ACatATypeASubTypeHierarchy";
+        ExcelTransformationUtility.pickAndConcatenateAssets(filePath, sourceSheetName_Transformed, destinationSheetName, destinationColumnName_Category, destinationColumnName_AssetType, destinationColumnName_AssetSubType, destinationColumnName_ACatATypeASubTypeHierarchy ,"/DAM/ACatATypeASubTypeHierarchy");
 
         //Lookup for Originating country
         String sourceColumnName_OriginatingCountry = "Segment/Flavor 2";
         String destinationColumnName_OriginatingCountry = "OriginatingCountry";
-        ExcelTransformationUtility.parseAndLookup1(filePath, sourceSheetName, sourceColumnName_OriginatingCountry,destinationSheetName, destinationColumnName_OriginatingCountry, LookupConstants.getOriginatingCountries());
+        ExcelTransformationUtility.parseAndLookup(filePath, sourceSheetName, sourceColumnName_OriginatingCountry,destinationSheetName, destinationColumnName_OriginatingCountry, LookupConstants.getOriginatingCountries());
 
         //Lookup for language
         String destinationColumnName_Language = "Language";
-        ExcelTransformationUtility.parseAndLookup1(filePath, sourceSheetName, destinationColumnName_Language,destinationSheetName, destinationColumnName_Language, LookUpConstants2.getLanguages());
+        ExcelTransformationUtility.parseAndLookup(filePath, sourceSheetName, destinationColumnName_Language,destinationSheetName, destinationColumnName_Language, LookUpConstants2.getLanguages());
 
         //Lookup for Occasion
         String sourceColumnName_Occasion = "Occasion 1";
         String destinationColumnName_Occasion = "Occasion";
-        ExcelTransformationUtility.parseAndLookup1(filePath, sourceSheetName, sourceColumnName_Occasion,destinationSheetName, destinationColumnName_Occasion, LookUpConstants2.getOccasion());
+        ExcelTransformationUtility.parseAndLookup(filePath, sourceSheetName, sourceColumnName_Occasion,destinationSheetName, destinationColumnName_Occasion, LookUpConstants2.getOccasion());
 
         //Lookup for Occasion Year
         String sourceColumnName_OccasionYear = "Occasion Year";
         String destinationColumnName_OccasionYear = "OccasionYear";
-        ExcelTransformationUtility.parseAndLookup1(filePath, sourceSheetName, sourceColumnName_OccasionYear,destinationSheetName, destinationColumnName_Flavor, LookUpConstants2.getOccasionyYears());
+        ExcelTransformationUtility.parseAndLookup(filePath, sourceSheetName, sourceColumnName_OccasionYear,destinationSheetName, destinationColumnName_OccasionYear, LookUpConstants2.getOccasionyYears());
 
         //Lookup for Customer Specific
         String sourceColumnName_CustomerSpecific = "Customer Specific";
         String destinationColumnName_CustomerSpecific = "CustomerSpecific";
-        ExcelTransformationUtility.parseAndLookup1(filePath, sourceSheetName, sourceColumnName_CustomerSpecific,destinationSheetName, destinationColumnName_CustomerSpecific, LookUpConstants2.getCustomerSpecific());
+        ExcelTransformationUtility.parseAndLookup(filePath, sourceSheetName, sourceColumnName_CustomerSpecific,destinationSheetName, destinationColumnName_CustomerSpecific, LookUpConstants2.getCustomerSpecific());
 
         //Lookup for Pet Lifestage
         String sourceColumnName_PetLifestage = "Pet Lifestage";
         String destinationColumnName_PetLifestage = "PetLifestage";
-        ExcelTransformationUtility.parseAndLookup1(filePath, sourceSheetName, sourceColumnName_PetLifestage,destinationSheetName, destinationColumnName_PetLifestage, LookUpConstants2.getPetLifeStage());
+        ExcelTransformationUtility.parseAndLookup(filePath, sourceSheetName, sourceColumnName_PetLifestage,destinationSheetName, destinationColumnName_PetLifestage, LookUpConstants2.getPetLifeStage());
 
         //Lookup for Pet Size
         String sourceColumnName_Petsize = "Pet Size";
         String destinationColumnName_Petsize = "PetSize";
-        ExcelTransformationUtility.parseAndLookup1(filePath, sourceSheetName, sourceColumnName_Petsize,destinationSheetName, destinationColumnName_Petsize, LookUpConstants2.getPetSizes());
+        ExcelTransformationUtility.parseAndLookup(filePath, sourceSheetName, sourceColumnName_Petsize,destinationSheetName, destinationColumnName_Petsize, LookUpConstants2.getPetSizes());
 
         //Lookup for health Benefit
         String sourceColumnName_HealthBenefit = "Health Benefit";
         String destinationColumnName_HealthBenefit = "HealthBenefit";
-        ExcelTransformationUtility.parseAndLookup1(filePath, sourceSheetName, sourceColumnName_HealthBenefit,destinationSheetName, destinationColumnName_HealthBenefit, LookUpConstants2.getHealthBenefits());
+        ExcelTransformationUtility.parseAndLookup(filePath, sourceSheetName, sourceColumnName_HealthBenefit,destinationSheetName, destinationColumnName_HealthBenefit, LookUpConstants2.getHealthBenefits());
 
         //Lookup for Display/Pack Type
         String sourceColumnName_DisplayPackType = "Display/Pack Type";
         String destinationColumnName_DisplayPackType = "Display/PackType";
-        ExcelTransformationUtility.parseAndLookup1(filePath, sourceSheetName, sourceColumnName_DisplayPackType,destinationSheetName, destinationColumnName_DisplayPackType, LookUpConstants2.getDisplayPackTypes());
+        ExcelTransformationUtility.parseAndLookup(filePath, sourceSheetName, sourceColumnName_DisplayPackType,destinationSheetName, destinationColumnName_DisplayPackType, LookUpConstants2.getDisplayPackTypes());
 
         //Lookup for Rights Restricted?
         String sourceColumnName_RightsRestricted = "Rights Restricted?";
         String destinationColumnName_RightsRestricted = "RightsRestricted";
-        ExcelTransformationUtility.parseAndLookup1(filePath, sourceSheetName, sourceColumnName_RightsRestricted,destinationSheetName, destinationColumnName_RightsRestricted, LookUpConstants2.getRightsRestricted());
+        ExcelTransformationUtility.parseAndLookup(filePath, sourceSheetName, sourceColumnName_RightsRestricted,destinationSheetName, destinationColumnName_RightsRestricted, LookUpConstants2.getRightsRestricted());
 
         //Lookup for Global/Regional/Local
         String ColumnName_GlobalRegionalLocal = "Global/Regional/Local";
-        ExcelTransformationUtility.parseAndLookup1(filePath, sourceSheetName, ColumnName_GlobalRegionalLocal,destinationSheetName, ColumnName_GlobalRegionalLocal, LookUpConstants2.getGlobalRegionalLocal());
+        ExcelTransformationUtility.parseAndLookup(filePath, sourceSheetName, ColumnName_GlobalRegionalLocal,destinationSheetName, ColumnName_GlobalRegionalLocal, LookUpConstants2.getGlobalRegionalLocal());
 
         //Lookup for Rights Management Type
         String sourceColumnName_RightsManagementType = "Rights Management Type";
         String destinationColumnName_RightsManagementType = "RightsManagementType";
-        ExcelTransformationUtility.parseAndLookup1(filePath, sourceSheetName, sourceColumnName_RightsManagementType,destinationSheetName, destinationColumnName_RightsManagementType, LookUpConstants2.getRightsManagementType());
-
-        String sourceSheetName_Transformed = "Transformed";
-        String sourceColumnName_AssetTypes = "AssetType";
-        String destinationColumnName_AssetSubType = "AssetSubType";
-        ExcelTransformationUtility.mapAssetTypeToAssetSubType(filePath, sourceSheetName_Transformed, sourceColumnName_AssetTypes, destinationSheetName, destinationColumnName_AssetSubType);
+        ExcelTransformationUtility.parseAndLookup(filePath, sourceSheetName, sourceColumnName_RightsManagementType,destinationSheetName, destinationColumnName_RightsManagementType, LookUpConstants2.getRightsManagementType());
 
         //Rearranging column order
         List columnOrder =  projectConstants.getColumnOrder();

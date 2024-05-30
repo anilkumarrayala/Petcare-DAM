@@ -1144,6 +1144,142 @@ public class ExcelTransformationUtility {
             }
         }
     }
+    public static void mapStatusValues(String filePath, String sourceSheetName, String sourceColumnName, String destinationSheetName, String destinationColumnName) {
+        FileInputStream fis = null;
+        FileOutputStream outputStream = null;
+        Workbook workbook = null;
+
+        String[] targetValues = new String[] {"SOURCE", "REFERENCE", "FINAL PACKAGING"};
+        List<String> targetList = Arrays.asList(targetValues);
+
+        try {
+            fis = new FileInputStream(filePath);
+            workbook = new XSSFWorkbook(fis);
+
+            Sheet sourceSheet = workbook.getSheet(sourceSheetName);
+            Sheet destinationSheet = workbook.getSheet(destinationSheetName);
+
+            int sourceColumnIndex = getColumnIndex(sourceSheet, sourceColumnName);
+            int destinationColumnIndex = getColumnIndex(destinationSheet, destinationColumnName);
+
+            if (sourceColumnIndex == -1) {
+                throw new IllegalArgumentException("Given source column name not found in the source sheet.");
+            }
+
+            if (destinationColumnIndex == -1) {
+                destinationColumnIndex = createColumn(destinationSheet, destinationColumnName);
+            }
+
+            for (int i = 1; i <= sourceSheet.getLastRowNum(); i++) {
+                Row sourceRow = sourceSheet.getRow(i);
+                if (sourceRow == null) continue;
+
+                Row destinationRow = destinationSheet.getRow(i);
+                if (destinationRow == null) {
+                    destinationRow = destinationSheet.createRow(i);
+                }
+
+                Cell sourceCell = sourceRow.getCell(sourceColumnIndex);
+                if (sourceCell != null) {
+                    String sourceValue = sourceCell.getStringCellValue().toUpperCase();
+                    String destinationValue;
+
+                    if (targetList.contains(sourceValue)) {
+                        destinationValue = "approved";
+                    } else {
+                        destinationValue = sourceValue.toLowerCase();
+                    }
+
+                    Cell destinationCell = destinationRow.createCell(destinationColumnIndex);
+                    destinationCell.setCellValue(destinationValue);
+                }
+            }
+
+            outputStream = new FileOutputStream(filePath);
+            workbook.write(outputStream);
+
+            System.out.println("Mapping for " + sourceColumnName + " completed successfully.");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (fis != null) fis.close();
+                if (outputStream != null) outputStream.close();
+                if (workbook != null) workbook.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public static void concatenateAndMapValues(String filePath, String sourceSheetName, String sourceColumnName1, String sourceColumnName2, String destinationSheetName, String destinationColumnName) {
+        FileInputStream fis = null;
+        FileOutputStream outputStream = null;
+        Workbook workbook = null;
+
+        try {
+            fis = new FileInputStream(filePath);
+            workbook = new XSSFWorkbook(fis);
+
+            Sheet sourceSheet = workbook.getSheet(sourceSheetName);
+            Sheet destinationSheet = workbook.getSheet(destinationSheetName);
+
+            int sourceColumnIndex1 = getColumnIndex(sourceSheet, sourceColumnName1);
+            int sourceColumnIndex2 = getColumnIndex(sourceSheet, sourceColumnName2);
+            int destinationColumnIndex = getColumnIndex(destinationSheet, destinationColumnName);
+
+            if (sourceColumnIndex1 == -1 || sourceColumnIndex2 == -1) {
+                throw new IllegalArgumentException("Given source column name not found in the source sheet.");
+            }
+
+            if (destinationColumnIndex == -1) {
+                destinationColumnIndex = createColumn(destinationSheet, destinationColumnName);
+            }
+
+            for (int i = 1; i <= sourceSheet.getLastRowNum(); i++) {
+                Row sourceRow = sourceSheet.getRow(i);
+                if (sourceRow == null) continue;
+
+                Row destinationRow = destinationSheet.getRow(i);
+                if (destinationRow == null) {
+                    destinationRow = destinationSheet.createRow(i);
+                }
+
+                Cell sourceCell1 = sourceRow.getCell(sourceColumnIndex1);
+                Cell sourceCell2 = sourceRow.getCell(sourceColumnIndex2);
+                String value1 = (sourceCell1 != null) ? sourceCell1.getStringCellValue() : "";
+                String value2 = (sourceCell2 != null) ? sourceCell2.getStringCellValue() : "";
+
+                String concatenatedValue;
+                if (value1.isEmpty()) {
+                    concatenatedValue = value2;
+                } else {
+                    concatenatedValue = value1 + " " + value2;
+                }
+
+                Cell destinationCell = destinationRow.createCell(destinationColumnIndex);
+                destinationCell.setCellValue(concatenatedValue);
+            }
+
+            outputStream = new FileOutputStream(filePath);
+            workbook.write(outputStream);
+
+            System.out.println("Concatenation and mapping for " + sourceColumnName1 + " and " + sourceColumnName2 + " completed successfully.");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (fis != null) fis.close();
+                if (outputStream != null) outputStream.close();
+                if (workbook != null) workbook.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
 
     public static void parseAndMapProductCategories(String filePath, String sourceSheetName, String sourceColumnName, String destinationSheetName, String destinationColumnName) {
 
@@ -1235,94 +1371,94 @@ public class ExcelTransformationUtility {
         }
     }
 
+//    public static void parseAndLookup(String filePath, String sourceSheetName, String sourceColumnName, String destinationSheetName, String destinationColumnName, List<String> LookUpTable) {
+//
+//        // Create the ArrayList with given flavor names
+//
+//
+//        FileInputStream fis = null;
+//        FileOutputStream outputStream = null;
+//        Workbook workbook = null;
+//
+//        try {
+//            fis = new FileInputStream(filePath);
+//            workbook = new XSSFWorkbook(fis);
+//
+//            Sheet sourceSheet = workbook.getSheet(sourceSheetName);
+//            Sheet destinationSheet = workbook.getSheet(destinationSheetName);
+//
+//            int sourceColumnIndex = getColumnIndex(sourceSheet, sourceColumnName);
+//            int destinationColumnIndex = getColumnIndex(destinationSheet, destinationColumnName);
+//
+//            if (sourceColumnIndex == -1) {
+//                throw new IllegalArgumentException("Given source column name "+sourceColumnName+"not found in the source sheet.");
+//            }
+//
+//            if (destinationColumnIndex == -1) {
+//                destinationColumnIndex = createColumn(destinationSheet, destinationColumnName);
+//            }
+//
+//            for (int i = 1; i <= sourceSheet.getLastRowNum(); i++) {
+//                Row sourceRow = sourceSheet.getRow(i);
+//                if (sourceRow == null) continue;
+//
+//                Row destinationRow = destinationSheet.getRow(i);
+//                if (destinationRow == null) {
+//                    destinationRow = destinationSheet.createRow(i);
+//                }
+//                Cell sourceCell = sourceRow.getCell(sourceColumnIndex);
+//                if (sourceCell != null) {
+//                    String sourceValue = sourceCell.getStringCellValue();
+//                    if (sourceValue.isEmpty()) {
+//                        Cell destinationCell = destinationRow.createCell(destinationColumnIndex);
+//                        destinationCell.setCellValue("");
+//                    } else {
+//                        String[] splitValues = sourceValue.split("\\|\\|");
+//                        boolean allMatched = true;
+//                        for (String value : splitValues) {
+//                            if (!value.isEmpty()) {
+//                                value = removeExtraSpaces(value.trim());
+//                                if (!LookUpTable.contains(value)) {
+//                                    System.out.println("No "+destinationColumnName+" match found at row " + (i + 1) + ": " + value);
+//                                    allMatched = false;
+//                                }
+//                            }
+//                            Cell destinationCell = destinationRow.createCell(destinationColumnIndex);
+//                            if (allMatched) {
+//                                // Join the parts with ";" and replace any remaining "||" with ";"
+//                                String formattedValue = String.join(";", splitValues).replace("||", ";");
+//                                destinationCell.setCellValue(formattedValue);
+//                            } else {
+//                                destinationCell.setCellValue("");
+//                            }
+//                        }
+//                    }
+//                } else {
+//                    // If the source cell is null, set the destination cell to empty as well
+//                    Cell destinationCell = destinationRow.createCell(destinationColumnIndex);
+//                    destinationCell.setCellValue("");
+//                }
+//            }
+//
+//            outputStream = new FileOutputStream(filePath);
+//            workbook.write(outputStream);
+//
+//            System.out.println("Column "+destinationColumnName+" Mapping completed successfully.");
+//
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        } finally {
+//            try {
+//                if (fis != null) fis.close();
+//                if (outputStream != null) outputStream.close();
+//                if (workbook != null) workbook.close();
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//    }
+
     public static void parseAndLookup(String filePath, String sourceSheetName, String sourceColumnName, String destinationSheetName, String destinationColumnName, List<String> LookUpTable) {
-
-        // Create the ArrayList with given flavor names
-
-
-        FileInputStream fis = null;
-        FileOutputStream outputStream = null;
-        Workbook workbook = null;
-
-        try {
-            fis = new FileInputStream(filePath);
-            workbook = new XSSFWorkbook(fis);
-
-            Sheet sourceSheet = workbook.getSheet(sourceSheetName);
-            Sheet destinationSheet = workbook.getSheet(destinationSheetName);
-
-            int sourceColumnIndex = getColumnIndex(sourceSheet, sourceColumnName);
-            int destinationColumnIndex = getColumnIndex(destinationSheet, destinationColumnName);
-
-            if (sourceColumnIndex == -1) {
-                throw new IllegalArgumentException("Given source column name "+sourceColumnName+"not found in the source sheet.");
-            }
-
-            if (destinationColumnIndex == -1) {
-                destinationColumnIndex = createColumn(destinationSheet, destinationColumnName);
-            }
-
-            for (int i = 1; i <= sourceSheet.getLastRowNum(); i++) {
-                Row sourceRow = sourceSheet.getRow(i);
-                if (sourceRow == null) continue;
-
-                Row destinationRow = destinationSheet.getRow(i);
-                if (destinationRow == null) {
-                    destinationRow = destinationSheet.createRow(i);
-                }
-                Cell sourceCell = sourceRow.getCell(sourceColumnIndex);
-                if (sourceCell != null) {
-                    String sourceValue = sourceCell.getStringCellValue();
-                    if (sourceValue.isEmpty()) {
-                        Cell destinationCell = destinationRow.createCell(destinationColumnIndex);
-                        destinationCell.setCellValue("");
-                    } else {
-                        String[] splitValues = sourceValue.split("\\|\\|");
-                        boolean allMatched = true;
-                        for (String value : splitValues) {
-                            if (!value.isEmpty()) {
-                                value = removeExtraSpaces(value.trim());
-                                if (!LookUpTable.contains(value)) {
-                                    System.out.println("No "+destinationColumnName+" match found at row " + (i + 1) + ": " + value);
-                                    allMatched = false;
-                                }
-                            }
-                            Cell destinationCell = destinationRow.createCell(destinationColumnIndex);
-                            if (allMatched) {
-                                // Join the parts with ";" and replace any remaining "||" with ";"
-                                String formattedValue = String.join(";", splitValues).replace("||", ";");
-                                destinationCell.setCellValue(formattedValue);
-                            } else {
-                                destinationCell.setCellValue("");
-                            }
-                        }
-                    }
-                } else {
-                    // If the source cell is null, set the destination cell to empty as well
-                    Cell destinationCell = destinationRow.createCell(destinationColumnIndex);
-                    destinationCell.setCellValue("");
-                }
-            }
-
-            outputStream = new FileOutputStream(filePath);
-            workbook.write(outputStream);
-
-            System.out.println("Column "+destinationColumnName+" Mapping completed successfully.");
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (fis != null) fis.close();
-                if (outputStream != null) outputStream.close();
-                if (workbook != null) workbook.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    public static void parseAndLookup1(String filePath, String sourceSheetName, String sourceColumnName, String destinationSheetName, String destinationColumnName, List<String> LookUpTable) {
 
         FileInputStream fis = null;
         FileOutputStream outputStream = null;
@@ -1471,6 +1607,72 @@ public class ExcelTransformationUtility {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    public static void pickAndConcatenateAssets(String filePath, String sourceSheetName, String destinationSheetName,
+                                                String sourceColumnName1, String sourceColumnName2, String sourceColumnName3,
+                                                String destinationColumnName, String appendStringValue) throws IOException {
+        FileInputStream fis = null;
+        FileOutputStream outputStream = null;
+        Workbook workbook = null;
+
+        try {
+            fis = new FileInputStream(filePath);
+            workbook = new XSSFWorkbook(fis);
+
+            Sheet sourceSheet = workbook.getSheet(sourceSheetName);
+            Sheet destinationSheet = workbook.getSheet(destinationSheetName);
+
+            // Get column indices by column names
+            int sourceColumnIndex1 = getColumnIndex(sourceSheet, sourceColumnName1);
+            int sourceColumnIndex2 = getColumnIndex(sourceSheet, sourceColumnName2);
+            int sourceColumnIndex3 = getColumnIndex(sourceSheet, sourceColumnName3);
+            int destinationColumnIndex = getColumnIndex(destinationSheet, destinationColumnName);
+
+            if (destinationColumnIndex == -1) {
+                destinationColumnIndex = createColumn(destinationSheet, destinationColumnName);
+            }
+
+            if (sourceColumnIndex1 == -1 || sourceColumnIndex2 == -1 || sourceColumnIndex3 == -1) {
+                throw new IllegalArgumentException("Given source column name not found in the source sheet.");
+            }
+
+            // Iterate through each row in the source sheet
+            for (int i = 1; i <= sourceSheet.getLastRowNum(); i++) {
+                Row sourceRow = sourceSheet.getRow(i);
+                if (sourceRow == null) continue;
+
+                Row destinationRow = destinationSheet.getRow(i);
+                if (destinationRow == null) {
+                    destinationRow = destinationSheet.createRow(i);
+                }
+
+                // Get values from the three columns
+                String value1 = sourceRow.getCell(sourceColumnIndex1).getStringCellValue();
+                String value2 = sourceRow.getCell(sourceColumnIndex2).getStringCellValue();
+                String value3 = sourceRow.getCell(sourceColumnIndex3).getStringCellValue();
+
+                // Concatenate values with the given string
+                String concatenatedValue = String.format("%s/%s/%s/%s", appendStringValue, value1, value2, value3);
+
+                // Create new cell in destination sheet and set the concatenated value
+                Cell destCell = destinationRow.createCell(destinationColumnIndex);
+                destCell.setCellValue(concatenatedValue);
+            }
+
+            // Write the destination workbook to a file
+            outputStream = new FileOutputStream(filePath);
+            workbook.write(outputStream);
+
+            System.out.println("Pick and Concatenate --> Columns " + sourceColumnName1 + ", " + sourceColumnName2 + ", and " + sourceColumnName3 + " mapped successfully to column " + destinationColumnName);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (fis != null) fis.close();
+            if (outputStream != null) outputStream.close();
+            if (workbook != null) workbook.close();
         }
     }
 
