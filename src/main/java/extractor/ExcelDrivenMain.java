@@ -16,8 +16,8 @@ public class ExcelDrivenMain {
 
     public static void main(String[] args) throws IOException,Exception {
 
-        String filePath = "C://Project//MARS//PN-50k-100k.xlsx";
-        //String filePath = "C://Project//MARS//test-1-PN-3.xlsx";
+        //String filePath = "C://Project//MARS//PN-50k-100k.xlsx";
+        String filePath = "C://Project//MARS//test-1-PN-2.xlsx";
         String extension = "Transformed-" +ExcelTransformationUtility.getCurrentTimestamp()+".xlsx";
         String destFilePath =System.getProperty("user.home")+ extension;
         //String destFilePath ="C://Project//MARS//" + extension;
@@ -94,7 +94,8 @@ public class ExcelDrivenMain {
 
         //Additional Transformations
         String sourceColumnName_Expo = "GTIN/EAN/UPC";
-        ExcelTransformationUtility.parseExponentialFields(filePath, sourceSheetName, sourceColumnName_Expo,destinationSheetName, sourceColumnName_Expo);
+        String destinationColumnName_Expo = "GTINEANUPC";
+        ExcelTransformationUtility.parseExponentialFields(filePath, sourceSheetName, sourceColumnName_Expo,destinationSheetName, destinationColumnName_Expo);
         String sourceColumnName_VERP = "VERP";
         ExcelTransformationUtility.parseExponentialFields(filePath, sourceSheetName, sourceColumnName_VERP,destinationSheetName, sourceColumnName_VERP);
         String sourceColumnName_FERT = "FERT";
