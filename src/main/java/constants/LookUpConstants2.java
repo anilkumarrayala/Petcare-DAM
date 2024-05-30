@@ -260,6 +260,8 @@ public class LookUpConstants2 {
             "Approved",
             "Embargoed",
             "Expired",
-            "Archived"
+            "Archived",
+            "Approved",
+            "Draft"
     ));
 }

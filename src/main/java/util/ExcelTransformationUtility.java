@@ -692,7 +692,8 @@ public class ExcelTransformationUtility {
     }
 
     public static String dateFormatter(String dateColumnValue) throws ParseException {
-        String targetFormatStr = "dd/MM/yyyy HH:mm:ss a";
+       //US date formatter
+        String targetFormatStr = "MM/dd/yyyy HH:mm:ss a";
         String originalFormatStr1 = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
         String originalFormatStr2 = "yyyy-MM-dd HH:mm:ss.SSS";
         DateFormat targetFormat = new SimpleDateFormat(targetFormatStr);
@@ -927,7 +928,8 @@ public class ExcelTransformationUtility {
         FileInputStream fis = null;
         FileOutputStream outputStream = null;
         Workbook workbook = null;
-
+        String[] PackagingValueNames = new String[] {"Evoke Group Asset", "Vidsy Asset","Elmwood Asset","Juice Asset"};
+        List<String> Policylist = Arrays.asList(PackagingValueNames);
         try {
             fis = new FileInputStream(filePath);
             workbook = new XSSFWorkbook(fis);
@@ -959,10 +961,14 @@ public class ExcelTransformationUtility {
                 if (sourceCell != null) {
                     String sourceValue = sourceCell.getStringCellValue();
                     String destinationValue;
-
-                    if ("Package".equals(sourceValue)) {
+                    //Applies for two values - Mars Inc. Final Packaging Asset / Mars Inc. Final Packaging Mechanical Artwork Asset
+                    if (sourceValue.contains("Packaging")) {
                         destinationValue = "Final Packaging";
-                    } else {
+                    } else if(Policylist.contains(sourceValue))
+                    {
+                        destinationValue = "Draft";
+                    }else
+                    {
                         destinationValue = "Reference";
                     }
 
@@ -974,7 +980,7 @@ public class ExcelTransformationUtility {
             outputStream = new FileOutputStream(filePath);
             workbook.write(outputStream);
 
-            System.out.println("Mapping completed successfully.");
+            System.out.println("Mapping for "+ sourceColumnName+" completed successfully.");
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -1004,7 +1010,7 @@ public class ExcelTransformationUtility {
             int destinationColumnIndex = getColumnIndex(destinationSheet, destinationColumnName);
 
             if (sourceColumnIndex == -1) {
-                throw new IllegalArgumentException("Given source column name not found in the source sheet.");
+                throw new IllegalArgumentException("Given source column name "+sourceColumnName+" not found in the source sheet.");
             }
 
             if (destinationColumnIndex == -1) {
@@ -1039,7 +1045,7 @@ public class ExcelTransformationUtility {
             outputStream = new FileOutputStream(filePath);
             workbook.write(outputStream);
 
-            System.out.println("Mapping completed successfully.");
+            System.out.println("Mapping for "+sourceColumnName+" completed successfully.");
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -1071,11 +1077,11 @@ public class ExcelTransformationUtility {
             int destinationColumnIndex = getColumnIndex(destinationSheet, destinationColumnName);
 
             if (sourceColumn1Index == -1) {
-                throw new IllegalArgumentException("Given source column 1 name not found in the source sheet.");
+                throw new IllegalArgumentException("Given source column 1 name : "+sourceColumnName1+" not found in the source sheet.");
             }
 
             if (sourceColumn2Index == -1) {
-                throw new IllegalArgumentException("Given source column 2 name not found in the source sheet.");
+                throw new IllegalArgumentException("Given source column 2 name: "+sourceColumnName2+" not found in the source sheet.");
             }
 
             if (destinationColumnIndex == -1) {
@@ -1124,7 +1130,7 @@ public class ExcelTransformationUtility {
             outputStream = new FileOutputStream(filePath);
             workbook.write(outputStream);
 
-            System.out.println("Mapping completed successfully.");
+            System.out.println("Mapping for "+sourceColumnName2+" completed successfully.");
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -1162,7 +1168,7 @@ public class ExcelTransformationUtility {
             int destinationColumnIndex = getColumnIndex(destinationSheet, destinationColumnName);
 
             if (sourceColumnIndex == -1) {
-                throw new IllegalArgumentException("Given source column name not found in the source sheet.");
+                throw new IllegalArgumentException("Given source column name "+sourceColumnName+" not found in the source sheet.");
             }
 
             if (destinationColumnIndex == -1) {
@@ -1214,7 +1220,7 @@ public class ExcelTransformationUtility {
             outputStream = new FileOutputStream(filePath);
             workbook.write(outputStream);
 
-            System.out.println("Mapping completed successfully.");
+            System.out.println("Mapping for "+sourceColumnName+" completed successfully.");
 
         } catch (IOException e) {
             e.printStackTrace();
