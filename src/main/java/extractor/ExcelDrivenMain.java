@@ -16,8 +16,8 @@ public class ExcelDrivenMain {
 
     public static void main(String[] args) throws IOException,Exception {
 
-        //String filePath = "C://Project//MARS//PN-50k-100k.xlsx";
-        String filePath = "C://Project//MARS//test-1-PN-2.xlsx";
+        String filePath = "C://Project//MARS//test-Extract-PetNutrition.xlsx";
+        //String filePath = "C://Project//MARS//test-1-PN-2.xlsx";
         String extension = "Transformed-" +ExcelTransformationUtility.getCurrentTimestamp()+".xlsx";
         String destFilePath =System.getProperty("user.home")+ extension;
         //String destFilePath ="C://Project//MARS//" + extension;
@@ -72,11 +72,11 @@ public class ExcelDrivenMain {
         //Lookup for Region & MarketingCountries
         String sourceColumnName_Region = "Region/Marketing Country 1";
         String destinationColumnName_Region = "Region";
-        //ExcelTransformationUtility.parseAndLookup1(filePath, sourceSheetName, sourceColumnName_Region,destinationSheetName, destinationColumnName_Region, LookupConstants.getRegions());
+        ExcelTransformationUtility.parseAndLookup(filePath, sourceSheetName, sourceColumnName_Region,destinationSheetName, destinationColumnName_Region, LookupConstants.getRegions());
 
         String sourceColumnName_MarketingCountry = "Region/Marketing Country 2";
         String destinationColumnName_MarketingCountry = "MarketingCountry";
-        //ExcelTransformationUtility.parseAndLookup1(filePath, sourceSheetName, sourceColumnName_MarketingCountry,destinationSheetName, destinationColumnName_MarketingCountry, LookupConstants.getMarketingCountries());
+        ExcelTransformationUtility.parseAndLookup(filePath, sourceSheetName, sourceColumnName_MarketingCountry,destinationSheetName, destinationColumnName_MarketingCountry, LookupConstants.getMarketingCountries());
 
         //not working properly ExcelTransformationUtility.pickAndConcatenate(filePath, destinationSheetName, destinationSheetName, destinationColumnName_Region, destinationColumnName_MarketingCountry, destinationColumnName1,';',"/DAM/MarketingRegionMarketingCountry/");
         String destinationColumnName1 = "Region/MarketingCountry";
@@ -85,9 +85,9 @@ public class ExcelDrivenMain {
         String sourceColumnName_Brand = "Brand";
         String sourceColumnName_SubBrand = "Sub-Brand";
         //Lookup for Brand
-        //ExcelTransformationUtility.parseAndLookup1(filePath, sourceSheetName, sourceColumnName_Brand,destinationSheetName, sourceColumnName_Brand, LookupConstants.getBrands());
+        ExcelTransformationUtility.parseAndLookup(filePath, sourceSheetName, sourceColumnName_Brand,destinationSheetName, sourceColumnName_Brand, LookupConstants.getBrands());
         //Lookup for Sub Brand
-        //ExcelTransformationUtility.parseAndLookup1(filePath, sourceSheetName, sourceColumnName_SubBrand,destinationSheetName, "SubBrand", LookupConstants.getSubBrandNames());
+        ExcelTransformationUtility.parseAndLookup(filePath, sourceSheetName, sourceColumnName_SubBrand,destinationSheetName, "SubBrand", LookupConstants.getSubBrandNames());
 
         String destinationColumnName_Combined = "BrandSubBrandHierarchy";
         ExcelTransformationUtility.pickAndConcatenate(filePath, sourceSheetName, destinationSheetName,sourceColumnName_Brand, sourceColumnName_SubBrand, destinationColumnName_Combined,';',"/DAM/SegmentBrandSubBrand/PetNutrition/", LookupConstants.getBrands(), LookupConstants.getSubBrandNames());
@@ -151,7 +151,7 @@ public class ExcelDrivenMain {
         ExcelTransformationUtility.pickAndConcatenateAssets(filePath, sourceSheetName_Transformed, destinationSheetName, destinationColumnName_Category, destinationColumnName_AssetType, destinationColumnName_AssetSubType, destinationColumnName_ACatATypeASubTypeHierarchy ,"/DAM/ACatATypeASubTypeHierarchy");
 
         //Lookup for Originating country
-        String sourceColumnName_OriginatingCountry = "Segment/Flavor 2";
+        String sourceColumnName_OriginatingCountry = "Originating Country";
         String destinationColumnName_OriginatingCountry = "OriginatingCountry";
         ExcelTransformationUtility.parseAndLookup(filePath, sourceSheetName, sourceColumnName_OriginatingCountry,destinationSheetName, destinationColumnName_OriginatingCountry, LookupConstants.getOriginatingCountries());
 
@@ -207,6 +207,14 @@ public class ExcelDrivenMain {
         String sourceColumnName_RightsManagementType = "Rights Management Type";
         String destinationColumnName_RightsManagementType = "RightsManagementType";
         ExcelTransformationUtility.parseAndLookup(filePath, sourceSheetName, sourceColumnName_RightsManagementType,destinationSheetName, destinationColumnName_RightsManagementType, LookUpConstants2.getRightsManagementType());
+
+        String[] sourceColumnNames = {
+                "is-related-to", "extracted-pdf", "copy-content-of", "extracted-pdf-child", "participant-subscribed",
+                "belong-to-video", "participant-collection-on-subscribed", "extracted-xml", "is-derivative-of",
+                "contains", "is-child-of", "derivative", "is-place-graphic-of", "belong-to", "has-video-clips",
+                "copy-contains", "is-parent-of", "extracted-xml-child", "placed-graphics"};
+        String destinationColumnName = "AssociatedAssets";
+        ExcelTransformationUtility.pickAndConcatenateAssets(filePath, sourceSheetName_Transformed, destinationSheetName, sourceColumnNames, destinationColumnName);
 
         //Rearranging column order
         List columnOrder =  projectConstants.getColumnOrder();

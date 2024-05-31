@@ -561,18 +561,18 @@ public class ExcelTransformationUtility {
                 for (String part1 : parts1) {
                     part1 = removeSpaces(part1.trim().replace("N/A", "NA"));
 
-                    if (!lookupTable1.contains(part1)) {
-                        System.out.println("No " + sourceColumnName1 + " match found at row " + (i + 1) + ": " + part1);
-                        allMatched = false;
-                    }
+//                    if (!lookupTable1.contains(part1)) {
+//                        System.out.println("No " + sourceColumnName1 + " match found at row " + (i + 1) + ": " + part1);
+//                        allMatched = false;
+//                    }
 
                     for (String part2 : parts2) {
                         part2 = removeSpaces(part2.trim().replace("N/A", "NA"));
 
-                        if (!lookupTable2.contains(part2)) {
-                            System.out.println("No " + sourceColumnName2 + " match found at row " + (i + 1) + ": " + part2);
-                            allMatched = false;
-                        }
+//                        if (!lookupTable2.contains(part2)) {
+//                            System.out.println("No " + sourceColumnName2 + " match found at row " + (i + 1) + ": " + part2);
+//                            allMatched = false;
+//                        }
 
                         // Append concatenated value to StringBuilder
                         concatenatedValues.append(appendStringValue)
@@ -1666,6 +1666,73 @@ public class ExcelTransformationUtility {
             workbook.write(outputStream);
 
             System.out.println("Pick and Concatenate --> Columns " + sourceColumnName1 + ", " + sourceColumnName2 + ", and " + sourceColumnName3 + " mapped successfully to column " + destinationColumnName);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (fis != null) fis.close();
+            if (outputStream != null) outputStream.close();
+            if (workbook != null) workbook.close();
+        }
+    }
+
+    public static void pickAndConcatenateAssets(String filePath, String sourceSheetName, String destinationSheetName,
+                                                String[] sourceColumnNames, String destinationColumnName) throws IOException {
+        FileInputStream fis = null;
+        FileOutputStream outputStream = null;
+        Workbook workbook = null;
+
+        try {
+            fis = new FileInputStream(filePath);
+            workbook = new XSSFWorkbook(fis);
+
+            Sheet sourceSheet = workbook.getSheet(sourceSheetName);
+            Sheet destinationSheet = workbook.getSheet(destinationSheetName);
+
+            // Get column indices by column names
+            int[] sourceColumnIndices = new int[sourceColumnNames.length];
+            for (int i = 0; i < sourceColumnNames.length; i++) {
+                sourceColumnIndices[i] = getColumnIndex(sourceSheet, sourceColumnNames[i]);
+                if (sourceColumnIndices[i] == -1) {
+                    throw new IllegalArgumentException("Given source column name " + sourceColumnNames[i] + " not found in the source sheet.");
+                }
+            }
+            int destinationColumnIndex = getColumnIndex(destinationSheet, destinationColumnName);
+            if (destinationColumnIndex == -1) {
+                destinationColumnIndex = createColumn(destinationSheet, destinationColumnName);
+            }
+
+            // Iterate through each row in the source sheet
+            for (int i = 1; i <= sourceSheet.getLastRowNum(); i++) {
+                Row sourceRow = sourceSheet.getRow(i);
+                if (sourceRow == null) continue;
+
+                Row destinationRow = destinationSheet.getRow(i);
+                if (destinationRow == null) {
+                    destinationRow = destinationSheet.createRow(i);
+                }
+
+                StringBuilder concatenatedValue = new StringBuilder();
+                for (int sourceColumnIndex : sourceColumnIndices) {
+                    Cell cell = sourceRow.getCell(sourceColumnIndex);
+                    if (cell != null) {
+                        String cellValue = cell.getStringCellValue().replaceAll(":N|:Y", "");
+                        if (concatenatedValue.length() > 0) {
+                            concatenatedValue.append(";");
+                        }
+                        concatenatedValue.append(cellValue);
+                    }
+                }
+
+                Cell destCell = destinationRow.createCell(destinationColumnIndex);
+                destCell.setCellValue(concatenatedValue.toString());
+            }
+
+            // Write the destination workbook to a file
+            outputStream = new FileOutputStream(filePath);
+            workbook.write(outputStream);
+
+            System.out.println("Pick and Concatenate --> Columns mapped successfully to column " + destinationColumnName);
 
         } catch (IOException e) {
             e.printStackTrace();
