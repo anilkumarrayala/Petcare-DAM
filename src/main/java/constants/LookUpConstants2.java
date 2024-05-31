@@ -256,7 +256,7 @@ public class LookUpConstants2 {
 
     //need to check
     static ArrayList<String> assetStatus = new ArrayList<>(Arrays.asList(
-            "In Revisions",
+            "InReview",
             "Approved",
             "Embargoed",
             "Expired",

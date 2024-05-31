@@ -961,12 +961,12 @@ public class ExcelTransformationUtility {
                 if (sourceCell != null) {
                     String sourceValue = sourceCell.getStringCellValue();
                     String destinationValue;
-                    //Applies for two values - Mars Inc. Final Packaging Asset / Mars Inc. Final Packaging Mechanical Artwork Asset
+                    //Applies for all the policies for agency assets
                     if (sourceValue.contains("Packaging")) {
                         destinationValue = "Final Packaging";
                     } else if(Policylist.contains(sourceValue))
                     {
-                        destinationValue = "Draft";
+                        destinationValue = "InReview";
                     }else
                     {
                         destinationValue = "Reference";
