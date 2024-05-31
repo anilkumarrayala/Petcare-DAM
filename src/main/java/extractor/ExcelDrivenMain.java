@@ -221,7 +221,7 @@ public class ExcelDrivenMain {
         ExcelTransformationUtility.rearrangeColumns(filePath, destinationSheetName, destinationSheetName1,  columnOrder);
 
         //Create a new sheet for transformed data
-       //createNewSheet(destinationSheetName, filePath, destinationSheetName, destFilePath);
+       createNewSheet(destinationSheetName, filePath, destinationSheetName, destFilePath);
 
     }
     }

@@ -578,7 +578,6 @@ public class ExcelTransformationUtility {
                         concatenatedValues.append(appendStringValue)
                                 .append(part1)
                                 .append("/")
-                                .append(part1)
                                 .append(part2)
                                 .append(";");
                     }
@@ -963,7 +962,7 @@ public class ExcelTransformationUtility {
                     String destinationValue;
                     //Applies for all the policies for agency assets
                     if (sourceValue.contains("Packaging")) {
-                        destinationValue = "Final Packaging";
+                        destinationValue = "FinalPackaging";
                     } else if(Policylist.contains(sourceValue))
                     {
                         destinationValue = "InReview";
@@ -1185,9 +1184,9 @@ public class ExcelTransformationUtility {
                     String destinationValue;
 
                     if (targetList.contains(sourceValue)) {
-                        destinationValue = "approved";
+                        destinationValue = "Approved";
                     } else {
-                        destinationValue = sourceValue.toLowerCase();
+                        destinationValue = convertToLowercaseExceptFirst(sourceValue);
                     }
 
                     Cell destinationCell = destinationRow.createCell(destinationColumnIndex);
@@ -1504,6 +1503,10 @@ public class ExcelTransformationUtility {
                         for (String value : splitValues) {
                             if (!value.isEmpty()) {
                                 String cleanedValue = removeSpaces(value.trim().replace("N/A", "NA"));
+                                if(sourceColumnName.equals("Occasion"))
+                                {
+                                    cleanedValue.replace(",","");
+                                }
                                 if (!LookUpTable.contains(cleanedValue)) {
                                     System.out.println("No " + destinationColumnName + " match found at row " + (i + 1) + ": " + cleanedValue);
                                     allMatched = false;
@@ -1762,6 +1765,19 @@ public class ExcelTransformationUtility {
     // Method to remove spaces from a string
     private static String removeSpaces(String input) {
         return input.replaceAll("\\s+", "");
+    }
+
+    public static String convertToLowercaseExceptFirst(String str) {
+        if (str == null || str.isEmpty()) {
+            return str;
+        }
+
+        // Split the string into the first character and the rest
+        char firstChar = str.charAt(0);
+        String restOfString = str.substring(1).toLowerCase();
+
+        // Concatenate the first character and the rest of the string
+        return firstChar + restOfString;
     }
 }
 
