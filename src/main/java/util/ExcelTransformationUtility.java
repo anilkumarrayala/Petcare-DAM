@@ -561,18 +561,18 @@ public class ExcelTransformationUtility {
                 for (String part1 : parts1) {
                     part1 = removeSpaces(part1.trim().replace("N/A", "NA"));
 
-//                    if (!lookupTable1.contains(part1)) {
-//                        System.out.println("No " + sourceColumnName1 + " match found at row " + (i + 1) + ": " + part1);
-//                        allMatched = false;
-//                    }
+                    if (!lookupTable1.contains(part1)) {
+                        System.out.println("No " + sourceColumnName1 + " match found at row " + (i + 1) + ": " + part1);
+                        //allMatched = false;
+                    }
 
                     for (String part2 : parts2) {
                         part2 = removeSpaces(part2.trim().replace("N/A", "NA"));
 
-//                        if (!lookupTable2.contains(part2)) {
-//                            System.out.println("No " + sourceColumnName2 + " match found at row " + (i + 1) + ": " + part2);
-//                            allMatched = false;
-//                        }
+                        if (!lookupTable2.contains(part2)) {
+                            System.out.println("No " + sourceColumnName2 + " match found at row " + (i + 1) + ": " + part2);
+                            //allMatched = false;
+                        }
 
                         // Append concatenated value to StringBuilder
                         concatenatedValues.append(appendStringValue)
@@ -584,7 +584,7 @@ public class ExcelTransformationUtility {
                     }
                 }
 
-                if (allMatched) {
+                //if (allMatched) {
                     // Remove the last ';' if present
                     if (concatenatedValues.length() > 0 && concatenatedValues.charAt(concatenatedValues.length() - 1) == ';') {
                         concatenatedValues.setLength(concatenatedValues.length() - 1);
@@ -593,7 +593,7 @@ public class ExcelTransformationUtility {
                     // Create new cell in destination sheet and set the concatenated value
                     Cell destCell = destinationRow.createCell(destinationColumnIndex);
                     destCell.setCellValue(concatenatedValues.toString());
-                }
+                //}
             }
 
             // Write the destination workbook to a file
