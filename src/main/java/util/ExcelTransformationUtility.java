@@ -1332,7 +1332,7 @@ public class ExcelTransformationUtility {
                                 value = removeExtraSpaces(value.trim());
                                 if (!productCategories.contains(value)) {
                                     System.out.println("No Product Category match found at row " + (i + 1) + ": " + value);
-                                    allMatched = false;
+                                  //  allMatched = false;
                                 }
                             }
                             Cell destinationCell = destinationRow.createCell(destinationColumnIndex);
@@ -1509,7 +1509,7 @@ public class ExcelTransformationUtility {
                                 }
                                 if (!LookUpTable.contains(cleanedValue)) {
                                     System.out.println("No " + destinationColumnName + " match found at row " + (i + 1) + ": " + cleanedValue);
-                                    allMatched = false;
+                                  //  allMatched = false;
                                 }
                                 if (formattedValue.length() > 0) {
                                     formattedValue.append(";");
