@@ -559,7 +559,7 @@ public class ExcelTransformationUtility {
 
                 // Iterate over parts of value1 and value2 to form the correct path
                 for (String part1 : parts1) {
-                    part1 = removeSpaces(part1.trim().replace("N/A", "NA"));
+                    part1 = removeSpaces(part1.trim().replace("N/A", "NA").replace("/","").replace("&","").replace("'",""));
 
                     if (!lookupTable1.contains(part1)) {
                         System.out.println("No " + sourceColumnName1 + " match found at row " + (i + 1) + ": " + part1);
@@ -567,7 +567,7 @@ public class ExcelTransformationUtility {
                     }
 
                     for (String part2 : parts2) {
-                        part2 = removeSpaces(part2.trim().replace("N/A", "NA"));
+                        part2 = removeSpaces(part2.trim().replace("N/A", "NA").replace("/","").replace("&","").replace("'",""));
 
                         if (!lookupTable2.contains(part2)) {
                             System.out.println("No " + sourceColumnName2 + " match found at row " + (i + 1) + ": " + part2);
@@ -1502,10 +1502,14 @@ public class ExcelTransformationUtility {
 
                         for (String value : splitValues) {
                             if (!value.isEmpty()) {
-                                String cleanedValue = removeSpaces(value.trim().replace("N/A", "NA"));
+                                String cleanedValue = removeSpaces(value.trim().replace("N/A", "NA").replace("/","").replace("-","").replace(":",""));
                                 if(sourceColumnName.equals("Occasion"))
                                 {
                                     cleanedValue.replace(",","");
+                                }
+                               else if(sourceColumnName.equals("Segment/Flavor 2"))
+                                {
+                                    cleanedValue.replace("and","and ");
                                 }
                                 if (!LookUpTable.contains(cleanedValue)) {
                                     System.out.println("No " + destinationColumnName + " match found at row " + (i + 1) + ": " + cleanedValue);

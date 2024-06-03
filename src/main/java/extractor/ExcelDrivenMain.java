@@ -209,7 +209,7 @@ public class ExcelDrivenMain {
         ExcelTransformationUtility.parseAndLookup(filePath, sourceSheetName, sourceColumnName_RightsManagementType,destinationSheetName, destinationColumnName_RightsManagementType, LookUpConstants2.getRightsManagementType());
 
         String[] sourceColumnNames = {
-                "is-related-to", "extracted-pdf", "copy-content-of", "extracted-pdf-child", "participant-subscribed",
+                "extracted-pdf", "copy-content-of", "extracted-pdf-child", "participant-subscribed",
                 "belong-to-video", "participant-collection-on-subscribed", "extracted-xml", "is-derivative-of",
                 "contains", "is-child-of", "derivative", "is-place-graphic-of", "belong-to", "has-video-clips",
                 "copy-contains", "is-parent-of", "extracted-xml-child", "placed-graphics"};
