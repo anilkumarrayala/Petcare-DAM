@@ -96,6 +96,7 @@ public class ExcelTransformationUtility {
     private static void mapColumnValues(Sheet sourceSheet, Sheet destinationSheet, int sourceColumnIndex, int destinationColumnIndex) {
         for (int i = 1; i <= sourceSheet.getLastRowNum(); i++) {
             Row sourceRow = sourceSheet.getRow(i);
+            if (sourceRow == null) continue;
             Row destinationRow = destinationSheet.getRow(i);
             if (destinationRow == null) {
                 destinationRow = destinationSheet.createRow(i);
@@ -103,7 +104,7 @@ public class ExcelTransformationUtility {
             Cell sourceCell = sourceRow.getCell(sourceColumnIndex);
             Cell destinationCell = destinationRow.createCell(destinationColumnIndex);
             if (sourceCell != null) {
-                String destinationCellValue = sourceCell.getStringCellValue().trim();
+                String destinationCellValue = getCellValueAsString(sourceCell).trim();
                 destinationCell.setCellValue(destinationCellValue.replace("N/A","NA"));
             }
         }
@@ -206,13 +207,14 @@ public class ExcelTransformationUtility {
             //parseAndMapSingleCellValues(sourceSheet, destinationSheet, sourceColumnIndex, destinationColumnIndex,deLimiter);
             for (int i = 1; i <= sourceSheet.getLastRowNum(); i++) {
                 Row sourceRow = sourceSheet.getRow(i);
+                if (sourceRow == null) continue;
                 Row destinationRow = destinationSheet.getRow(i);
                 if (destinationRow == null) {
                     destinationRow = destinationSheet.createRow(i);
                 }
                 Cell sourceCell = sourceRow.getCell(sourceColumnIndex);
                 if (sourceCell != null) {
-                    String sourceCellValue = sourceCell.getStringCellValue();
+                    String sourceCellValue = getCellValueAsString(sourceCell);
                     if (sourceCellValue != null && !sourceCellValue.isEmpty()) {
                         Set<String> uniqueValues = new HashSet<>();
                         StringBuilder concatenatedValue = new StringBuilder();
@@ -288,7 +290,7 @@ public class ExcelTransformationUtility {
      */
 
     public static void parseAndMapMultipleColumn(String filePath, String sourceSheetName, String destinationSheetName,
-                                   String sourceColumnName, String destinationColumnName1, String destinationColumnName2, char deLimiter) throws IOException {
+                                                 String sourceColumnName, String destinationColumnName1, String destinationColumnName2, char deLimiter) throws IOException {
         FileInputStream fis = null;
         FileOutputStream outputStream = null;
 
@@ -319,7 +321,7 @@ public class ExcelTransformationUtility {
     }
 
     private static void parseAndMapMultipleCellValues(Sheet sourceSheet, Sheet destinationSheet, int sourceColumnIndex,
-                                              int destinationColumnIndex1, int destinationColumnIndex2 , char deLimiter) {
+                                                      int destinationColumnIndex1, int destinationColumnIndex2 , char deLimiter) {
         for (int i = 1; i <= sourceSheet.getLastRowNum(); i++) {
             Row sourceRow = sourceSheet.getRow(i);
             Row destinationRow = destinationSheet.getRow(i);
@@ -372,7 +374,7 @@ public class ExcelTransformationUtility {
      */
 
     public static void parseAndMap1(String filePath, String sourceSheetName, String destinationSheetName,
-                                   String sourceColumnName, String destinationColumnName) throws IOException {
+                                    String sourceColumnName, String destinationColumnName) throws IOException {
         try (FileInputStream fis = new FileInputStream(filePath);
              Workbook workbook = new XSSFWorkbook(fis)) {
 
@@ -444,9 +446,9 @@ public class ExcelTransformationUtility {
         */
 
     public static void parseAndMap2(String filePath, String sourceSheetName, String sourceColumnName,
-                                   String destinationSheetName, String destinationColumnName) throws IOException {
+                                    String destinationSheetName, String destinationColumnName) throws IOException {
         FileInputStream fis = new FileInputStream(filePath);
-       workbook = WorkbookFactory.create(fis);
+        workbook = WorkbookFactory.create(fis);
 
         Sheet sourceSheet = workbook.getSheet(sourceSheetName);
         Sheet destinationSheet = workbook.getSheet(destinationSheetName);
@@ -471,7 +473,7 @@ public class ExcelTransformationUtility {
     }
 
     private static void parseAndMapCellValues2(Sheet sourceSheet, Sheet destinationSheet,
-                                              int sourceColumnIndex, int destinationColumnIndex) {
+                                               int sourceColumnIndex, int destinationColumnIndex) {
         for (int i = 1; i <= sourceSheet.getLastRowNum(); i++) {
             Row sourceRow = sourceSheet.getRow(i);
             Row destinationRow = destinationSheet.getRow(i);
@@ -510,8 +512,10 @@ public class ExcelTransformationUtility {
                                           String sourceColumnName1, String sourceColumnName2, String destinationColumnName,
                                           char deLimiter, String appendStringValue,
                                           List<String> lookupTable1, List<String> lookupTable2) throws IOException {
+        Workbook workbook = null;
+        FileInputStream fis = null;
         try {
-            FileInputStream fis = new FileInputStream(filePath);
+            fis = new FileInputStream(filePath);
             workbook = WorkbookFactory.create(fis);
 
             Sheet sourceSheet = workbook.getSheet(sourceSheetName);
@@ -541,8 +545,20 @@ public class ExcelTransformationUtility {
                 }
 
                 // Get values from the two columns
-                String value1 = sourceRow.getCell(sourceColumnIndex1).getStringCellValue();
-                String value2 = sourceRow.getCell(sourceColumnIndex2).getStringCellValue();
+                Cell cell1 = sourceRow.getCell(sourceColumnIndex1);
+                Cell cell2 = sourceRow.getCell(sourceColumnIndex2);
+
+                if (cell1 == null || cell1.getCellType() == CellType.BLANK) {
+                    System.out.println("Null or blank cell found at row " + (i + 1) + ", column " + sourceColumnIndex1);
+                    continue;
+                }
+                if (cell2 == null || cell2.getCellType() == CellType.BLANK) {
+                    System.out.println("Null or blank cell found at row " + (i + 1) + ", column " + sourceColumnIndex2);
+                    continue;
+                }
+
+                String value1 = cell1.getStringCellValue();
+                String value2 = cell2.getStringCellValue();
 
                 // Split value1 and value2 into parts based on the delimiter ||
                 String[] parts1 = value1.split("\\|\\|");
@@ -559,7 +575,12 @@ public class ExcelTransformationUtility {
 
                 // Iterate over parts of value1 and value2 to form the correct path
                 for (String part1 : parts1) {
-                    part1 = removeSpaces(part1.trim().replace("N/A", "NA").replace("/","").replace("&","").replace("'",""));
+                    //part1 = removeSpaces(part1.trim().replace("N/A", "NA").replace("/","").replace("&","").replace("'",""));
+                    part1 = part1.trim();
+                    part1 = part1.replace("N/A", "NA")
+                            .replaceAll("[/&'-]", "")  // Remove &, /, -, and '
+                            .replaceAll("\\s", "");   // Remove all spaces
+                    part1 = removeSpaces(part1); // Ensure any extra spaces are removed
 
                     if (!lookupTable1.contains(part1)) {
                         System.out.println("No " + sourceColumnName1 + " match found at row " + (i + 1) + ": " + part1);
@@ -567,7 +588,12 @@ public class ExcelTransformationUtility {
                     }
 
                     for (String part2 : parts2) {
-                        part2 = removeSpaces(part2.trim().replace("N/A", "NA").replace("/","").replace("&","").replace("'",""));
+                        //part2 = removeSpaces(part2.trim().replace("N/A", "NA").replace("/","").replace("&","").replace("'",""));
+                        part2 = part2.trim();
+                        part2 = part2.replace("N/A", "NA")
+                                .replaceAll("[/&'-]", "")  // Remove &, /, -, and '
+                                .replaceAll("\\s", "");   // Remove all spaces
+                        part2 = removeSpaces(part2); // Ensure any extra spaces are removed
 
                         if (!lookupTable2.contains(part2)) {
                             System.out.println("No " + sourceColumnName2 + " match found at row " + (i + 1) + ": " + part2);
@@ -583,16 +609,14 @@ public class ExcelTransformationUtility {
                     }
                 }
 
-                //if (allMatched) {
-                    // Remove the last ';' if present
-                    if (concatenatedValues.length() > 0 && concatenatedValues.charAt(concatenatedValues.length() - 1) == ';') {
-                        concatenatedValues.setLength(concatenatedValues.length() - 1);
-                    }
+                // Remove the last ';' if present
+                if (concatenatedValues.length() > 0 && concatenatedValues.charAt(concatenatedValues.length() - 1) == ';') {
+                    concatenatedValues.setLength(concatenatedValues.length() - 1);
+                }
 
-                    // Create new cell in destination sheet and set the concatenated value
-                    Cell destCell = destinationRow.createCell(destinationColumnIndex);
-                    destCell.setCellValue(concatenatedValues.toString());
-                //}
+                // Create new cell in destination sheet and set the concatenated value
+                Cell destCell = destinationRow.createCell(destinationColumnIndex);
+                destCell.setCellValue(concatenatedValues.toString());
             }
 
             // Write the destination workbook to a file
@@ -601,12 +625,11 @@ public class ExcelTransformationUtility {
                 System.out.println("Pick and Concatenate --> LH Column " + sourceColumnName1 + " and " + sourceColumnName2 + " mapped successfully to Aprimo Column " + destinationColumnName);
             }
 
-            // Close resources
-            fis.close();
-            workbook.close();
-
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            if (fis != null) fis.close();
+            if (workbook != null) workbook.close();
         }
     }
 
@@ -691,7 +714,7 @@ public class ExcelTransformationUtility {
     }
 
     public static String dateFormatter(String dateColumnValue) throws ParseException {
-       //US date formatter
+        //US date formatter
         String targetFormatStr = "MM/dd/yyyy HH:mm:ss a";
         String originalFormatStr1 = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
         String originalFormatStr2 = "yyyy-MM-dd HH:mm:ss.SSS";
@@ -766,6 +789,7 @@ public class ExcelTransformationUtility {
             //Apply date transformation to each value
             for (int i = 1; i <= sourceSheet.getLastRowNum(); i++) {
                 Row sourceRow = sourceSheet.getRow(i);
+                if (sourceRow == null) continue;
                 Row destinationRow = destinationSheet.getRow(i);
                 if (destinationRow == null) {
                     destinationRow = destinationSheet.createRow(i);
@@ -777,16 +801,16 @@ public class ExcelTransformationUtility {
                         Set<String> uniqueValues = new HashSet<>();
                         StringBuilder concatenatedValue = new StringBuilder();
                         String[] values = sourceCellValue.split("\\|\\|"); // Split the cell value with "||" delimiter
-                            for (String value : values) { //check for null
-                                value = dateFormatter(value.trim());
-                                if (!uniqueValues.contains(value)) {
-                                    if (concatenatedValue.length() > 0) {
-                                        concatenatedValue.append(deLimiter); // Adding delimiter "," between values
-                                    }
-                                    concatenatedValue.append(value);
-                                    uniqueValues.add(value);
+                        for (String value : values) { //check for null
+                            value = dateFormatter(value.trim());
+                            if (!uniqueValues.contains(value)) {
+                                if (concatenatedValue.length() > 0) {
+                                    concatenatedValue.append(deLimiter); // Adding delimiter "," between values
                                 }
+                                concatenatedValue.append(value);
+                                uniqueValues.add(value);
                             }
+                        }
                         Cell destinationCell = destinationRow.createCell(destinationColumnIndex);
                         //destinationCell.setCellValue(concatenatedValue.toString());
                         destinationCell.setCellValue(concatenatedValue.toString());
@@ -1332,13 +1356,13 @@ public class ExcelTransformationUtility {
                                 value = removeExtraSpaces(value.trim());
                                 if (!productCategories.contains(value)) {
                                     System.out.println("No Product Category match found at row " + (i + 1) + ": " + value);
-                                  //  allMatched = false;
+                                    //  allMatched = false;
                                 }
                             }
                             Cell destinationCell = destinationRow.createCell(destinationColumnIndex);
                             if (allMatched) {
                                 // Join the parts with ";" and replace any remaining "||" with ";"
-                                String formattedValue = String.join(";", splitValues).replace("||", ";");
+                                String formattedValue = removeSpaces(String.join(";", splitValues).replace("||", ";"));
                                 destinationCell.setCellValue(formattedValue);
                             } else {
                                 destinationCell.setCellValue("");
@@ -1491,7 +1515,7 @@ public class ExcelTransformationUtility {
                 }
                 Cell sourceCell = sourceRow.getCell(sourceColumnIndex);
                 if (sourceCell != null) {
-                    String sourceValue = sourceCell.getStringCellValue();
+                    String sourceValue = getCellValueAsString(sourceCell);
                     Cell destinationCell = destinationRow.createCell(destinationColumnIndex);
                     if (sourceValue.isEmpty()) {
                         destinationCell.setCellValue("");
@@ -1502,18 +1526,18 @@ public class ExcelTransformationUtility {
 
                         for (String value : splitValues) {
                             if (!value.isEmpty()) {
-                                String cleanedValue = removeSpaces(value.trim().replace("N/A", "NA").replace("/","").replace("-","").replace(":",""));
+                                String cleanedValue = removeSpaces(value.trim().replace("N/A", "NA").replace("/","").replace("&","").replace("-","").replace(":",""));
                                 if(sourceColumnName.equals("Occasion"))
                                 {
                                     cleanedValue.replace(",","");
                                 }
-                               else if(sourceColumnName.equals("Segment/Flavor 2"))
+                                else if(sourceColumnName.equals("Segment/Flavor 2"))
                                 {
                                     cleanedValue.replace("and","and ");
                                 }
                                 if (!LookUpTable.contains(cleanedValue)) {
                                     System.out.println("No " + destinationColumnName + " match found at row " + (i + 1) + ": " + cleanedValue);
-                                  //  allMatched = false;
+                                    //  allMatched = false;
                                 }
                                 if (formattedValue.length() > 0) {
                                     formattedValue.append(";");
@@ -1782,6 +1806,17 @@ public class ExcelTransformationUtility {
 
         // Concatenate the first character and the rest of the string
         return firstChar + restOfString;
+    }
+    private static String getCellValueAsString(Cell cell) {
+        if (cell == null) {
+            return null;
+        }
+
+        if (cell.getCellType() == CellType.NUMERIC) {
+            return String.valueOf(cell.getNumericCellValue());
+        }
+
+        return cell.getStringCellValue();
     }
 }
 

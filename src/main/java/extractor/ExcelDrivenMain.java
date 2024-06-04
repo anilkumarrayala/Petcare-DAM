@@ -16,8 +16,8 @@ public class ExcelDrivenMain {
 
     public static void main(String[] args) throws IOException,Exception {
 
-        String filePath = "C://Project//MARS//test-Extract-PetNutrition.xlsx";
-        //String filePath = "C://Project//MARS//test-1-PN-2.xlsx";
+        //String filePath = "C://Project//MARS//test-Extract-PetNutrition.xlsx";
+        String filePath = "C://Project//MARS//test-1-PN-2.xlsx";
         String extension = "Transformed-" +ExcelTransformationUtility.getCurrentTimestamp()+".xlsx";
         String destFilePath =System.getProperty("user.home")+ extension;
         //String destFilePath ="C://Project//MARS//" + extension;
@@ -143,9 +143,9 @@ public class ExcelDrivenMain {
         String destinationColumnName_AssetType = "AssetType";
         ExcelTransformationUtility.parseAndLookup(filePath, sourceSheetName, sourceColumnName_AssetType,destinationSheetName, destinationColumnName_AssetType, LookupConstants.getAssetTypes());
 
-        String sourceColumnName_AssetTypes = "AssetType";
+        //String sourceColumnName_AssetTypes = "AssetType";
         String destinationColumnName_AssetSubType = "AssetSubType";
-        ExcelTransformationUtility.mapAssetTypeToAssetSubType(filePath, sourceSheetName_Transformed, sourceColumnName_AssetTypes, destinationSheetName, destinationColumnName_AssetSubType);
+        ExcelTransformationUtility.mapAssetTypeToAssetSubType(filePath, sourceSheetName_Transformed, destinationColumnName_SubCategor, destinationSheetName, destinationColumnName_AssetSubType);
 
         String destinationColumnName_ACatATypeASubTypeHierarchy = "ACatATypeASubTypeHierarchy";
         ExcelTransformationUtility.pickAndConcatenateAssets(filePath, sourceSheetName_Transformed, destinationSheetName, destinationColumnName_Category, destinationColumnName_AssetType, destinationColumnName_AssetSubType, destinationColumnName_ACatATypeASubTypeHierarchy ,"/DAM/ACatATypeASubTypeHierarchy");
