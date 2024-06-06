@@ -16,8 +16,8 @@ public class ExcelDrivenMain {
 
     public static void main(String[] args) throws IOException,Exception {
 
-        //String filePath = "C://Project//MARS//test-Extract-PetNutrition.xlsx";
-        String filePath = "C://Project//MARS//test-1-PN-2.xlsx";
+        String filePath = "C://Project//MARS//test-Extract-PetNutrition.xlsx";
+        //String filePath = "C://Project//MARS//test-1-PN-2.xlsx";
         String extension = "Transformed-" +ExcelTransformationUtility.getCurrentTimestamp()+".xlsx";
         String destFilePath =System.getProperty("user.home")+ extension;
         //String destFilePath ="C://Project//MARS//" + extension;
@@ -101,6 +101,9 @@ public class ExcelDrivenMain {
         ExcelTransformationUtility.parseExponentialFields(filePath, sourceSheetName, sourceColumnName_VERP,destinationSheetName, sourceColumnName_VERP);
         String sourceColumnName_FERT = "FERT";
         ExcelTransformationUtility.parseExponentialFields(filePath, sourceSheetName, sourceColumnName_FERT,destinationSheetName, sourceColumnName_FERT);
+        String sourceColumnName_InternalZREP = "Internal ZREP";
+        String destinationColumnName_InternalZREP = "InternalZREP";
+        ExcelTransformationUtility.parseExponentialFields(filePath, sourceSheetName, sourceColumnName_InternalZREP,destinationSheetName, destinationColumnName_InternalZREP);
 
         String sourceColumnName_Policies = "&POLICIES";
         String destinationColumnName_Policies = "DeliverableType";
@@ -164,6 +167,12 @@ public class ExcelDrivenMain {
         String destinationColumnName_Occasion = "Occasion";
         ExcelTransformationUtility.parseAndLookup(filePath, sourceSheetName, sourceColumnName_Occasion,destinationSheetName, destinationColumnName_Occasion, LookUpConstants2.getOccasion());
 
+
+        //Lookup for Agency/Partner
+        String sourceColumnName_AgencyPartner = "Agency/Partner/Vendor";
+        String destinationColumnName_AgencyPartner = "AgencyPartner";
+        ExcelTransformationUtility.parseAndLookup(filePath, sourceSheetName, sourceColumnName_AgencyPartner,destinationSheetName, destinationColumnName_AgencyPartner, LookUpConstants2.getAgencyPartner());
+
         //Lookup for Occasion Year
         String sourceColumnName_OccasionYear = "Occasion Year";
         String destinationColumnName_OccasionYear = "OccasionYear";
@@ -191,7 +200,7 @@ public class ExcelDrivenMain {
 
         //Lookup for Display/Pack Type
         String sourceColumnName_DisplayPackType = "Display/Pack Type";
-        String destinationColumnName_DisplayPackType = "Display/PackType";
+        String destinationColumnName_DisplayPackType = "DisplayPackType";
         ExcelTransformationUtility.parseAndLookup(filePath, sourceSheetName, sourceColumnName_DisplayPackType,destinationSheetName, destinationColumnName_DisplayPackType, LookUpConstants2.getDisplayPackTypes());
 
         //Lookup for Rights Restricted?

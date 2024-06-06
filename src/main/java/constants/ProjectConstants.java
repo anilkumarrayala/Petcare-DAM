@@ -33,7 +33,7 @@ public class ProjectConstants {
                     "BrightcoveAssetStatus", "MasterOrLocalizationAdaptation","Flavor","ProductCategory",
                     "RightsManagementType","RightsManagementType1","RightsManagementType2","RightsManagementType3","RightsManagementType4","RightsManagementType5","RightsManagementType6","RightsManagementType7","RightsManagementType8",
                     "Recipe","Region/MarketingCountry","ProductImageAngle",
-                    "Occasion","OccasionYear","OriginatingCountry","FERT","Claims", "Display/PackType","CampaignPromotionalYear","AssetEmail",
+                    "Occasion","OccasionYear","OriginatingCountry","FERT","Claims", "DisplayPackType","CampaignPromotionalYear","AssetEmail",
                     /*"Keywords",*/"InPerpetuity","InPerpetuity1","InPerpetuity2","InPerpetuity3","InPerpetuity4","InPerpetuity5","InPerpetuity6","InPerpetuity7","InPerpetuity8","Languages","GTINEANUPC","ImagePosition",
                     "VERP","BrandSubBrandHierarchy","CoverageStartDate","CoverageStartDate1","CoverageStartDate2","CoverageStartDate3","CoverageStartDate4","CoverageStartDate5",
                     "CoverageStartDate6","CoverageEndDate7","CoverageStartDate8","CoverageEndDate","CoverageEndDate1","CoverageEndDate2","CoverageEndDate3","CoverageEndDate4","CoverageEndDate5","CoverageEndDate6",
@@ -49,17 +49,16 @@ public class ProjectConstants {
 
 
     private    List LightHouseColumnName =
-            Arrays.asList(new String[] {"ID", "Name" , "Asset Version" ,
-                    "Agency/Partner/Vendor","Category/Type/Sub-Type 2", "Category/Type/Sub-Type 3", "Asset Status","Description"
+            Arrays.asList(new String[] {"ID", "Name" , "Asset Version"
+                   ,"Category/Type/Sub-Type 2", "Category/Type/Sub-Type 3", "Asset Status","Description"
                     ,"Description/Keywords","Original File Name","Health Benefit","Net Weight","Pet Lifestage","Piece Count","Pet Size","Brightcove Asset ID",
                     "Brightcove Asset Name","Removed By","Brightcove Asset Status","Segment/Product Category 2","Recipe",
-                    "Occasion 1","Occasion Year","Originating Country","Claims","Display/Pack Type","Campaign/Promotional Year","Asset Owner"});
+                    "Occasion 1","Occasion Year","Originating Country","Claims","Campaign/Promotional Year","Asset Owner"});
 
-    private List AprimoColumnName = Arrays.asList(new String[] {"LighthouseAssetID", "Title" , "LegacyAssetVersion",
-            "AgencyPartner","AssetType","AssetSubType","Status","Description","Keywords","OriginalFileName","HealthBenefit",
+    private List AprimoColumnName = Arrays.asList(new String[] {"LighthouseAssetID", "Title" , "LegacyAssetVersion"
+            ,"AssetType","AssetSubType","Status","Description","Keywords","OriginalFileName","HealthBenefit",
             "NetWeight","PetLifestage","PieceCount","PetSize","BrightcoveAssetID","BrightcoveAssetName","BrightcoveRemovedBy",
-            "BrightcoveAssetStatus","ProductCategory","Recipe", "Occasion","OccasionYear","OriginatingCountry","Claims",
-            "Display/PackType","CampaignPromotionalYear","AssetEmail"});
+            "BrightcoveAssetStatus","ProductCategory","Recipe", "Occasion","OccasionYear","OriginatingCountry","Claims","CampaignPromotionalYear","AssetEmail"});
 
     public List getAprimoDateColumnName() {
         return AprimoDateColumnName;
@@ -99,7 +98,7 @@ public class ProjectConstants {
             "Keywords","InPerpetuity","InPerpetuity1","InPerpetuity2","InPerpetuity3","InPerpetuity4","InPerpetuity5","InPerpetuity6","InPerpetuity7","InPerpetuity8",
             "CustomerSpecific","CampaignPromotionalName", "MarsCampaignCode","RightsRestricted","IsLatestVersion",
             "TransparentBackground","PlatformSpecifications","SourceFile","DataClassification","Languages","ImagePosition","Brand","SubBrand","Segment",
-            "MasterOrLocalizationAdaptation","ProductImageAngle", "InternalZREP","Global/Regional/Local","Global/Regional/Local1","Global/Regional/Local2","Global/Regional/Local3","Global/Regional/Local4"
+            "MasterOrLocalizationAdaptation","ProductImageAngle","Global/Regional/Local","Global/Regional/Local1","Global/Regional/Local2","Global/Regional/Local3","Global/Regional/Local4"
             ,"Global/Regional/Local5","Global/Regional/Local6","Global/Regional/Local7","Global/Regional/Local8","IncludedCountries","IncludedCountries1","IncludedCountries2","IncludedCountries3","IncludedCountries4",
             "IncludedCountries5","IncludedCountries6","IncludedCountries7","IncludedCountries8", "ExcludedCountries", "ExcludedCountries1", "ExcludedCountries2", "ExcludedCountries3", "ExcludedCountries4", "ExcludedCountries5",
             "ExcludedCountries6", "ExcludedCountries7", "ExcludedCountries8",
@@ -115,7 +114,7 @@ public class ProjectConstants {
                     "Asset in Perpetuity?","Asset in Perpetuity? 1","Asset in Perpetuity? 2","Asset in Perpetuity? 3","Asset in Perpetuity? 4","Asset in Perpetuity? 5","Asset in Perpetuity? 6","Asset in Perpetuity? 7","Asset in Perpetuity? 8"
                     ,"Customer Specific","Campaign/Promotional Name", "Mars Campaign Code","Rights Restricted?","Is Latest Version",
                     "Transparent Background?","Platform Specifications","Source File?","Data Classification","Language","Image Position/Slot","Brand","Sub-Brand","Segment",
-                    "Master or Localization/Adaptation?","Product Image Angle", "Internal ZREP","Global/Regional/Local","Global/Regional/Local 1","Global/Regional/Local 2","Global/Regional/Local 3",
+                    "Master or Localization/Adaptation?","Product Image Angle","Global/Regional/Local","Global/Regional/Local 1","Global/Regional/Local 2","Global/Regional/Local 3",
                     "Global/Regional/Local 4", "Global/Regional/Local 5","Global/Regional/Local 6","Global/Regional/Local 7","Global/Regional/Local 8","Included Countries","Included Countries 1",
                     "Included Countries 2","Included Countries 3","Included Countries 4","Included Countries 5","Included Countries 6","Included Countries 7","Included Countries 8",
                     "Excluded Countries","Excluded Countries 1","Excluded Countries 2","Excluded Countries 3","Excluded Countries 4","Excluded Countries 5","Excluded Countries 6","Excluded Countries 7","Excluded Countries 8",
