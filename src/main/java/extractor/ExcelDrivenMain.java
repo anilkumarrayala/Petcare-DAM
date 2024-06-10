@@ -25,6 +25,7 @@ public class ExcelDrivenMain {
         String destinationSheetName = "Transformed";
         String destinationSheetName1 = "Final";
         String sourceSheetName_Transformed = "Transformed";
+        String sourceColumnName_OriginalAssetID= "OriginalAssetID";
         ProjectConstants projectConstants = new ProjectConstants();
         // Get current size of heap in bytes.
         long heapSize = Runtime.getRuntime().totalMemory();
@@ -78,14 +79,15 @@ public class ExcelDrivenMain {
         String destinationColumnName_MarketingCountry = "MarketingCountry";
         ExcelTransformationUtility.parseAndLookup(filePath, sourceSheetName, sourceColumnName_MarketingCountry,destinationSheetName, destinationColumnName_MarketingCountry, LookupConstants.getMarketingCountries());
 
-        //not working properly ExcelTransformationUtility.pickAndConcatenate(filePath, destinationSheetName, destinationSheetName, destinationColumnName_Region, destinationColumnName_MarketingCountry, destinationColumnName1,';',"/DAM/MarketingRegionMarketingCountry/");
         String destinationColumnName1 = "Region/MarketingCountry";
         ExcelTransformationUtility.pickAndConcatenate(filePath, sourceSheetName, destinationSheetName,sourceColumnName_Region, sourceColumnName_MarketingCountry, destinationColumnName1,';',"/DAM/MarketingRegionMarketingCountry/",LookupConstants.getRegions(), LookupConstants.getMarketingCountries());
 
         String sourceColumnName_Brand = "Brand";
         String sourceColumnName_SubBrand = "Sub-Brand";
+
         //Lookup for Brand
         ExcelTransformationUtility.parseAndLookup(filePath, sourceSheetName, sourceColumnName_Brand,destinationSheetName, sourceColumnName_Brand, LookupConstants.getBrands());
+
         //Lookup for Sub Brand
         ExcelTransformationUtility.parseAndLookup(filePath, sourceSheetName, sourceColumnName_SubBrand,destinationSheetName, "SubBrand", LookupConstants.getSubBrandNames());
 
@@ -151,7 +153,7 @@ public class ExcelDrivenMain {
         ExcelTransformationUtility.mapAssetTypeToAssetSubType(filePath, sourceSheetName_Transformed, destinationColumnName_SubCategor, destinationSheetName, destinationColumnName_AssetSubType);
 
         String destinationColumnName_ACatATypeASubTypeHierarchy = "ACatATypeASubTypeHierarchy";
-        ExcelTransformationUtility.pickAndConcatenateAssets(filePath, sourceSheetName_Transformed, destinationSheetName, destinationColumnName_Category, destinationColumnName_AssetType, destinationColumnName_AssetSubType, destinationColumnName_ACatATypeASubTypeHierarchy ,"/DAM/ACatATypeASubTypeHierarchy");
+        ExcelTransformationUtility.pickAndConcatenateAssets(filePath, sourceSheetName_Transformed, destinationSheetName, destinationColumnName_Category, destinationColumnName_AssetType, destinationColumnName_AssetSubType, sourceColumnName_OriginalAssetID, destinationColumnName_ACatATypeASubTypeHierarchy ,"/DAM/ACatATypeASubType");
 
         //Lookup for Originating country
         String sourceColumnName_OriginatingCountry = "Originating Country";
@@ -223,14 +225,17 @@ public class ExcelDrivenMain {
                 "contains", "is-child-of", "derivative", "is-place-graphic-of", "belong-to", "has-video-clips",
                 "copy-contains", "is-parent-of", "extracted-xml-child", "placed-graphics"};
         String destinationColumnName = "AssociatedAssets";
-        ExcelTransformationUtility.pickAndConcatenateAssets(filePath, sourceSheetName_Transformed, destinationSheetName, sourceColumnNames, destinationColumnName);
+        ExcelTransformationUtility.pickAndConcatenateAssociatedAssets(filePath, sourceSheetName_Transformed, destinationSheetName, sourceColumnNames, destinationColumnName);
+
+        String sourceColumnName_File= "uniqueId";
+        ExcelTransformationUtility.findAndPrintDuplicates(filePath,sourceSheetName_Transformed, sourceColumnName_File, sourceColumnName_OriginalAssetID );
 
         //Rearranging column order
         List columnOrder =  projectConstants.getColumnOrder();
         ExcelTransformationUtility.rearrangeColumns(filePath, destinationSheetName, destinationSheetName1,  columnOrder);
 
-        //Create a new sheet for transformed data
-       createNewSheet(destinationSheetName, filePath, destinationSheetName, destFilePath);
+//        //Create a new sheet for transformed data
+//       createNewSheet(destinationSheetName, filePath, destinationSheetName, destFilePath);
 
     }
     }

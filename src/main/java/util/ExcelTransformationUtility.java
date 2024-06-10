@@ -564,54 +564,36 @@ public class ExcelTransformationUtility {
                 String[] parts1 = value1.split("\\|\\|");
                 String[] parts2 = value2.split("\\|\\|");
 
-                // Eliminate duplicate values in parts1 and parts2
-                parts1 = Arrays.stream(parts1).distinct().toArray(String[]::new);
-                parts2 = Arrays.stream(parts2).distinct().toArray(String[]::new);
-
                 // Create StringBuilder to accumulate concatenated values
                 StringBuilder concatenatedValues = new StringBuilder();
 
-                boolean allMatched = true; // To track if all values match the lookup tables
-
                 // Iterate over parts of value1 and value2 to form the correct path
-                for (String part1 : parts1) {
-                    //part1 = removeSpaces(part1.trim().replace("N/A", "NA").replace("/","").replace("&","").replace("'",""));
-                    part1 = part1.trim();
-                    part1 = part1.replace("N/A", "NA")
-                            .replaceAll("[/&'-]", "")  // Remove &, /, -, and '
-                            .replaceAll("\\s", "");   // Remove all spaces
-                    part1 = removeSpaces(part1); // Ensure any extra spaces are removed
+                for (int j = 0; j < parts1.length; j++) {
+                    String part1 = parts1[j].trim().replaceAll("[/&'-]", "").replaceAll("\\s", "");
+                    part1 = removeSpaces(part1);
 
                     if (!lookupTable1.contains(part1)) {
                         System.out.println("No " + sourceColumnName1 + " match found at row " + (i + 1) + ": " + part1);
-                        //allMatched = false;
                     }
 
-                    for (String part2 : parts2) {
-                        //part2 = removeSpaces(part2.trim().replace("N/A", "NA").replace("/","").replace("&","").replace("'",""));
-                        part2 = part2.trim();
-                        part2 = part2.replace("N/A", "NA")
-                                .replaceAll("[/&'-]", "")  // Remove &, /, -, and '
-                                .replaceAll("\\s", "");   // Remove all spaces
-                        part2 = removeSpaces(part2); // Ensure any extra spaces are removed
+                    if (j < parts2.length) {
+                        String part2 = parts2[j].trim().replaceAll("[/&'-]", "").replaceAll("\\s", "");
+                        part2 = removeSpaces(part2);
 
                         if (!lookupTable2.contains(part2)) {
                             System.out.println("No " + sourceColumnName2 + " match found at row " + (i + 1) + ": " + part2);
-                            //allMatched = false;
+                        }
+
+                        if (concatenatedValues.length() > 0) {
+                            concatenatedValues.append(";");
                         }
 
                         // Append concatenated value to StringBuilder
                         concatenatedValues.append(appendStringValue)
                                 .append(part1)
                                 .append("/")
-                                .append(part2)
-                                .append(";");
+                                .append(part2);
                     }
-                }
-
-                // Remove the last ';' if present
-                if (concatenatedValues.length() > 0 && concatenatedValues.charAt(concatenatedValues.length() - 1) == ';') {
-                    concatenatedValues.setLength(concatenatedValues.length() - 1);
                 }
 
                 // Create new cell in destination sheet and set the concatenated value
@@ -1482,7 +1464,6 @@ public class ExcelTransformationUtility {
 //    }
 
     public static void parseAndLookup(String filePath, String sourceSheetName, String sourceColumnName, String destinationSheetName, String destinationColumnName, List<String> LookUpTable) {
-
         FileInputStream fis = null;
         FileOutputStream outputStream = null;
         Workbook workbook = null;
@@ -1505,6 +1486,15 @@ public class ExcelTransformationUtility {
                 destinationColumnIndex = createColumn(destinationSheet, destinationColumnName);
             }
 
+            // Creating the lookup replacements map
+            HashMap<String, String> lookupMap = new HashMap<>();
+            lookupMap.put("Infeed", "InFeed");
+            lookupMap.put("GK", "GKGraphics");
+            lookupMap.put("ThisisPegasus", "ThisIsPegasus");
+            lookupMap.put("SGSUSA", "SGSUS");
+            lookupMap.put("TheAndPartnership", "TheandPartnership");
+            lookupMap.put("MediaCom", "EssenceMediaCom");
+
             for (int i = 1; i <= sourceSheet.getLastRowNum(); i++) {
                 Row sourceRow = sourceSheet.getRow(i);
                 if (sourceRow == null) continue;
@@ -1526,18 +1516,16 @@ public class ExcelTransformationUtility {
 
                         for (String value : splitValues) {
                             if (!value.isEmpty()) {
-                                String cleanedValue = removeSpaces(value.trim().replace("N/A", "NA").replace("/","").replace("&","").replace("-","").replace(":",""));
-                                if(sourceColumnName.equals("Occasion"))
-                                {
-                                    cleanedValue.replace(",","");
-                                }
-                                else if(sourceColumnName.equals("Segment/Flavor 2"))
-                                {
-                                    cleanedValue.replace("and","and ");
+                                String cleanedValue = removeSpaces(value.trim().replace("N/A", "NA").replace("/","").replace("&","").replace("-","").replace("'","").replace(":",""));
+                                cleanedValue = replaceLookupValues(cleanedValue, lookupMap);  // Apply the lookup replacements
+                                if (sourceColumnName.equals("Occasion")) {
+                                    cleanedValue = cleanedValue.replace(",", "");
+                                } else if (sourceColumnName.equals("Segment/Flavor 2")) {
+                                    cleanedValue = cleanedValue.replace("and", "and ");
                                 }
                                 if (!LookUpTable.contains(cleanedValue)) {
                                     System.out.println("No " + destinationColumnName + " match found at row " + (i + 1) + ": " + cleanedValue);
-                                    //  allMatched = false;
+                                    // allMatched = false;
                                 }
                                 if (formattedValue.length() > 0) {
                                     formattedValue.append(";");
@@ -1573,6 +1561,10 @@ public class ExcelTransformationUtility {
                 e.printStackTrace();
             }
         }
+    }
+
+    private static String replaceLookupValues(String value, HashMap<String, String> lookupMap) {
+        return lookupMap.getOrDefault(value, value);
     }
 
     public static void mapAssetTypeToAssetSubType(String filePath, String sourceSheetName, String sourceColumnName, String destinationSheetName, String destinationColumnName) {
@@ -1643,7 +1635,7 @@ public class ExcelTransformationUtility {
 
     public static void pickAndConcatenateAssets(String filePath, String sourceSheetName, String destinationSheetName,
                                                 String sourceColumnName1, String sourceColumnName2, String sourceColumnName3,
-                                                String destinationColumnName, String appendStringValue) throws IOException {
+                                                String sourceColumnName4, String destinationColumnName, String appendStringValue) throws IOException {
         FileInputStream fis = null;
         FileOutputStream outputStream = null;
         Workbook workbook = null;
@@ -1659,13 +1651,14 @@ public class ExcelTransformationUtility {
             int sourceColumnIndex1 = getColumnIndex(sourceSheet, sourceColumnName1);
             int sourceColumnIndex2 = getColumnIndex(sourceSheet, sourceColumnName2);
             int sourceColumnIndex3 = getColumnIndex(sourceSheet, sourceColumnName3);
+            int sourceColumnIndex4 = getColumnIndex(sourceSheet, sourceColumnName4);
             int destinationColumnIndex = getColumnIndex(destinationSheet, destinationColumnName);
 
             if (destinationColumnIndex == -1) {
                 destinationColumnIndex = createColumn(destinationSheet, destinationColumnName);
             }
 
-            if (sourceColumnIndex1 == -1 || sourceColumnIndex2 == -1 || sourceColumnIndex3 == -1) {
+            if (sourceColumnIndex1 == -1 || sourceColumnIndex2 == -1 || sourceColumnIndex3 == -1 || sourceColumnIndex4 == -1) {
                 throw new IllegalArgumentException("Given source column name not found in the source sheet.");
             }
 
@@ -1679,13 +1672,21 @@ public class ExcelTransformationUtility {
                     destinationRow = destinationSheet.createRow(i);
                 }
 
-                // Get values from the three columns
+                // Get values from the columns
                 String value1 = sourceRow.getCell(sourceColumnIndex1).getStringCellValue();
                 String value2 = sourceRow.getCell(sourceColumnIndex2).getStringCellValue();
                 String value3 = sourceRow.getCell(sourceColumnIndex3).getStringCellValue();
+                String value4 = sourceRow.getCell(sourceColumnIndex4).getStringCellValue();
 
-                // Concatenate values with the given string
-                String concatenatedValue = String.format("%s/%s/%s/%s", appendStringValue, value1, value2, value3);
+                // Check if value2 and value3 are the same and log the information
+                String concatenatedValue;
+                if (value2.equals(value3)) {
+                    concatenatedValue = String.format("%s/%s/%s", appendStringValue, value1, value2);
+                    System.out.println("Duplicate value found: " + value2 + " at " + sourceColumnName2 + " and " + sourceColumnName3 + " in row " + (i + 1) +
+                            " with " + sourceColumnName4 + " value: " + value4);
+                } else {
+                    concatenatedValue = String.format("%s/%s/%s/%s", appendStringValue, value1, value2, value3);
+                }
 
                 // Create new cell in destination sheet and set the concatenated value
                 Cell destCell = destinationRow.createCell(destinationColumnIndex);
@@ -1696,7 +1697,7 @@ public class ExcelTransformationUtility {
             outputStream = new FileOutputStream(filePath);
             workbook.write(outputStream);
 
-            System.out.println("Pick and Concatenate --> Columns " + sourceColumnName1 + ", " + sourceColumnName2 + ", and " + sourceColumnName3 + " mapped successfully to column " + destinationColumnName);
+            System.out.println("Pick and Concatenate --> Columns " + sourceColumnName1 + ", " + sourceColumnName2 + ", " + sourceColumnName3 + ", and " + sourceColumnName4 + " mapped successfully to column " + destinationColumnName);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -1707,7 +1708,7 @@ public class ExcelTransformationUtility {
         }
     }
 
-    public static void pickAndConcatenateAssets(String filePath, String sourceSheetName, String destinationSheetName,
+    public static void pickAndConcatenateAssociatedAssets(String filePath, String sourceSheetName, String destinationSheetName,
                                                 String[] sourceColumnNames, String destinationColumnName) throws IOException {
         FileInputStream fis = null;
         FileOutputStream outputStream = null;
@@ -1771,6 +1772,72 @@ public class ExcelTransformationUtility {
             if (fis != null) fis.close();
             if (outputStream != null) outputStream.close();
             if (workbook != null) workbook.close();
+        }
+    }
+
+    public static void findAndPrintDuplicates(String filePath, String sourceSheetName, String sourceColumnName, String sourceColumnName2) {
+        FileInputStream fis = null;
+        FileOutputStream outputStream = null;
+        Workbook workbook = null;
+
+        try {
+            fis = new FileInputStream(filePath);
+            workbook = new XSSFWorkbook(fis);
+
+            Sheet sourceSheet = workbook.getSheet(sourceSheetName);
+
+            int sourceColumnIndex = getColumnIndex(sourceSheet, sourceColumnName);
+            int sourceColumn2Index = getColumnIndex(sourceSheet, sourceColumnName2);
+
+            if (sourceColumnIndex == -1) {
+                throw new IllegalArgumentException("Given source column name " + sourceColumnName + " not found in the source sheet.");
+            }
+
+            if (sourceColumn2Index == -1) {
+                throw new IllegalArgumentException("Given source column name " + sourceColumnName2 + " not found in the source sheet.");
+            }
+
+            Set<String> uniqueValues = new HashSet<>();
+            Set<String> duplicateValues = new HashSet<>();
+
+            for (int i = 1; i <= sourceSheet.getLastRowNum(); i++) {
+                Row sourceRow = sourceSheet.getRow(i);
+                if (sourceRow == null) continue;
+
+                Cell sourceCell = sourceRow.getCell(sourceColumnIndex);
+                if (sourceCell != null) {
+                    String sourceValue = sourceCell.getStringCellValue();
+                    if (!uniqueValues.add(sourceValue)) {
+                        duplicateValues.add(sourceValue);
+                    }
+                }
+            }
+
+            for (int i = 1; i <= sourceSheet.getLastRowNum(); i++) {
+                Row sourceRow = sourceSheet.getRow(i);
+                if (sourceRow == null) continue;
+
+                Cell sourceCell = sourceRow.getCell(sourceColumnIndex);
+                Cell sourceColumn2Cell = sourceRow.getCell(sourceColumn2Index);
+
+                if (sourceCell != null) {
+                    String sourceValue = sourceCell.getStringCellValue();
+                    if (duplicateValues.contains(sourceValue)) {
+                        String sourceColumn2Value = sourceColumn2Cell != null ? sourceColumn2Cell.getStringCellValue() : "N/A";
+                        System.out.println("Duplicate value found: " + sourceValue + " at row " + (i + 1) + " with " + sourceColumnName2 + " value: " + sourceColumn2Value);
+                    }
+                }
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (fis != null) fis.close();
+                if (workbook != null) workbook.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
