@@ -968,7 +968,7 @@ public class ExcelTransformationUtility {
                     String destinationValue;
                     //Applies for all the policies for agency assets
                     if (sourceValue.contains("Packaging")) {
-                        destinationValue = "FinalPackaging";
+                        destinationValue = "Final Packaging";
                     } else if(Policylist.contains(sourceValue))
                     {
                         destinationValue = "InReview";
