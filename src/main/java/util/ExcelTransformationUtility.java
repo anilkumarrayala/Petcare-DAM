@@ -569,7 +569,7 @@ public class ExcelTransformationUtility {
 
                 // Iterate over parts of value1 and value2 to form the correct path
                 for (int j = 0; j < parts1.length; j++) {
-                    String part1 = parts1[j].trim().replaceAll("[/&'-]", "").replaceAll("\\s", "");
+                    String part1 = parts1[j].trim().replaceAll("[/&'’\\-\\s]", "");
                     part1 = removeSpaces(part1);
 
                     if (!lookupTable1.contains(part1)) {
@@ -577,7 +577,7 @@ public class ExcelTransformationUtility {
                     }
 
                     if (j < parts2.length) {
-                        String part2 = parts2[j].trim().replaceAll("[/&'-]", "").replaceAll("\\s", "");
+                        String part2 = parts2[j].trim().replaceAll("[/&'’\\-\\s]", "");
                         part2 = removeSpaces(part2);
 
                         if (!lookupTable2.contains(part2)) {
@@ -1516,13 +1516,15 @@ public class ExcelTransformationUtility {
 
                         for (String value : splitValues) {
                             if (!value.isEmpty()) {
-                                String cleanedValue = removeSpaces(value.trim().replace("N/A", "NA").replace("/","").replace("&","").replace("-","").replace("'","").replace(":",""));
+                                String cleanedValue = removeSpaces(value.trim().replaceAll("N/A", "NA").replaceAll("[/&'’\\-:]", "").replaceAll("\\s+", ""));
                                 cleanedValue = replaceLookupValues(cleanedValue, lookupMap);  // Apply the lookup replacements
-                                if (sourceColumnName.equals("Occasion")) {
-                                    cleanedValue = cleanedValue.replace(",", "");
-                                } else if (sourceColumnName.equals("Segment/Flavor 2")) {
+                                cleanedValue = removeSpaces(cleanedValue);
+                                if (destinationColumnName.equals("Occasion")) {
+                                    cleanedValue = cleanedValue.replaceAll(",", "");
+                                }else if (sourceColumnName.equals("Segment/Flavor 2")) {
                                     cleanedValue = cleanedValue.replace("and", "and ");
                                 }
+
                                 if (!LookUpTable.contains(cleanedValue)) {
                                     System.out.println("No " + destinationColumnName + " match found at row " + (i + 1) + ": " + cleanedValue);
                                     // allMatched = false;
