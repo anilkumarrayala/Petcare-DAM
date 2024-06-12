@@ -695,12 +695,15 @@ public class ExcelTransformationUtility {
         }
     }
 
-    public static String dateFormatter(String dateColumnValue) throws ParseException {
-        //US date formatter
+    public static String dateFormatter(String dateColumnValue, String columnName) throws ParseException {
+        // US date formatter
         String targetFormatStr = "MM/dd/yyyy HH:mm:ss a";
+        String simpleDateFormatStr = "MM/dd/yyyy";
         String originalFormatStr1 = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
         String originalFormatStr2 = "yyyy-MM-dd HH:mm:ss.SSS";
+
         DateFormat targetFormat = new SimpleDateFormat(targetFormatStr);
+        DateFormat simpleDateFormat = new SimpleDateFormat(simpleDateFormatStr);
         String formattedDate = null;
 
         try {
@@ -727,7 +730,11 @@ public class ExcelTransformationUtility {
                     }
                 }
                 if (parsed) {
-                    formattedDate = targetFormat.format(date);
+                    if ("AssetCreationDate".equals(columnName)) {
+                        formattedDate = simpleDateFormat.format(date);
+                    } else {
+                        formattedDate = targetFormat.format(date);
+                    }
                 }
             }
         } catch (ParseException pe) {
@@ -784,7 +791,7 @@ public class ExcelTransformationUtility {
                         StringBuilder concatenatedValue = new StringBuilder();
                         String[] values = sourceCellValue.split("\\|\\|"); // Split the cell value with "||" delimiter
                         for (String value : values) { //check for null
-                            value = dateFormatter(value.trim());
+                            value = dateFormatter(value.trim(), destinationColumnName);
                             if (!uniqueValues.contains(value)) {
                                 if (concatenatedValue.length() > 0) {
                                     concatenatedValue.append(deLimiter); // Adding delimiter "," between values
@@ -794,7 +801,6 @@ public class ExcelTransformationUtility {
                             }
                         }
                         Cell destinationCell = destinationRow.createCell(destinationColumnIndex);
-                        //destinationCell.setCellValue(concatenatedValue.toString());
                         destinationCell.setCellValue(concatenatedValue.toString());
                     }
                 }
@@ -803,7 +809,7 @@ public class ExcelTransformationUtility {
             outputStream = new FileOutputStream(filePath);
             workbook.write(outputStream);
 
-            System.out.println("Dates Tranformation applied in column " + sourceColumnName + "mapped successfully to " + destinationColumnName);
+            System.out.println("Dates Transformation applied in column " + sourceColumnName + " mapped successfully to " + destinationColumnName);
         } catch(IOException | IllegalArgumentException | IllegalStateException | ParseException ex){
             ex.printStackTrace();
         } finally{
