@@ -37,8 +37,8 @@ public class ProjectConstants {
                     /*"Keywords",*/"InPerpetuity","InPerpetuity1","InPerpetuity2","InPerpetuity3","InPerpetuity4","InPerpetuity5","InPerpetuity6","InPerpetuity7","InPerpetuity8","Languages","GTINEANUPC","ImagePosition",
                     "VERP","BrandSubBrandHierarchy","CoverageStartDate","CoverageStartDate1","CoverageStartDate2","CoverageStartDate3","CoverageStartDate4","CoverageStartDate5",
                     "CoverageStartDate6","CoverageEndDate7","CoverageStartDate8","CoverageEndDate","CoverageEndDate1","CoverageEndDate2","CoverageEndDate3","CoverageEndDate4","CoverageEndDate5","CoverageEndDate6",
-                    "CoverageEndDate7","CoverageEndDate8","InternalZREP","Global/Regional/Local","Global/Regional/Local1","Global/Regional/Local2","Global/Regional/Local3","Global/Regional/Local4"
-                    ,"Global/Regional/Local5","Global/Regional/Local6","Global/Regional/Local7","Global/Regional/Local8","IncludedCountries","IncludedCountries1","IncludedCountries2","IncludedCountries3","IncludedCountries4",
+                    "CoverageEndDate7","CoverageEndDate8","InternalZREP","GlobalRegionalLocal","GlobalRegionalLocal1","GlobalRegionalLocal2","GlobalRegionalLocal3","GlobalRegionalLocal4"
+                    ,"GlobalRegionalLocal5","GlobalRegionalLocal6","GlobalRegionalLocal7","GlobalRegionalLocal8","IncludedCountries","IncludedCountries1","IncludedCountries2","IncludedCountries3","IncludedCountries4",
                     "IncludedCountries5","IncludedCountries6","IncludedCountries7","IncludedCountries8", "ExcludedCountries", "ExcludedCountries1", "ExcludedCountries2", "ExcludedCountries3", "ExcludedCountries4", "ExcludedCountries5",
                     "ExcludedCountries6", "ExcludedCountries7", "ExcludedCountries8",
                     "MediaChannel","MediaChannel1","MediaChannel2","MediaChannel3","MediaChannel4","MediaChannel5","MediaChannel6","MediaChannel7","MediaChannel8",
@@ -98,8 +98,8 @@ public class ProjectConstants {
             "Keywords","InPerpetuity","InPerpetuity1","InPerpetuity2","InPerpetuity3","InPerpetuity4","InPerpetuity5","InPerpetuity6","InPerpetuity7","InPerpetuity8",
             "CustomerSpecific","CampaignPromotionalName", "MarsCampaignCode","RightsRestricted","IsLatestVersion",
             "TransparentBackground","PlatformSpecifications","SourceFile","DataClassification","Languages","ImagePosition","Brand","SubBrand","Segment",
-            "MasterOrLocalizationAdaptation","ProductImageAngle","Global/Regional/Local","Global/Regional/Local1","Global/Regional/Local2","Global/Regional/Local3","Global/Regional/Local4"
-            ,"Global/Regional/Local5","Global/Regional/Local6","Global/Regional/Local7","Global/Regional/Local8","IncludedCountries","IncludedCountries1","IncludedCountries2","IncludedCountries3","IncludedCountries4",
+            "MasterOrLocalizationAdaptation","ProductImageAngle","GlobalRegionalLocal","GlobalRegionalLocal1","GlobalRegionalLocal2","GlobalRegionalLocal3","GlobalRegionalLocal4"
+            ,"GlobalRegionalLocal5","GlobalRegionalLocal6","GlobalRegionalLocal7","GlobalRegionalLocal8","IncludedCountries","IncludedCountries1","IncludedCountries2","IncludedCountries3","IncludedCountries4",
             "IncludedCountries5","IncludedCountries6","IncludedCountries7","IncludedCountries8", "ExcludedCountries", "ExcludedCountries1", "ExcludedCountries2", "ExcludedCountries3", "ExcludedCountries4", "ExcludedCountries5",
             "ExcludedCountries6", "ExcludedCountries7", "ExcludedCountries8",
             "MediaChannel","MediaChannel1","MediaChannel2","MediaChannel3","MediaChannel4","MediaChannel5","MediaChannel6","MediaChannel7","MediaChannel8",
