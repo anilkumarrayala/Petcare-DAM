@@ -16,8 +16,8 @@ public class ExcelDrivenMain {
 
     public static void main(String[] args) throws IOException,Exception {
 
-        String filePath = "C://Project//MARS//test-Extract-PetNutrition.xlsx";
-        //String filePath = "C://Project//MARS//test-1-PN-2.xlsx";
+        //String filePath = "C://Project//MARS//test-Extract-PetNutrition-new.xlsx";
+        String filePath = "C://Project//MARS//PN-1-50k.xlsx";
         String extension = "Transformed-" +ExcelTransformationUtility.getCurrentTimestamp()+".xlsx";
         String destFilePath =System.getProperty("user.home")+ extension;
         //String destFilePath ="C://Project//MARS//" + extension;
@@ -80,7 +80,7 @@ public class ExcelDrivenMain {
         ExcelTransformationUtility.parseAndLookup(filePath, sourceSheetName, sourceColumnName_MarketingCountry,destinationSheetName, destinationColumnName_MarketingCountry, LookupConstants.getMarketingCountries());
 
         String destinationColumnName1 = "Region/MarketingCountry";
-        ExcelTransformationUtility.pickAndConcatenate(filePath, sourceSheetName, destinationSheetName,sourceColumnName_Region, sourceColumnName_MarketingCountry, destinationColumnName1,';',"/DAM/MarketingRegionMarketingCountry/",LookupConstants.getRegions(), LookupConstants.getMarketingCountries());
+        ExcelTransformationUtility.pickAndConcatenate(filePath, sourceSheetName, destinationSheetName,sourceColumnName_Region, sourceColumnName_MarketingCountry, destinationColumnName1,';',"/DAM/MRegionMCountryHierarchy/",LookupConstants.getRegions(), LookupConstants.getMarketingCountries());
 
         String sourceColumnName_Brand = "Brand";
         String sourceColumnName_SubBrand = "Sub-Brand";
@@ -153,7 +153,7 @@ public class ExcelDrivenMain {
         ExcelTransformationUtility.mapAssetTypeToAssetSubType(filePath, sourceSheetName_Transformed, destinationColumnName_SubCategor, destinationSheetName, destinationColumnName_AssetSubType);
 
         String destinationColumnName_ACatATypeASubTypeHierarchy = "ACatATypeASubTypeHierarchy";
-        ExcelTransformationUtility.pickAndConcatenateAssets(filePath, sourceSheetName_Transformed, destinationSheetName, destinationColumnName_Category, destinationColumnName_AssetType, destinationColumnName_AssetSubType, sourceColumnName_OriginalAssetID, destinationColumnName_ACatATypeASubTypeHierarchy ,"/DAM/ACatATypeASubType");
+        ExcelTransformationUtility.pickAndConcatenateAssets(filePath, sourceSheetName_Transformed, destinationSheetName, destinationColumnName_Category, destinationColumnName_AssetType, destinationColumnName_AssetSubType, sourceColumnName_OriginalAssetID, destinationColumnName_ACatATypeASubTypeHierarchy ,"/DAM/ACatATypeASubTypeHierarchy");
 
         //Lookup for Originating country
         String sourceColumnName_OriginatingCountry = "Originating Country";
@@ -168,7 +168,6 @@ public class ExcelDrivenMain {
         String sourceColumnName_Occasion = "Occasion 1";
         String destinationColumnName_Occasion = "Occasion";
         ExcelTransformationUtility.parseAndLookup(filePath, sourceSheetName, sourceColumnName_Occasion,destinationSheetName, destinationColumnName_Occasion, LookUpConstants2.getOccasion());
-
 
         //Lookup for Agency/Partner
         String sourceColumnName_AgencyPartner = "Agency/Partner/Vendor";
@@ -209,6 +208,9 @@ public class ExcelDrivenMain {
         String sourceColumnName_RightsRestricted = "Rights Restricted?";
         String destinationColumnName_RightsRestricted = "RightsRestricted";
         ExcelTransformationUtility.parseAndLookup(filePath, sourceSheetName, sourceColumnName_RightsRestricted,destinationSheetName, destinationColumnName_RightsRestricted, LookUpConstants2.getRightsRestricted());
+
+        String destinationColumn_RestrictDownload = "RestrictDownload";
+        ExcelTransformationUtility.mapPoliciesAndVideoAssetsValues(filePath, sourceSheetName, sourceColumnName_Policies, destinationSheetName, destinationColumn_RestrictDownload );
 
         //Lookup for Global/Regional/Local
         String ColumnName_GlobalRegionalLocal = "Global/Regional/Local";

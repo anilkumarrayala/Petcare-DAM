@@ -1522,14 +1522,14 @@ public class ExcelTransformationUtility {
 
                         for (String value : splitValues) {
                             if (!value.isEmpty()) {
-                                String cleanedValue = removeSpaces(value.trim().replaceAll("N/A", "NA").replaceAll("[/&'’\\-:]", "").replaceAll("\\s+", ""));
+                                String cleanedValue = removeSpaces(value.trim().replaceAll("N/A", "NA").replaceAll("[,/&'’\\-:]", "").replaceAll("\\s+", ""));
                                 cleanedValue = replaceLookupValues(cleanedValue, lookupMap);  // Apply the lookup replacements
                                 cleanedValue = removeSpaces(cleanedValue);
-                                if (destinationColumnName.equals("Occasion")) {
-                                    cleanedValue = cleanedValue.replaceAll(",", "");
-                                }else if (sourceColumnName.equals("Segment/Flavor 2")) {
-                                    cleanedValue = cleanedValue.replace("and", "and ");
-                                }
+//                                if (destinationColumnName.equals("Occasion")) {
+//                                    cleanedValue = cleanedValue.replaceAll(",", "");
+//                                }else if (sourceColumnName.equals("Segment/Flavor 2")) {
+//                                    cleanedValue = cleanedValue.replace("and", "and ");
+//                                }
 
                                 if (!LookUpTable.contains(cleanedValue)) {
                                     System.out.println("No " + destinationColumnName + " match found at row " + (i + 1) + ": " + cleanedValue);

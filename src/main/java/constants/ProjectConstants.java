@@ -29,7 +29,7 @@ public class ProjectConstants {
                     "LegacyAssetVersion","ImportedDate", "EmbargoDate","ExpirationDate","IsLatestVersion",
                     "AgencyPartner", "AssetCategory",/*"AssetType","AssetSubType",*/ "ACatATypeASubTypeHierarchy", "AssetCreationDate","AssetDate","Status","DeliverableType","CampaignPromotionalName", "MarsCampaignCode","CampaignEndDate","CampaignStartDate",
                     "CustomerSpecific","DataClassification","Description" /*,"Keywords"*/,"OriginalFileName","HealthBenefit", "TransparentBackground",
-                    "NetWeight","PetLifestage","PieceCount","PlatformSpecifications","RightsRestricted","PetSize","BrightcoveAssetID","BrightcoveAssetName","BrightcoveRemovedBy","BrightcoveRemovedDate",
+                    "NetWeight","PetLifestage","PieceCount","PlatformSpecifications","RightsRestricted","RestrictDownload","PetSize","BrightcoveAssetID","BrightcoveAssetName","BrightcoveRemovedBy","BrightcoveRemovedDate",
                     "BrightcoveAssetStatus", "MasterOrLocalizationAdaptation","Flavor","ProductCategory",
                     "RightsManagementType","RightsManagementType1","RightsManagementType2","RightsManagementType3","RightsManagementType4","RightsManagementType5","RightsManagementType6","RightsManagementType7","RightsManagementType8",
                     "Recipe","Region/MarketingCountry","ProductImageAngle",
@@ -43,7 +43,7 @@ public class ProjectConstants {
                     "ExcludedCountries6", "ExcludedCountries7", "ExcludedCountries8",
                     "MediaChannel","MediaChannel1","MediaChannel2","MediaChannel3","MediaChannel4","MediaChannel5","MediaChannel6","MediaChannel7","MediaChannel8",
                     "RestrictionDescription","RestrictionDescription1","RestrictionDescription2","RestrictionDescription3","RestrictionDescription4","RestrictionDescription5","RestrictionDescription6","RestrictionDescription7","RestrictionDescription8"
-                    ,/*"is-related-to","extracted-pdf","copy-content-of","extracted-pdf-child","participant-subscribed","belong-to-video","participant-collection-on-subscribed","extracted-xml",
+                    ,"is-related-to",/*"extracted-pdf","copy-content-of","extracted-pdf-child","participant-subscribed","belong-to-video","participant-collection-on-subscribed","extracted-xml",
                     "is-derivative-of","contains","is-child-of","derivative","is-place-graphic-of", "belong-to","has-video-clips", "copy-contains","is-parent-of","extracted-xml-child","placed-graphics"*/"AssociatedAssets"
             });
 
