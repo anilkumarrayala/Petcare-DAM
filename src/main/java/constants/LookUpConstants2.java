@@ -23,7 +23,7 @@ public class LookUpConstants2 {
     static ArrayList<String> rightsRestricted = new ArrayList<>(Arrays.asList(
             "Yes",
             "No"));
-    //need to check
+
     static ArrayList<String> rightsManagementType = new ArrayList<>(Arrays.asList(
             "AVO",
             "Image Rights",
@@ -31,7 +31,7 @@ public class LookUpConstants2 {
             "Musicians",
             "On-Camera Talent/Model"
     ));
-    //need to check
+
     static ArrayList<String> MasterOrLocalised = new ArrayList<>(Arrays.asList(
             "Master File",
             "Localized File",

@@ -588,11 +588,18 @@ public class ExcelTransformationUtility {
                             concatenatedValues.append(";");
                         }
 
-                        // Append concatenated value to StringBuilder
-                        concatenatedValues.append(appendStringValue)
-                                .append(part1)
-                                .append("/")
-                                .append(part2);
+                        // Checking for the condition and append the value
+                        if (destinationColumnName.equals("BrandSubBrandHierarchy") && part2.equals("NA")) {
+                            concatenatedValues.append(appendStringValue)
+                                    .append(part1)
+                                    .append("/")
+                                    .append(part1).append(part2);
+                        } else {
+                            concatenatedValues.append(appendStringValue)
+                                    .append(part1)
+                                    .append("/")
+                                    .append(part2);
+                        }
                     }
                 }
 
@@ -1315,7 +1322,7 @@ public class ExcelTransformationUtility {
             int destinationColumnIndex = getColumnIndex(destinationSheet, destinationColumnName);
 
             if (sourceColumnIndex == -1) {
-                throw new IllegalArgumentException("Given source column name "+sourceColumnName+" not found in the source sheet.");
+                throw new IllegalArgumentException("Given source column name " + sourceColumnName + " not found in the source sheet.");
             }
 
             if (destinationColumnIndex == -1) {
@@ -1331,35 +1338,40 @@ public class ExcelTransformationUtility {
                     destinationRow = destinationSheet.createRow(i);
                 }
                 Cell sourceCell = sourceRow.getCell(sourceColumnIndex);
+                Cell destinationCell = destinationRow.createCell(destinationColumnIndex);
+
                 if (sourceCell != null) {
                     String sourceValue = sourceCell.getStringCellValue();
                     if (sourceValue.isEmpty()) {
-                        Cell destinationCell = destinationRow.createCell(destinationColumnIndex);
                         destinationCell.setCellValue("");
                     } else {
                         String[] splitValues = sourceValue.split("\\|\\|");
                         boolean allMatched = true;
+                        StringBuilder formattedValue = new StringBuilder();
+
                         for (String value : splitValues) {
                             if (!value.isEmpty()) {
-                                value = removeExtraSpaces(value.trim());
+                                value = removeSpaces(value.trim().replace(" ", ""));
                                 if (!productCategories.contains(value)) {
                                     System.out.println("No Product Category match found at row " + (i + 1) + ": " + value);
-                                    //  allMatched = false;
+//                                    allMatched = false;
+//                                    break;
+                                } else {
+                                    if (formattedValue.length() > 0) {
+                                        formattedValue.append(";");
+                                    }
+                                    formattedValue.append(value);
                                 }
                             }
-                            Cell destinationCell = destinationRow.createCell(destinationColumnIndex);
-                            if (allMatched) {
-                                // Join the parts with ";" and replace any remaining "||" with ";"
-                                String formattedValue = removeSpaces(String.join(";", splitValues).replace("||", ";"));
-                                destinationCell.setCellValue(formattedValue);
-                            } else {
-                                destinationCell.setCellValue("");
-                            }
+                        }
+
+                        if (allMatched) {
+                            destinationCell.setCellValue(formattedValue.toString());
+                        } else {
+                            destinationCell.setCellValue("");
                         }
                     }
                 } else {
-                    // If the source cell is null, set the destination cell to empty as well
-                    Cell destinationCell = destinationRow.createCell(destinationColumnIndex);
                     destinationCell.setCellValue("");
                 }
             }
@@ -1367,7 +1379,7 @@ public class ExcelTransformationUtility {
             outputStream = new FileOutputStream(filePath);
             workbook.write(outputStream);
 
-            System.out.println("Mapping for "+sourceColumnName+" completed successfully.");
+            System.out.println("Mapping for " + sourceColumnName + " completed successfully.");
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -1382,92 +1394,7 @@ public class ExcelTransformationUtility {
         }
     }
 
-//    public static void parseAndLookup(String filePath, String sourceSheetName, String sourceColumnName, String destinationSheetName, String destinationColumnName, List<String> LookUpTable) {
-//
-//        // Create the ArrayList with given flavor names
-//
-//
-//        FileInputStream fis = null;
-//        FileOutputStream outputStream = null;
-//        Workbook workbook = null;
-//
-//        try {
-//            fis = new FileInputStream(filePath);
-//            workbook = new XSSFWorkbook(fis);
-//
-//            Sheet sourceSheet = workbook.getSheet(sourceSheetName);
-//            Sheet destinationSheet = workbook.getSheet(destinationSheetName);
-//
-//            int sourceColumnIndex = getColumnIndex(sourceSheet, sourceColumnName);
-//            int destinationColumnIndex = getColumnIndex(destinationSheet, destinationColumnName);
-//
-//            if (sourceColumnIndex == -1) {
-//                throw new IllegalArgumentException("Given source column name "+sourceColumnName+"not found in the source sheet.");
-//            }
-//
-//            if (destinationColumnIndex == -1) {
-//                destinationColumnIndex = createColumn(destinationSheet, destinationColumnName);
-//            }
-//
-//            for (int i = 1; i <= sourceSheet.getLastRowNum(); i++) {
-//                Row sourceRow = sourceSheet.getRow(i);
-//                if (sourceRow == null) continue;
-//
-//                Row destinationRow = destinationSheet.getRow(i);
-//                if (destinationRow == null) {
-//                    destinationRow = destinationSheet.createRow(i);
-//                }
-//                Cell sourceCell = sourceRow.getCell(sourceColumnIndex);
-//                if (sourceCell != null) {
-//                    String sourceValue = sourceCell.getStringCellValue();
-//                    if (sourceValue.isEmpty()) {
-//                        Cell destinationCell = destinationRow.createCell(destinationColumnIndex);
-//                        destinationCell.setCellValue("");
-//                    } else {
-//                        String[] splitValues = sourceValue.split("\\|\\|");
-//                        boolean allMatched = true;
-//                        for (String value : splitValues) {
-//                            if (!value.isEmpty()) {
-//                                value = removeExtraSpaces(value.trim());
-//                                if (!LookUpTable.contains(value)) {
-//                                    System.out.println("No "+destinationColumnName+" match found at row " + (i + 1) + ": " + value);
-//                                    allMatched = false;
-//                                }
-//                            }
-//                            Cell destinationCell = destinationRow.createCell(destinationColumnIndex);
-//                            if (allMatched) {
-//                                // Join the parts with ";" and replace any remaining "||" with ";"
-//                                String formattedValue = String.join(";", splitValues).replace("||", ";");
-//                                destinationCell.setCellValue(formattedValue);
-//                            } else {
-//                                destinationCell.setCellValue("");
-//                            }
-//                        }
-//                    }
-//                } else {
-//                    // If the source cell is null, set the destination cell to empty as well
-//                    Cell destinationCell = destinationRow.createCell(destinationColumnIndex);
-//                    destinationCell.setCellValue("");
-//                }
-//            }
-//
-//            outputStream = new FileOutputStream(filePath);
-//            workbook.write(outputStream);
-//
-//            System.out.println("Column "+destinationColumnName+" Mapping completed successfully.");
-//
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        } finally {
-//            try {
-//                if (fis != null) fis.close();
-//                if (outputStream != null) outputStream.close();
-//                if (workbook != null) workbook.close();
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//    }
+
 
     public static void parseAndLookup(String filePath, String sourceSheetName, String sourceColumnName, String destinationSheetName, String destinationColumnName, List<String> LookUpTable) {
         FileInputStream fis = null;
@@ -1522,18 +1449,11 @@ public class ExcelTransformationUtility {
 
                         for (String value : splitValues) {
                             if (!value.isEmpty()) {
-                                String cleanedValue = removeSpaces(value.trim().replaceAll("N/A", "NA").replaceAll("[,/&'’\\-:]", "").replaceAll("\\s+", ""));
-                                cleanedValue = replaceLookupValues(cleanedValue, lookupMap);  // Apply the lookup replacements
-                                cleanedValue = removeSpaces(cleanedValue);
-//                                if (destinationColumnName.equals("Occasion")) {
-//                                    cleanedValue = cleanedValue.replaceAll(",", "");
-//                                }else if (sourceColumnName.equals("Segment/Flavor 2")) {
-//                                    cleanedValue = cleanedValue.replace("and", "and ");
-//                                }
-
+                                String cleanedValue = removeSpaces(value.trim().replaceAll("N/A", "NA").replaceAll("[()+,/&'’\\-:]", "").replaceAll("\\s+", ""));
+                                cleanedValue = replaceLookupValues(cleanedValue, lookupMap);
                                 if (!LookUpTable.contains(cleanedValue)) {
                                     System.out.println("No " + destinationColumnName + " match found at row " + (i + 1) + ": " + cleanedValue);
-                                    // allMatched = false;
+                                    //  allMatched = false;
                                 }
                                 if (formattedValue.length() > 0) {
                                     formattedValue.append(";");

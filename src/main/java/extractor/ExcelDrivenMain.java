@@ -16,8 +16,8 @@ public class ExcelDrivenMain {
 
     public static void main(String[] args) throws IOException,Exception {
 
-        //String filePath = "C://Project//MARS//test-Extract-PetNutrition-new.xlsx";
-        String filePath = "C://Project//MARS//PN-1-50k.xlsx";
+        String filePath = "C://Project//MARS//test-Extract-PetNutrition-new.xlsx";
+        //String filePath = "C://Project//MARS//PN-1-50k.xlsx";
         String extension = "Transformed-" +ExcelTransformationUtility.getCurrentTimestamp()+".xlsx";
         String destFilePath =System.getProperty("user.home")+ extension;
         //String destFilePath ="C://Project//MARS//" + extension;
@@ -92,7 +92,7 @@ public class ExcelDrivenMain {
         ExcelTransformationUtility.parseAndLookup(filePath, sourceSheetName, sourceColumnName_SubBrand,destinationSheetName, "SubBrand", LookupConstants.getSubBrandNames());
 
         String destinationColumnName_Combined = "BrandSubBrandHierarchy";
-        ExcelTransformationUtility.pickAndConcatenate(filePath, sourceSheetName, destinationSheetName,sourceColumnName_Brand, sourceColumnName_SubBrand, destinationColumnName_Combined,';',"/DAM/SegmentBrandSubBrand/PetNutrition/", LookupConstants.getBrands(), LookupConstants.getSubBrandNames());
+        ExcelTransformationUtility.pickAndConcatenate(filePath, sourceSheetName, destinationSheetName,sourceColumnName_Brand, sourceColumnName_SubBrand, destinationColumnName_Combined,';',"/DAM/BrandSubBrandHierarchy/", LookupConstants.getBrands(), LookupConstants.getSubBrandNames());
 
 
         //Additional Transformations
