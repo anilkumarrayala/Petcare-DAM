@@ -184,7 +184,7 @@ public class LookUpConstants2 {
             "2023",
             "2024",
             "2025",
-            "N/A"
+            "NA"
     ));
 
     public static ArrayList<String> getLanguages() {

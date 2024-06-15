@@ -910,13 +910,16 @@ public class ExcelTransformationUtility {
                         // Split the value by "||"
                         String[] parts = formattedValue.split("\\|\\|");
 
-                        if (parts.length > 1) {
-                            // Join the parts with ";"
-                            formattedValue = String.join(";", parts);
-                        }
+                        // Remove empty parts, trim each part, and join the remaining parts with ";"
+                        formattedValue = String.join(";", Arrays.stream(parts)
+                                .map(String::trim)  // Trim each part
+                                .filter(part -> !part.isEmpty())  // Remove empty parts
+                                .toArray(String[]::new));
 
-                        // Replace any remaining "||" with ";"
-                        formattedValue = formattedValue.replace("||", ";");
+                        // Remove trailing semicolons
+                        if (formattedValue.endsWith(";")) {
+                            formattedValue = formattedValue.substring(0, formattedValue.length() - 1);
+                        }
 
                         Cell destinationCell = destinationRow.createCell(destinationColumnIndex);
                         destinationCell.setCellValue(formattedValue);
@@ -927,7 +930,7 @@ public class ExcelTransformationUtility {
             outputStream = new FileOutputStream(filePath);
             workbook.write(outputStream);
 
-            System.out.println("Formatting completed successfully.");
+            System.out.println("Parse Exponential Fields --> LH Column "+sourceColumnName+" mapped successfully to Aprimo Column "+ destinationColumnName);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -1303,8 +1306,8 @@ public class ExcelTransformationUtility {
 
         // Create the ArrayList with given product categories
         List<String> productCategories = new ArrayList<>(Arrays.asList(
-                "Cat Treats", "Dog Treats", "Dry Cat", "Dry Dog", "Ferret",
-                "Wet Cat", "Wet Dog", "Bird", "Fish", "Litter"
+                "CatTreats", "DogTreats", "DryCat", "DryDog", "Ferret",
+                "WetCat", "WetDog", "Bird", "Fish", "Litter"
         ));
 
         FileInputStream fis = null;
@@ -1421,6 +1424,9 @@ public class ExcelTransformationUtility {
 
             // Creating the lookup replacements map
             HashMap<String, String> lookupMap = new HashMap<>();
+            lookupMap.put("ImageRights", "Image Rights");
+            lookupMap.put("MusicLicense", "Music License");
+            lookupMap.put("OnCameraTalentModel", "On-Camera Talent/Model");
             lookupMap.put("Infeed", "InFeed");
             lookupMap.put("GK", "GKGraphics");
             lookupMap.put("ThisisPegasus", "ThisIsPegasus");
