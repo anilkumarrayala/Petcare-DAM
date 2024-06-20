@@ -1425,12 +1425,6 @@ public class ExcelTransformationUtility {
             int destinationColumnIndex = getColumnIndex(destinationSheet, destinationColumnName);
             int statusColumnIndex = getColumnIndex(destinationSheet, "TransformationStatus");
 
-            System.out.println("Starting parsing and lookup process...");
-            System.out.println("Source Sheet: " + sourceSheetName);
-            System.out.println("Destination Sheet: " + destinationSheetName);
-            System.out.println("Source Column: " + sourceColumnName);
-            System.out.println("Additional Source Column: " + sourceColumnName2);
-            System.out.println("Destination Column: " + destinationColumnName);
 
             if (sourceColumnIndex == -1) {
                 throw new IllegalArgumentException("Given source column name " + sourceColumnName + " not found in the source sheet.");
@@ -1459,6 +1453,8 @@ public class ExcelTransformationUtility {
             lookupMap.put("SGSUSA", "SGSUS");
             lookupMap.put("TheAndPartnership", "TheandPartnership");
             lookupMap.put("MediaCom", "EssenceMediaCom");
+            lookupMap.put("POS", "POSCollateral");
+            lookupMap.put("eCommerceEnhancedContent", "ECommerceEnhancedContent");
 
             // Process rows and update transformationStatusMap
             for (int i = 1; i <= sourceSheet.getLastRowNum(); i++) {
@@ -1494,7 +1490,7 @@ public class ExcelTransformationUtility {
 
                         for (String value : splitValues) {
                             if (!value.isEmpty()) {
-                                String cleanedValue = removeSpaces(value.trim().replaceAll("N/A", "NA").replaceAll("[()+,/&'’\\-:]", "").replaceAll("\\s+", ""));
+                                String cleanedValue = removeSpacesAndSpecialChars(value.trim().replaceAll("N/A", "NA"));
                                 cleanedValue = replaceLookupValues(cleanedValue, lookupMap);
                                 if (!LookUpTable.contains(cleanedValue)) {
                                     allMatched = false; // Ensure allMatched is set to false on failure
@@ -1504,11 +1500,11 @@ public class ExcelTransformationUtility {
                                     }
                                     failureMessages.append(failureMessage);
                                     System.out.println(failureMessage);
-                                    // Still set the destination cell value even if no match found
+                                    // Set the destination cell value to the cleaned value
                                     if (formattedValue.length() > 0) {
                                         formattedValue.append("; ");
                                     }
-                                    formattedValue.append(failureMessage); // Append failure message
+                                    formattedValue.append(cleanedValue); // Append the cleaned value
                                 } else {
                                     if (formattedValue.length() > 0) {
                                         formattedValue.append("; ");
@@ -1592,6 +1588,7 @@ public class ExcelTransformationUtility {
             }
         }
     }
+
 
 //    public static void writeTransformationStatus(String filePath, String sheetName) {
 //        FileInputStream fis = null;
@@ -1935,6 +1932,9 @@ public class ExcelTransformationUtility {
     // Method to remove spaces from a string
     private static String removeSpaces(String input) {
         return input.replaceAll("\\s+", "");
+    }
+    private static String removeSpacesAndSpecialChars(String input) {
+        return input.replaceAll("[ &()+,/:'’\\-]", "");
     }
 
     public static String convertToLowercaseExceptFirst(String str) {

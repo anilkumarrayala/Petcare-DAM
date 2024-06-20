@@ -93,7 +93,7 @@ public class ExcelDrivenMain {
         ExcelTransformationUtility.parseAndLookup(filePath, sourceSheetName, sourceColumnName_SubBrand, sourceColumnName_AssetID, destinationSheetName, "SubBrand", LookupConstants.getSubBrandNames());
 
         String destinationColumnName_Combined = "BrandSubBrandHierarchy";
-        ExcelTransformationUtility.pickAndConcatenate(filePath, sourceSheetName, destinationSheetName,sourceColumnName_Brand, sourceColumnName_SubBrand, destinationColumnName_Combined,';',"/DAM/BrandSubBrandHierarchy/", LookupConstants.getBrands(), LookupConstants.getSubBrandNames());
+        ExcelTransformationUtility.pickAndConcatenate(filePath, sourceSheetName, destinationSheetName,sourceColumnName_Brand, sourceColumnName_SubBrand, destinationColumnName_Combined,';',"/DAM/DivisionBrandSubBrandHierarchy/PetNutrition/", LookupConstants.getBrands(), LookupConstants.getSubBrandNames());
 
 
         //Additional Transformations

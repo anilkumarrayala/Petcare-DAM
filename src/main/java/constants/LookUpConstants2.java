@@ -64,19 +64,77 @@ public class LookUpConstants2 {
 
 
     static ArrayList<String> displayPackTypes = new ArrayList<>(Arrays.asList(
-            "BackerCard", "Bag", "BagPaper", "BagPlastic", "Base", "BlisterCard", "BlisterPack",
-            "Bottle", "Box", "Can", "CanLabel", "Carton", "ClipStrip", "Cup", "DisplayReadyCase",
-            "DisplayReadyTray", "DisplayableCasesTrays", "Floorstand", "Flowbag", "Flowwrap",
-            "FlowwrapBag", "FlowwrapSingleStick", "GiftBox", "GravityDisplay", "HalfPallet",
-            "HolidayPack", "Label", "LabelCanisterWraparound", "LaydownBag", "Lid", "MetalTin",
-            "MultiPack", "MultiWallBag", "NA", "OuterShrinkWrap", "Pack", "Packet", "PalletDisplay",
-            "PegBag", "PlasticPack", "Polybag", "Pot", "Pouch", "ReclosablePackaging", "Sachet",
-            "SeasonalOverwrap", "ShelfReadyPackaging", "Shipper", "ShipperProductasItShips",
-            "ShipperProductInsideBox", "ShipperProductOutsideBox", "ShippingCase", "ShrinkWrap",
-            "ShrinkWrapTin", "Sleeve", "StandUpBag", "StandUpPouch", "Stickers", "Tin",
-            "TinShrinkWrap", "TowerDisplay", "Tray", "TrayBase", "TrayCover", "TrayDisplay",
-            "TrayLid", "Tub", "Tube", "Wrapper"
-    ));
+            "BackerCard",
+            "Bag",
+            "BagPaper",
+            "BagPlastic",
+            "Base",
+            "BlisterCard",
+            "BlisterPack",
+            "Bottle",
+            "Box",
+            "Can",
+            "CanLabel",
+            "Carton",
+            "ClipStrip",
+            "Cup",
+            "DisplayReadyCase",
+            "DisplayReadyTray",
+            "DisplayableCasesTrays",
+            "Floorstand",
+            "Flowbag",
+            "Flowwrap",
+            "FlowwrapBag",
+            "FlowwrapSingleStick",
+            "GiftBox",
+            "GravityDisplay",
+            "HalfPallet",
+            "HolidayPack",
+            "Label",
+            "LabelCanisterWraparound",
+            "LaydownBag",
+            "Lid",
+            "MetalTin",
+            "MultiPack",
+            "MultiWallBag",
+            "NA",
+            "OuterShrinkWrap",
+            "Pack",
+            "Packet",
+            "PalletDisplay",
+            "PegBag",
+            "PlasticPack",
+            "Polybag",
+            "Pot",
+            "Pouch",
+            "ReclosablePackaging",
+            "Sachet",
+            "SeasonalOverwrap",
+            "ShelfReadyPackaging",
+            "Shipper",
+            "ShipperProductasItShips",
+            "ShipperProductInsideBox",
+            "ShipperProductOutsideBox",
+            "ShippingCase",
+            "ShrinkWrap",
+            "ShrinkWrapTin",
+            "Sleeve",
+            "StandUpBag",
+            "StandUpPouch",
+            "Stickers",
+            "Tin",
+            "TinShrinkWrap",
+            "TowerDisplay",
+            "Tray",
+            "TrayBase",
+            "TrayCover",
+            "TrayDisplay",
+            "TrayLid",
+            "Tub",
+            "Tube",
+            "Wrapper"
+
+            ));
 
     static ArrayList<String> breeds = new ArrayList<>(Arrays.asList(
             "Abyssinian", "AmericanBobtail", "AmericanBurmese", "AmericanCurl", "AmericanLonghair", "AmericanPolydactyl",
@@ -248,11 +306,11 @@ public class LookUpConstants2 {
     }
 
     static ArrayList<String> Occasion = new ArrayList<>(Arrays.asList(
-            "BackToSchool", "Christmas", "DentalHealthMonth", "Easter", "Fall",
-            "FathersDay", "Halloween", "Holiday", "LimitedEdition", "MothersDay",
-            "NFL", "NewYear", "Promotional", "RedWhiteBlue", "Seasonal",
+            "BackToSchool", "Christmas", "DentalHealthMonth", "Easter", "Fall", "FathersDay", "Halloween", "Holiday",
+            "LimitedEdition", "MothersDay", "NFL", "NewYear", "Promotional", "RedWhiteBlue", "Seasonal",
             "Spring", "Summer", "SuperBowl", "ValentinesDay", "CNY", "Winter"
-    ));
+
+            ));
 
     //need to check
     static ArrayList<String> assetStatus = new ArrayList<>(Arrays.asList(
@@ -694,8 +752,7 @@ public class LookUpConstants2 {
             "YLGAgency",
             "YoGroup",
             "Zubi",
-            "TheandPartnership",
-            "PetNutrition",
             "LighthouseTeam"
-    ));
+
+            ));
 }
