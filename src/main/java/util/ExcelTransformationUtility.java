@@ -18,6 +18,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 public class ExcelTransformationUtility {
 
     public static Workbook workbook;
+    private static Map<Integer, String> transformationStatusMap = new HashMap<>();
     /*
     Logic for Field To Field Mapping
      */
@@ -704,7 +705,7 @@ public class ExcelTransformationUtility {
 
     public static String dateFormatter(String dateColumnValue, String columnName) throws ParseException {
         // US date formatter
-        String targetFormatStr = "MM/dd/yyyy HH:mm:ss a";
+        String targetFormatStr = "MM/dd/yyyy HH:mm";
         String simpleDateFormatStr = "MM/dd/yyyy";
         String originalFormatStr1 = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
         String originalFormatStr2 = "yyyy-MM-dd HH:mm:ss.SSS";
@@ -1399,7 +1400,8 @@ public class ExcelTransformationUtility {
 
 
 
-    public static void parseAndLookup(String filePath, String sourceSheetName, String sourceColumnName, String destinationSheetName, String destinationColumnName, List<String> LookUpTable) {
+
+    public static void parseAndLookup(String filePath, String sourceSheetName, String sourceColumnName, String sourceColumnName2, String destinationSheetName, String destinationColumnName, List<String> LookUpTable) {
         FileInputStream fis = null;
         FileOutputStream outputStream = null;
         Workbook workbook = null;
@@ -1409,17 +1411,41 @@ public class ExcelTransformationUtility {
             workbook = new XSSFWorkbook(fis);
 
             Sheet sourceSheet = workbook.getSheet(sourceSheetName);
+            if (sourceSheet == null) {
+                throw new IllegalArgumentException("Source sheet " + sourceSheetName + " does not exist.");
+            }
+
             Sheet destinationSheet = workbook.getSheet(destinationSheetName);
+            if (destinationSheet == null) {
+                destinationSheet = workbook.createSheet(destinationSheetName);
+            }
 
             int sourceColumnIndex = getColumnIndex(sourceSheet, sourceColumnName);
+            int sourceColumnIndex2 = getColumnIndex(sourceSheet, sourceColumnName2);
             int destinationColumnIndex = getColumnIndex(destinationSheet, destinationColumnName);
+            int statusColumnIndex = getColumnIndex(destinationSheet, "TransformationStatus");
+
+            System.out.println("Starting parsing and lookup process...");
+            System.out.println("Source Sheet: " + sourceSheetName);
+            System.out.println("Destination Sheet: " + destinationSheetName);
+            System.out.println("Source Column: " + sourceColumnName);
+            System.out.println("Additional Source Column: " + sourceColumnName2);
+            System.out.println("Destination Column: " + destinationColumnName);
 
             if (sourceColumnIndex == -1) {
                 throw new IllegalArgumentException("Given source column name " + sourceColumnName + " not found in the source sheet.");
             }
 
+            if (sourceColumnIndex2 == -1) {
+                throw new IllegalArgumentException("Given additional source column name " + sourceColumnName2 + " not found in the source sheet.");
+            }
+
             if (destinationColumnIndex == -1) {
                 destinationColumnIndex = createColumn(destinationSheet, destinationColumnName);
+            }
+
+            if (statusColumnIndex == -1) {
+                statusColumnIndex = createColumn(destinationSheet, "TransformationStatus");
             }
 
             // Creating the lookup replacements map
@@ -1434,6 +1460,7 @@ public class ExcelTransformationUtility {
             lookupMap.put("TheAndPartnership", "TheandPartnership");
             lookupMap.put("MediaCom", "EssenceMediaCom");
 
+            // Process rows and update transformationStatusMap
             for (int i = 1; i <= sourceSheet.getLastRowNum(); i++) {
                 Row sourceRow = sourceSheet.getRow(i);
                 if (sourceRow == null) continue;
@@ -1443,8 +1470,19 @@ public class ExcelTransformationUtility {
                     destinationRow = destinationSheet.createRow(i);
                 }
                 Cell sourceCell = sourceRow.getCell(sourceColumnIndex);
+                Cell sourceCell2 = sourceRow.getCell(sourceColumnIndex2);
+                String sourceColumn2Value = getCellValueAsString(sourceCell2);
+                Cell statusCell = destinationRow.getCell(statusColumnIndex);
+                if (statusCell == null) {
+                    statusCell = destinationRow.createCell(statusColumnIndex);
+                }
+
+                System.out.println("\nProcessing Row: " + (i + 1));
+
                 if (sourceCell != null) {
                     String sourceValue = getCellValueAsString(sourceCell);
+                    System.out.println("Source Value: " + sourceValue);
+
                     Cell destinationCell = destinationRow.createCell(destinationColumnIndex);
                     if (sourceValue.isEmpty()) {
                         destinationCell.setCellValue("");
@@ -1452,25 +1490,39 @@ public class ExcelTransformationUtility {
                         String[] splitValues = sourceValue.split("\\|\\|");
                         boolean allMatched = true;
                         StringBuilder formattedValue = new StringBuilder();
+                        StringBuilder failureMessages = new StringBuilder();
 
                         for (String value : splitValues) {
                             if (!value.isEmpty()) {
                                 String cleanedValue = removeSpaces(value.trim().replaceAll("N/A", "NA").replaceAll("[()+,/&'’\\-:]", "").replaceAll("\\s+", ""));
                                 cleanedValue = replaceLookupValues(cleanedValue, lookupMap);
                                 if (!LookUpTable.contains(cleanedValue)) {
-                                    System.out.println("No " + destinationColumnName + " match found at row " + (i + 1) + ": " + cleanedValue);
-                                    //  allMatched = false;
+                                    allMatched = false; // Ensure allMatched is set to false on failure
+                                    String failureMessage = "No " + destinationColumnName + " match found at row " + (i + 1) + ": " + cleanedValue + " with " + sourceColumnName2 + " value: " + sourceColumn2Value;
+                                    if (failureMessages.length() > 0) {
+                                        failureMessages.append("; ");
+                                    }
+                                    failureMessages.append(failureMessage);
+                                    System.out.println(failureMessage);
+                                    // Still set the destination cell value even if no match found
+                                    if (formattedValue.length() > 0) {
+                                        formattedValue.append("; ");
+                                    }
+                                    formattedValue.append(failureMessage); // Append failure message
+                                } else {
+                                    if (formattedValue.length() > 0) {
+                                        formattedValue.append("; ");
+                                    }
+                                    formattedValue.append(cleanedValue);
                                 }
-                                if (formattedValue.length() > 0) {
-                                    formattedValue.append(";");
-                                }
-                                formattedValue.append(cleanedValue);
                             }
                         }
+                        destinationCell.setCellValue(formattedValue.toString().replaceAll("\\|\\|", "; "));
                         if (allMatched) {
-                            destinationCell.setCellValue(formattedValue.toString().replaceAll("\\|\\|", ";"));
+                            System.out.println("Formatted Value (Success): " + formattedValue.toString().replaceAll("\\|\\|", "; "));
+                            updateTransformationStatus(i, "Success");
                         } else {
-                            destinationCell.setCellValue("");
+                            updateTransformationStatus(i, failureMessages.toString());
                         }
                     }
                 } else {
@@ -1479,10 +1531,29 @@ public class ExcelTransformationUtility {
                 }
             }
 
+            // Write the status column based on accumulated transformationStatusMap
+            System.out.println("\nUpdating Transformation Status column...");
+            for (Map.Entry<Integer, String> entry : transformationStatusMap.entrySet()) {
+                int rowIndex = entry.getKey();
+                String status = entry.getValue();
+
+                Row row = destinationSheet.getRow(rowIndex);
+                if (row == null) {
+                    row = destinationSheet.createRow(rowIndex);
+                }
+                Cell statusCell = row.getCell(statusColumnIndex);
+                if (statusCell == null) {
+                    statusCell = row.createCell(statusColumnIndex);
+                }
+                statusCell.setCellValue(status);
+
+                System.out.println("Row " + (rowIndex + 1) + " Status: " + status);
+            }
+
             outputStream = new FileOutputStream(filePath);
             workbook.write(outputStream);
 
-            System.out.println("Column " + destinationColumnName + " Mapping completed successfully.");
+            System.out.println("\nColumn " + destinationColumnName + " Mapping completed successfully.");
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -1500,6 +1571,76 @@ public class ExcelTransformationUtility {
     private static String replaceLookupValues(String value, HashMap<String, String> lookupMap) {
         return lookupMap.getOrDefault(value, value);
     }
+
+    private static void updateTransformationStatus(int rowIndex, String status) {
+        String existingStatus = transformationStatusMap.get(rowIndex);
+        if (existingStatus == null) {
+            transformationStatusMap.put(rowIndex, status);
+        } else {
+            if (status.equals("Success")) {
+                // Only one "Success" should be stored if all statuses are successes
+                if (!existingStatus.contains("No ")) {
+                    transformationStatusMap.put(rowIndex, "Success");
+                }
+            } else {
+                // Append new failure messages separated by ";"
+                if (!existingStatus.startsWith("Success")) {
+                    transformationStatusMap.put(rowIndex, existingStatus + "; " + status);
+                } else {
+                    transformationStatusMap.put(rowIndex, status);
+                }
+            }
+        }
+    }
+
+//    public static void writeTransformationStatus(String filePath, String sheetName) {
+//        FileInputStream fis = null;
+//        FileOutputStream outputStream = null;
+//        Workbook workbook = null;
+//
+//        try {
+//            fis = new FileInputStream(filePath);
+//            workbook = new XSSFWorkbook(fis);
+//
+//            Sheet sheet = workbook.getSheet(sheetName);
+//            int statusColumnIndex = getColumnIndex(sheet, "TransformationStatus");
+//
+//            if (statusColumnIndex == -1) {
+//                statusColumnIndex = createColumn(sheet, "TransformationStatus");
+//            }
+//
+//            for (Map.Entry<Integer, StringBuilder> entry : transformationStatusMap.entrySet()) {
+//                int rowIndex = entry.getKey();
+//                String status = entry.getValue().toString();
+//
+//                Row row = sheet.getRow(rowIndex);
+//                if (row == null) {
+//                    row = sheet.createRow(rowIndex);
+//                }
+//                Cell statusCell = row.getCell(statusColumnIndex);
+//                if (statusCell == null) {
+//                    statusCell = row.createCell(statusColumnIndex);
+//                }
+//                statusCell.setCellValue(status);
+//            }
+//
+//            outputStream = new FileOutputStream(filePath);
+//            workbook.write(outputStream);
+//
+//            System.out.println("TransformationStatus column updated successfully.");
+//
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        } finally {
+//            try {
+//                if (fis != null) fis.close();
+//                if (outputStream != null) outputStream.close();
+//                if (workbook != null) workbook.close();
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//    }
 
     public static void mapAssetTypeToAssetSubType(String filePath, String sourceSheetName, String sourceColumnName, String destinationSheetName, String destinationColumnName) {
         FileInputStream fis = null;

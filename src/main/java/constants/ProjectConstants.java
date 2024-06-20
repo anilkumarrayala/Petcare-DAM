@@ -32,8 +32,8 @@ public class ProjectConstants {
                     "NetWeight","PetLifestage","PieceCount","PlatformSpecifications","RightsRestricted","RestrictDownload","PetSize","BrightcoveAssetID","BrightcoveAssetName","BrightcoveRemovedBy","BrightcoveRemovedDate",
                     "BrightcoveAssetStatus", "MasterOrLocalizationAdaptation","Flavor","ProductCategory",
                     "RightsManagementType","RightsManagementType1","RightsManagementType2","RightsManagementType3","RightsManagementType4","RightsManagementType5","RightsManagementType6","RightsManagementType7","RightsManagementType8",
-                    "Recipe","Region/MarketingCountry","ProductImageAngle",
-                    "Occasion","OccasionYear","OriginatingCountry","FERT","Claims", "DisplayPackType","CampaignPromotionalYear","AssetEmail",
+                    "Recipe","Region","Region/MarketingCountry","ProductImageAngle",
+                    "Occasion","OccasionYear","OriginatingCountry","FERT","Claims", "DisplayPackType","CampaignPromotionalYear","AssetOwnerEmail",
                     /*"Keywords",*/"InPerpetuity","InPerpetuity1","InPerpetuity2","InPerpetuity3","InPerpetuity4","InPerpetuity5","InPerpetuity6","InPerpetuity7","InPerpetuity8","Languages","GTINEANUPC","ImagePosition",
                     "VERP","BrandSubBrandHierarchy","CoverageStartDate","CoverageStartDate1","CoverageStartDate2","CoverageStartDate3","CoverageStartDate4","CoverageStartDate5",
                     "CoverageStartDate6","CoverageEndDate7","CoverageStartDate8","CoverageEndDate","CoverageEndDate1","CoverageEndDate2","CoverageEndDate3","CoverageEndDate4","CoverageEndDate5","CoverageEndDate6",
@@ -44,7 +44,7 @@ public class ProjectConstants {
                     "MediaChannel","MediaChannel1","MediaChannel2","MediaChannel3","MediaChannel4","MediaChannel5","MediaChannel6","MediaChannel7","MediaChannel8",
                     "RestrictionDescription","RestrictionDescription1","RestrictionDescription2","RestrictionDescription3","RestrictionDescription4","RestrictionDescription5","RestrictionDescription6","RestrictionDescription7","RestrictionDescription8",
                     /*,"is-related-to","extracted-pdf","copy-content-of","extracted-pdf-child","participant-subscribed","belong-to-video","participant-collection-on-subscribed","extracted-xml",
-                    "is-derivative-of","contains","is-child-of","derivative","is-place-graphic-of", "belong-to","has-video-clips", "copy-contains","is-parent-of","extracted-xml-child","placed-graphics"*/"AssociatedAssets"
+                    "is-derivative-of","contains","is-child-of","derivative","is-place-graphic-of", "belong-to","has-video-clips", "copy-contains","is-parent-of","extracted-xml-child","placed-graphics"*/"AssociatedAssets","TransformationStatus"
             });
 
 
@@ -58,7 +58,7 @@ public class ProjectConstants {
     private List AprimoColumnName = Arrays.asList(new String[] {"LighthouseAssetID", "Title" , "LegacyAssetVersion"
             ,"AssetType","AssetSubType","Status","Description","Keywords","OriginalFileName","HealthBenefit",
             "NetWeight","PetLifestage","PieceCount","PetSize","BrightcoveAssetID","BrightcoveAssetName","BrightcoveRemovedBy",
-            "BrightcoveAssetStatus","ProductCategory","Recipe", "Occasion","OccasionYear","OriginatingCountry","Claims","CampaignPromotionalYear","AssetEmail"});
+            "BrightcoveAssetStatus","ProductCategory","Recipe", "Occasion","OccasionYear","OriginatingCountry","Claims","CampaignPromotionalYear","AssetOwnerEmail"});
 
     public List getAprimoDateColumnName() {
         return AprimoDateColumnName;
