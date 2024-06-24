@@ -11,7 +11,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-import constants.LookupConstants;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
@@ -19,6 +18,9 @@ public class ExcelTransformationUtility {
 
     public static Workbook workbook;
     private static Map<Integer, String> transformationStatusMap = new HashMap<>();
+
+    private static Map<String, String> propertiesMap;
+
     /*
     Logic for Field To Field Mapping
      */
@@ -49,7 +51,7 @@ public class ExcelTransformationUtility {
             outputStream = new FileOutputStream(filePath);
             workbook.write(outputStream);
 
-            System.out.println("FIELD to FIELD MAPPING --> LH Column "+sourceColumnName+" mapped successfully to Aprimo Column "+ destinationColumnName);
+            System.out.println("FIELD to FIELD MAPPING --> LH Column " + sourceColumnName + " mapped successfully to Aprimo Column " + destinationColumnName);
         } catch (IOException | IllegalArgumentException | IllegalStateException ex) {
             ex.printStackTrace();
         } finally {
@@ -106,7 +108,7 @@ public class ExcelTransformationUtility {
             Cell destinationCell = destinationRow.createCell(destinationColumnIndex);
             if (sourceCell != null) {
                 String destinationCellValue = getCellValueAsString(sourceCell).trim();
-                destinationCell.setCellValue(destinationCellValue.replace("N/A","NA"));
+                destinationCell.setCellValue(destinationCellValue.replace("N/A", "NA"));
             }
         }
     }
@@ -146,7 +148,7 @@ public class ExcelTransformationUtility {
             outputStream = new FileOutputStream(filePath);
             workbook.write(outputStream);
 
-            System.out.println("SPLIT and MAP --> LH Column "+sourceColumnName+ "mapped successfully to Aprimo Column "+ destinationColumnNames);
+            System.out.println("SPLIT and MAP --> LH Column " + sourceColumnName + "mapped successfully to Aprimo Column " + destinationColumnNames);
         } catch (IOException | IllegalArgumentException | IllegalStateException ex) {
             ex.printStackTrace();
         } finally {
@@ -222,7 +224,7 @@ public class ExcelTransformationUtility {
                         String[] values = sourceCellValue.split("\\|\\|"); // Split the cell value with "||" delimiter
                         for (String value : values) {
                             value = value.trim();
-                            value = value.replace("N/A","NA");
+                            value = value.replace("N/A", "NA");
                             if (!uniqueValues.contains(value)) {
                                 if (concatenatedValue.length() > 0) {
                                     concatenatedValue.append(deLimiter); // Adding delimiter ";" between values
@@ -240,7 +242,7 @@ public class ExcelTransformationUtility {
             outputStream = new FileOutputStream(filePath);
             workbook.write(outputStream);
 
-            System.out.println("Parse and Map single column --> LH Column "+sourceColumnName+" mapped successfully to Aprimo Column "+ destinationColumnName);
+            System.out.println("Parse and Map single column --> LH Column " + sourceColumnName + " mapped successfully to Aprimo Column " + destinationColumnName);
         } catch (IOException | IllegalArgumentException | IllegalStateException ex) {
             ex.printStackTrace();
         } finally {
@@ -267,7 +269,7 @@ public class ExcelTransformationUtility {
                     String[] values = cellValue.split("\\|\\|"); // Split the cell value with "||" delimiter
                     for (String value : values) {
                         value = value.trim();
-                        value = value.replace("N/A","NA");
+                        value = value.replace("N/A", "NA");
                         if (!uniqueValues.contains(value)) {
                             if (concatenatedValue.length() > 0) {
                                 concatenatedValue.append(deLimiter); // Adding delimiter ";" between values
@@ -311,18 +313,18 @@ public class ExcelTransformationUtility {
                 throw new IllegalArgumentException("Given source column name not found in the source sheet.");
             }
 
-            parseAndMapMultipleCellValues(sourceSheet, destinationSheet, sourceColumnIndex, destinationColumnIndex1, destinationColumnIndex2,deLimiter);
+            parseAndMapMultipleCellValues(sourceSheet, destinationSheet, sourceColumnIndex, destinationColumnIndex1, destinationColumnIndex2, deLimiter);
 
             outputStream = new FileOutputStream(filePath);
             workbook.write(outputStream);
-            System.out.println("Parse and Map Multiple columns --> LH Column "+sourceColumnName+" mapped successfully to Aprimo Column "+ destinationColumnName1 +destinationColumnName2);
+            System.out.println("Parse and Map Multiple columns --> LH Column " + sourceColumnName + " mapped successfully to Aprimo Column " + destinationColumnName1 + destinationColumnName2);
         } finally {
             closeResources(fis, outputStream, workbook);
         }
     }
 
     private static void parseAndMapMultipleCellValues(Sheet sourceSheet, Sheet destinationSheet, int sourceColumnIndex,
-                                                      int destinationColumnIndex1, int destinationColumnIndex2 , char deLimiter) {
+                                                      int destinationColumnIndex1, int destinationColumnIndex2, char deLimiter) {
         for (int i = 1; i <= sourceSheet.getLastRowNum(); i++) {
             Row sourceRow = sourceSheet.getRow(i);
             Row destinationRow = destinationSheet.getRow(i);
@@ -395,7 +397,7 @@ public class ExcelTransformationUtility {
             }
 
             // Process each row in the source sheet
-            for (int i = sourceSheet.getFirstRowNum()+1; i <= sourceSheet.getLastRowNum(); i++) {
+            for (int i = sourceSheet.getFirstRowNum() + 1; i <= sourceSheet.getLastRowNum(); i++) {
                 Row sourceRow = sourceSheet.getRow(i);
                 if (sourceRow != null) {
                     Cell sourceCell = sourceRow.getCell(sourceColumnIndex);
@@ -466,7 +468,7 @@ public class ExcelTransformationUtility {
         // Write changes to the workbook
         FileOutputStream outputStream = new FileOutputStream(filePath);
         workbook.write(outputStream);
-        System.out.println("Parse and Map2 --> LH Column "+sourceColumnName+" mapped successfully to Aprimo Column "+ destinationColumnName);
+        System.out.println("Parse and Map2 --> LH Column " + sourceColumnName + " mapped successfully to Aprimo Column " + destinationColumnName);
         // Close resources
         outputStream.close();
         fis.close();
@@ -756,13 +758,15 @@ public class ExcelTransformationUtility {
         DateFormat targetFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss a");
         Date date = new Date();
         try {
-            if(!formattedDate.isEmpty()){
+            if (!formattedDate.isEmpty()) {
                 date = targetFormat.parse(formattedDate);
-            }} catch (Exception pe) {
+            }
+        } catch (Exception pe) {
             System.out.println(pe);
         }
         return date;
     }
+
     public static void mapDateFields(String filePath, String sourceSheetName, String destinationSheetName, String sourceColumnName, String destinationColumnName, char deLimiter) {
         FileInputStream fis = null;
         FileOutputStream outputStream = null;
@@ -818,9 +822,9 @@ public class ExcelTransformationUtility {
             workbook.write(outputStream);
 
             System.out.println("Dates Transformation applied in column " + sourceColumnName + " mapped successfully to " + destinationColumnName);
-        } catch(IOException | IllegalArgumentException | IllegalStateException | ParseException ex){
+        } catch (IOException | IllegalArgumentException | IllegalStateException | ParseException ex) {
             ex.printStackTrace();
-        } finally{
+        } finally {
             try {
                 if (outputStream != null) {
                     outputStream.close();
@@ -931,7 +935,7 @@ public class ExcelTransformationUtility {
             outputStream = new FileOutputStream(filePath);
             workbook.write(outputStream);
 
-            System.out.println("Parse Exponential Fields --> LH Column "+sourceColumnName+" mapped successfully to Aprimo Column "+ destinationColumnName);
+            System.out.println("Parse Exponential Fields --> LH Column " + sourceColumnName + " mapped successfully to Aprimo Column " + destinationColumnName);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -950,7 +954,7 @@ public class ExcelTransformationUtility {
         FileInputStream fis = null;
         FileOutputStream outputStream = null;
         Workbook workbook = null;
-        String[] PackagingValueNames = new String[] {"Evoke Group Asset", "Vidsy Asset","Elmwood Asset","Juice Asset"};
+        String[] PackagingValueNames = new String[]{"Evoke Group Asset", "Vidsy Asset", "Elmwood Asset", "Juice Asset"};
         List<String> Policylist = Arrays.asList(PackagingValueNames);
         try {
             fis = new FileInputStream(filePath);
@@ -986,11 +990,9 @@ public class ExcelTransformationUtility {
                     //Applies for all the policies for agency assets
                     if (sourceValue.contains("Packaging")) {
                         destinationValue = "Final Packaging";
-                    } else if(Policylist.contains(sourceValue))
-                    {
+                    } else if (Policylist.contains(sourceValue)) {
                         destinationValue = "InReview";
-                    }else
-                    {
+                    } else {
                         destinationValue = "Reference";
                     }
 
@@ -1002,7 +1004,7 @@ public class ExcelTransformationUtility {
             outputStream = new FileOutputStream(filePath);
             workbook.write(outputStream);
 
-            System.out.println("Mapping for "+ sourceColumnName+" completed successfully.");
+            System.out.println("Mapping for " + sourceColumnName + " completed successfully.");
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -1016,6 +1018,7 @@ public class ExcelTransformationUtility {
             }
         }
     }
+
     public static void mapPoliciesAndVideoAssetsValues(String filePath, String sourceSheetName, String sourceColumnName, String destinationSheetName, String destinationColumnName) {
         FileInputStream fis = null;
         FileOutputStream outputStream = null;
@@ -1032,7 +1035,7 @@ public class ExcelTransformationUtility {
             int destinationColumnIndex = getColumnIndex(destinationSheet, destinationColumnName);
 
             if (sourceColumnIndex == -1) {
-                throw new IllegalArgumentException("Given source column name "+sourceColumnName+" not found in the source sheet.");
+                throw new IllegalArgumentException("Given source column name " + sourceColumnName + " not found in the source sheet.");
             }
 
             if (destinationColumnIndex == -1) {
@@ -1067,7 +1070,7 @@ public class ExcelTransformationUtility {
             outputStream = new FileOutputStream(filePath);
             workbook.write(outputStream);
 
-            System.out.println("Mapping for "+sourceColumnName+" completed successfully.");
+            System.out.println("Mapping for " + sourceColumnName + " completed successfully.");
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -1099,11 +1102,11 @@ public class ExcelTransformationUtility {
             int destinationColumnIndex = getColumnIndex(destinationSheet, destinationColumnName);
 
             if (sourceColumn1Index == -1) {
-                throw new IllegalArgumentException("Given source column 1 name : "+sourceColumnName1+" not found in the source sheet.");
+                throw new IllegalArgumentException("Given source column 1 name : " + sourceColumnName1 + " not found in the source sheet.");
             }
 
             if (sourceColumn2Index == -1) {
-                throw new IllegalArgumentException("Given source column 2 name: "+sourceColumnName2+" not found in the source sheet.");
+                throw new IllegalArgumentException("Given source column 2 name: " + sourceColumnName2 + " not found in the source sheet.");
             }
 
             if (destinationColumnIndex == -1) {
@@ -1152,7 +1155,7 @@ public class ExcelTransformationUtility {
             outputStream = new FileOutputStream(filePath);
             workbook.write(outputStream);
 
-            System.out.println("Mapping for "+sourceColumnName2+" completed successfully.");
+            System.out.println("Mapping for " + sourceColumnName2 + " completed successfully.");
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -1166,12 +1169,13 @@ public class ExcelTransformationUtility {
             }
         }
     }
+
     public static void mapStatusValues(String filePath, String sourceSheetName, String sourceColumnName, String destinationSheetName, String destinationColumnName) {
         FileInputStream fis = null;
         FileOutputStream outputStream = null;
         Workbook workbook = null;
 
-        String[] targetValues = new String[] {"SOURCE", "REFERENCE", "FINAL PACKAGING"};
+        String[] targetValues = new String[]{"SOURCE", "REFERENCE", "FINAL PACKAGING"};
         List<String> targetList = Arrays.asList(targetValues);
 
         try {
@@ -1397,8 +1401,6 @@ public class ExcelTransformationUtility {
             }
         }
     }
-
-
 
 
     public static void parseAndLookup(String filePath, String sourceSheetName, String sourceColumnName, String sourceColumnName2, String destinationSheetName, String destinationColumnName, List<String> LookUpTable) {
@@ -1781,7 +1783,7 @@ public class ExcelTransformationUtility {
     }
 
     public static void pickAndConcatenateAssociatedAssets(String filePath, String sourceSheetName, String destinationSheetName,
-                                                String[] sourceColumnNames, String destinationColumnName) throws IOException {
+                                                          String[] sourceColumnNames, String destinationColumnName) throws IOException {
         FileInputStream fis = null;
         FileOutputStream outputStream = null;
         Workbook workbook = null;
@@ -1929,10 +1931,12 @@ public class ExcelTransformationUtility {
 
         return cleanedString;
     }
+
     // Method to remove spaces from a string
     private static String removeSpaces(String input) {
         return input.replaceAll("\\s+", "");
     }
+
     private static String removeSpacesAndSpecialChars(String input) {
         return input.replaceAll("[ &()+,/:'’\\-]", "");
     }
@@ -1949,6 +1953,7 @@ public class ExcelTransformationUtility {
         // Concatenate the first character and the rest of the string
         return firstChar + restOfString;
     }
+
     private static String getCellValueAsString(Cell cell) {
         if (cell == null) {
             return null;
@@ -1959,6 +1964,98 @@ public class ExcelTransformationUtility {
         }
 
         return cell.getStringCellValue();
+    }
+
+    private static void loadProperties(String filePath) throws IOException {
+        Properties properties = new Properties();
+        try (FileInputStream inputStream = new FileInputStream(filePath)) {
+            properties.load(inputStream);
+        }
+
+        for (String key : properties.stringPropertyNames()) {
+            propertiesMap.put(key, properties.getProperty(key));
+        }
+    }
+
+    public String getMatchingValue(String A, String B, String C) {
+        String key = A + "," + B + "," + C;
+        return propertiesMap.getOrDefault(key, "No match found");
+    }
+
+    //ExcelTransformationUtility.pickAndConcatenateAssets(filePath, sourceSheetName_Transformed, destinationSheetName,
+    // destinationColumnName_Category,destinationColumnName_AssetType, destinationColumnName_AssetSubType,
+    // sourceColumnName_OriginalAssetID, destinationColumnName_ACatATypeASubTypeHierarchy ,"/DAM/ACatATypeASubTypeHierarchy");
+
+    public static void pickAndConcatenatePropertyLookup(String filePath, String sourceSheetName, String destinationSheetName,
+                                                        String sourceColumnName1, String sourceColumnName2, String sourceColumnName3,
+                                                        String destinationColumnName) throws IOException {
+        System.out.println("Pick and Concatenate Property Lookup");
+        FileInputStream fis = null;
+        FileOutputStream outputStream = null;
+        Workbook workbook = null;
+        Properties properties = new Properties();
+        FileInputStream fileInputStream = null;
+        try {
+            fis = new FileInputStream(filePath);
+            workbook = new XSSFWorkbook(fis);
+
+            Sheet sourceSheet = workbook.getSheet(sourceSheetName);
+            Sheet destinationSheet = workbook.getSheet(destinationSheetName);
+
+            // Get column indices by column names
+            int sourceColumnIndex1 = getColumnIndex(sourceSheet, sourceColumnName1);
+            int sourceColumnIndex2 = getColumnIndex(sourceSheet, sourceColumnName2);
+            int sourceColumnIndex3 = getColumnIndex(sourceSheet, sourceColumnName3);
+            int destinationColumnIndex = getColumnIndex(destinationSheet, destinationColumnName);
+
+            if (destinationColumnIndex == -1) {
+                destinationColumnIndex = createColumn(destinationSheet, destinationColumnName);
+            }
+
+            if (sourceColumnIndex1 == -1 || sourceColumnIndex2 == -1 || sourceColumnIndex3 == -1) {
+                throw new IllegalArgumentException("Given source column name not found in the source sheet.");
+            }
+
+            // Iterate through each row in the source sheet
+            for (int i = 1; i <= sourceSheet.getLastRowNum(); i++) {
+                Row sourceRow = sourceSheet.getRow(i);
+                if (sourceRow == null) continue;
+
+                Row destinationRow = destinationSheet.getRow(i);
+                if (destinationRow == null) {
+                    destinationRow = destinationSheet.createRow(i);
+                }
+
+                // Get values from the columns
+                String value1 = sourceRow.getCell(sourceColumnIndex1).getStringCellValue();
+                String value2 = sourceRow.getCell(sourceColumnIndex2).getStringCellValue();
+                String value3 = sourceRow.getCell(sourceColumnIndex3).getStringCellValue();
+
+                // Check if value2 and value3 are the same and log the information
+                String concatenatedValue;
+                // Check from property file
+                PropertiesMatcher matcher = new PropertiesMatcher("C://Project//MARS//LookUpConfig.properties");
+                concatenatedValue = matcher.getMatchingValue(value1, value2, value3);
+                // Create new cell in destination sheet and set the concatenated value
+                Cell destCell = destinationRow.createCell(destinationColumnIndex);
+                destCell.setCellValue(concatenatedValue);
+            }
+
+            // Write the destination workbook to a file
+            outputStream = new FileOutputStream(filePath);
+            workbook.write(outputStream);
+            System.out.println("Pick and Concatenate Lookup --> Columns " + sourceColumnName1 + ", " + sourceColumnName2 + ", " + sourceColumnName3 + ", and "   + " mapped successfully to column " + destinationColumnName );
+
+        }catch (IOException e) {
+            e.printStackTrace();
+        }finally {
+            try {
+                if (fis != null) fis.close();
+                if (workbook != null) workbook.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
 

@@ -16,11 +16,9 @@ public class ExcelDrivenMain {
 
     public static void main(String[] args) throws IOException,Exception {
 
-        String filePath = "C://Project//MARS//test-Extract-PetNutrition-new.xlsx";
-        //String filePath = "C://Project//MARS//PN-10k-20k.xlsx";
+        String filePath = "C://Project//MARS//test-Extract-PetNutrition.xlsx";
         String extension = "Transformed-" +ExcelTransformationUtility.getCurrentTimestamp()+".xlsx";
         String destFilePath =System.getProperty("user.home")+ extension;
-        //String destFilePath ="C://Project//MARS//" + extension;
         String sourceSheetName = "Data";
         String destinationSheetName = "Transformed";
         String destinationSheetName1 = "Final";
@@ -40,6 +38,27 @@ public class ExcelDrivenMain {
         long heapFreeSize = Runtime.getRuntime().freeMemory();
         System.out.println("Java Heap Free Size "+heapFreeSize);
 
+        //Lookup for Asset Category
+        String sourceColumnName_Category = "Category/Type/Sub-Type 1";
+        String destinationColumnName_Category = "AssetCategory";
+        ExcelTransformationUtility.parseAndLookup(filePath, sourceSheetName, sourceColumnName_Category, sourceColumnName_AssetID, destinationSheetName, destinationColumnName_Category, LookupConstants.getAssetCategories());
+
+        //Lookup for Asset SubType
+        String sourceColumnName_SubCategory = "Category/Type/Sub-Type 3";
+        String destinationColumnName_SubCategor = "AssetSubType";
+        ExcelTransformationUtility.parseAndLookup(filePath, sourceSheetName, sourceColumnName_SubCategory, sourceColumnName_AssetID, destinationSheetName, destinationColumnName_SubCategor, LookupConstants.getAssetSubType());
+
+        //Lookup for Asset Type
+        String sourceColumnName_AssetType = "Category/Type/Sub-Type 2";
+        String destinationColumnName_AssetType = "AssetType";
+        ExcelTransformationUtility.parseAndLookup(filePath, sourceSheetName, sourceColumnName_AssetType, sourceColumnName_AssetID, destinationSheetName, destinationColumnName_AssetType, LookupConstants.getAssetTypes());
+
+        //String sourceColumnName_AssetTypes = "AssetType";
+        String destinationColumnName_AssetSubType = "AssetSubType";
+        ExcelTransformationUtility.mapAssetTypeToAssetSubType(filePath, sourceSheetName_Transformed, destinationColumnName_SubCategor, destinationSheetName, destinationColumnName_AssetSubType);
+
+        String destinationColumnName_ACatATypeASubTypeHierarchy = "ACatATypeASubTypeHierarchy";
+        ExcelTransformationUtility.pickAndConcatenatePropertyLookup(filePath, sourceSheetName_Transformed, destinationSheetName, destinationColumnName_Category, destinationColumnName_AssetType, destinationColumnName_AssetSubType, destinationColumnName_ACatATypeASubTypeHierarchy);
 
         // Parse and map
         List LHSplitColumnName =  projectConstants.getLHSplitReplaceColumnNames();
@@ -134,27 +153,6 @@ public class ExcelDrivenMain {
         String destinationColumnName_Flavor = "Flavor";
         ExcelTransformationUtility.parseAndLookup(filePath, sourceSheetName, sourceColumnName_Flavor, sourceColumnName_AssetID, destinationSheetName, destinationColumnName_Flavor, LookupConstants.getFlavorNames());
 
-        //Lookup for Asset Category
-        String sourceColumnName_Category = "Category/Type/Sub-Type 1";
-        String destinationColumnName_Category = "AssetCategory";
-        ExcelTransformationUtility.parseAndLookup(filePath, sourceSheetName, sourceColumnName_Category, sourceColumnName_AssetID, destinationSheetName, destinationColumnName_Category, LookupConstants.getAssetCategories());
-
-        //Lookup for Asset SubType
-        String sourceColumnName_SubCategory = "Category/Type/Sub-Type 3";
-        String destinationColumnName_SubCategor = "AssetSubType";
-        ExcelTransformationUtility.parseAndLookup(filePath, sourceSheetName, sourceColumnName_SubCategory, sourceColumnName_AssetID, destinationSheetName, destinationColumnName_SubCategor, LookupConstants.getAssetSubType());
-
-        //Lookup for Asset Type
-        String sourceColumnName_AssetType = "Category/Type/Sub-Type 2";
-        String destinationColumnName_AssetType = "AssetType";
-        ExcelTransformationUtility.parseAndLookup(filePath, sourceSheetName, sourceColumnName_AssetType, sourceColumnName_AssetID, destinationSheetName, destinationColumnName_AssetType, LookupConstants.getAssetTypes());
-
-        //String sourceColumnName_AssetTypes = "AssetType";
-        String destinationColumnName_AssetSubType = "AssetSubType";
-        ExcelTransformationUtility.mapAssetTypeToAssetSubType(filePath, sourceSheetName_Transformed, destinationColumnName_SubCategor, destinationSheetName, destinationColumnName_AssetSubType);
-
-        String destinationColumnName_ACatATypeASubTypeHierarchy = "ACatATypeASubTypeHierarchy";
-        ExcelTransformationUtility.pickAndConcatenateAssets(filePath, sourceSheetName_Transformed, destinationSheetName, destinationColumnName_Category, destinationColumnName_AssetType, destinationColumnName_AssetSubType, sourceColumnName_OriginalAssetID, destinationColumnName_ACatATypeASubTypeHierarchy ,"/DAM/ACatATypeASubTypeHierarchy");
 
         //Lookup for Originating country
         String sourceColumnName_OriginatingCountry = "Originating Country";
