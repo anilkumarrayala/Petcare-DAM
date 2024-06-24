@@ -217,10 +217,10 @@ public class ExcelDrivenMain {
         String ColumnName_GlobalRegionalLocal = "Global/Regional/Local";
         ExcelTransformationUtility.parseAndLookup(filePath, sourceSheetName, ColumnName_GlobalRegionalLocal, sourceColumnName_AssetID, destinationSheetName, ColumnName_GlobalRegionalLocal, LookUpConstants2.getGlobalRegionalLocal());
 
-        //Lookup for Rights Management Type
-        String sourceColumnName_RightsManagementType = "Rights Management Type";
-        String destinationColumnName_RightsManagementType = "RightsManagementType";
-        ExcelTransformationUtility.parseAndLookup(filePath, sourceSheetName, sourceColumnName_RightsManagementType, sourceColumnName_AssetID, destinationSheetName, destinationColumnName_RightsManagementType, LookUpConstants2.getRightsManagementType());
+//        //Lookup for Rights Management Type
+//        String sourceColumnName_RightsManagementType = "Rights Management Type 1";
+//        String destinationColumnName_RightsManagementType = "RightsManagementType";
+//        ExcelTransformationUtility.parseAndLookup(filePath, sourceSheetName, sourceColumnName_RightsManagementType, sourceColumnName_AssetID, destinationSheetName, destinationColumnName_RightsManagementType, LookUpConstants2.getRightsManagementType());
 
         String[] sourceColumnNames = {
                 "extracted-pdf", "copy-content-of", "extracted-pdf-child", "participant-subscribed",

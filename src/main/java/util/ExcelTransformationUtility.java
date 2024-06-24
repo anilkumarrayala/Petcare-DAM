@@ -1473,11 +1473,11 @@ public class ExcelTransformationUtility {
                     statusCell = destinationRow.createCell(statusColumnIndex);
                 }
 
-                System.out.println("\nProcessing Row: " + (i + 1));
+                //System.out.println("\nProcessing Row: " + (i + 1));
 
                 if (sourceCell != null) {
                     String sourceValue = getCellValueAsString(sourceCell);
-                    System.out.println("Source Value: " + sourceValue);
+                    //System.out.println("Source Value: " + sourceValue);
 
                     Cell destinationCell = destinationRow.createCell(destinationColumnIndex);
                     if (sourceValue.isEmpty()) {
@@ -1515,7 +1515,7 @@ public class ExcelTransformationUtility {
                         }
                         destinationCell.setCellValue(formattedValue.toString().replaceAll("\\|\\|", "; "));
                         if (allMatched) {
-                            System.out.println("Formatted Value (Success): " + formattedValue.toString().replaceAll("\\|\\|", "; "));
+                            //System.out.println("Formatted Value (Success): " + formattedValue.toString().replaceAll("\\|\\|", "; "));
                             updateTransformationStatus(i, "Success");
                         } else {
                             updateTransformationStatus(i, failureMessages.toString());
@@ -1543,7 +1543,7 @@ public class ExcelTransformationUtility {
                 }
                 statusCell.setCellValue(status);
 
-                System.out.println("Row " + (rowIndex + 1) + " Status: " + status);
+                //System.out.println("Row " + (rowIndex + 1) + " Status: " + status);
             }
 
             outputStream = new FileOutputStream(filePath);
