@@ -5,12 +5,11 @@ import constants.LookUpConstants2;
 import constants.LookupConstants;
 import util.ExcelTransformationUtility;
 import constants.ProjectConstants;
+import constants.FileConstants;
 
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
-
-import static workbook.WorkBookCopier.createNewSheet;
 
 public class ExcelDrivenMain {
 
@@ -38,27 +37,6 @@ public class ExcelDrivenMain {
         long heapFreeSize = Runtime.getRuntime().freeMemory();
         System.out.println("Java Heap Free Size "+heapFreeSize);
 
-        //Lookup for Asset Category
-        String sourceColumnName_Category = "Category/Type/Sub-Type 1";
-        String destinationColumnName_Category = "AssetCategory";
-        ExcelTransformationUtility.parseAndLookup(filePath, sourceSheetName, sourceColumnName_Category, sourceColumnName_AssetID, destinationSheetName, destinationColumnName_Category, LookupConstants.getAssetCategories());
-
-        //Lookup for Asset SubType
-        String sourceColumnName_SubCategory = "Category/Type/Sub-Type 3";
-        String destinationColumnName_SubCategor = "AssetSubType";
-        ExcelTransformationUtility.parseAndLookup(filePath, sourceSheetName, sourceColumnName_SubCategory, sourceColumnName_AssetID, destinationSheetName, destinationColumnName_SubCategor, LookupConstants.getAssetSubType());
-
-        //Lookup for Asset Type
-        String sourceColumnName_AssetType = "Category/Type/Sub-Type 2";
-        String destinationColumnName_AssetType = "AssetType";
-        ExcelTransformationUtility.parseAndLookup(filePath, sourceSheetName, sourceColumnName_AssetType, sourceColumnName_AssetID, destinationSheetName, destinationColumnName_AssetType, LookupConstants.getAssetTypes());
-
-        //String sourceColumnName_AssetTypes = "AssetType";
-        String destinationColumnName_AssetSubType = "AssetSubType";
-        ExcelTransformationUtility.mapAssetTypeToAssetSubType(filePath, sourceSheetName_Transformed, destinationColumnName_SubCategor, destinationSheetName, destinationColumnName_AssetSubType);
-
-        String destinationColumnName_ACatATypeASubTypeHierarchy = "ACatATypeASubTypeHierarchy";
-        ExcelTransformationUtility.pickAndConcatenatePropertyLookup(filePath, sourceSheetName_Transformed, destinationSheetName, destinationColumnName_Category, destinationColumnName_AssetType, destinationColumnName_AssetSubType, destinationColumnName_ACatATypeASubTypeHierarchy);
 
         // Parse and map
         List LHSplitColumnName =  projectConstants.getLHSplitReplaceColumnNames();
@@ -89,7 +67,44 @@ public class ExcelDrivenMain {
         {
             ExcelTransformationUtility.fieldToFieldColumnMapping(filePath,sourceSheetName, destinationSheetName, it1.next(), it2.next());
         }
+        //Lookup for Asset Category
+        String sourceColumnName_Category = "Category/Type/Sub-Type 1";
+        String destinationColumnName_Category = "AssetCategory";
+        ExcelTransformationUtility.parseAndLookup(filePath, sourceSheetName, sourceColumnName_Category, sourceColumnName_AssetID, destinationSheetName, destinationColumnName_Category, LookupConstants.getAssetCategories());
 
+        //Lookup for Asset SubType
+        String sourceColumnName_SubCategory = "Category/Type/Sub-Type 3";
+        String destinationColumnName_SubCategor = "AssetSubType";
+        ExcelTransformationUtility.parseAndLookup(filePath, sourceSheetName, sourceColumnName_SubCategory, sourceColumnName_AssetID, destinationSheetName, destinationColumnName_SubCategor, LookupConstants.getAssetSubType());
+
+        //Lookup for Asset Type
+        String sourceColumnName_AssetType = "Category/Type/Sub-Type 2";
+        String destinationColumnName_AssetType = "AssetType";
+        ExcelTransformationUtility.parseAndLookup(filePath, sourceSheetName, sourceColumnName_AssetType, sourceColumnName_AssetID, destinationSheetName, destinationColumnName_AssetType, LookupConstants.getAssetTypes());
+
+        //String sourceColumnName_AssetTypes = "AssetType";
+        String destinationColumnName_AssetSubType = "AssetSubType";
+        ExcelTransformationUtility.mapAssetTypeToAssetSubType(filePath, sourceSheetName_Transformed, destinationColumnName_SubCategor, destinationSheetName, destinationColumnName_AssetSubType);
+
+        String destinationColumnName_ACatATypeASubTypeHierarchy = "ACatATypeASubTypeHierarchy";
+        ExcelTransformationUtility.pickAndConcatenatePropertyLookupThreeColumn(filePath, sourceSheetName_Transformed, destinationSheetName, destinationColumnName_Category, destinationColumnName_AssetType, destinationColumnName_AssetSubType, destinationColumnName_ACatATypeASubTypeHierarchy,FileConstants.configFilePath1);
+
+        String sourceColumnName_Brand = "Brand";
+        String sourceColumnName_SubBrand = "Sub-Brand";
+        String sourceColumnName_Division ="Segment";
+
+        //Lookup for Brand
+        ExcelTransformationUtility.parseAndLookup(filePath, sourceSheetName, sourceColumnName_Brand, sourceColumnName_AssetID, destinationSheetName,  sourceColumnName_Brand, LookupConstants.getBrands());
+
+        //Lookup for Sub Brand
+        ExcelTransformationUtility.parseAndLookup(filePath, sourceSheetName, sourceColumnName_SubBrand, sourceColumnName_AssetID, destinationSheetName, "SubBrand", LookupConstants.getSubBrandNames());
+
+        //Lookup for Division
+        ExcelTransformationUtility.parseAndLookup(filePath, sourceSheetName, sourceColumnName_Division, sourceColumnName_AssetID, destinationSheetName, "Segment", LookupConstants.getDivision());
+
+        String destinationColumnName_Combined = "BrandSubBrandHierarchy";
+        // ExcelTransformationUtility.pickAndConcatenate(filePath, sourceSheetName, destinationSheetName,sourceColumnName_Brand, sourceColumnName_SubBrand, destinationColumnName_Combined,';',"/DAM/DivisionBrandSubBrandHierarchy/PetNutrition/", LookupConstants.getBrands(), LookupConstants.getSubBrandNames());
+        ExcelTransformationUtility.pickAndConcatenatePropertyLookupThreeColumn(filePath, sourceSheetName, destinationSheetName, sourceColumnName_Division,sourceColumnName_Brand, sourceColumnName_SubBrand, destinationColumnName_Combined,FileConstants.configFilePath2);
         //Lookup for Region & MarketingCountries
         String sourceColumnName_Region = "Region/Marketing Country 1";
         String destinationColumnName_Region = "Region";
@@ -100,19 +115,8 @@ public class ExcelDrivenMain {
         ExcelTransformationUtility.parseAndLookup(filePath, sourceSheetName, sourceColumnName_MarketingCountry,sourceColumnName_AssetID, destinationSheetName, destinationColumnName_MarketingCountry, LookupConstants.getMarketingCountries());
 
         String destinationColumnName1 = "Region/MarketingCountry";
-        ExcelTransformationUtility.pickAndConcatenate(filePath, sourceSheetName, destinationSheetName,sourceColumnName_Region, sourceColumnName_MarketingCountry, destinationColumnName1,';',"/DAM/MRegionMCountryHierarchy/",LookupConstants.getRegions(), LookupConstants.getMarketingCountries());
-
-        String sourceColumnName_Brand = "Brand";
-        String sourceColumnName_SubBrand = "Sub-Brand";
-
-        //Lookup for Brand
-        ExcelTransformationUtility.parseAndLookup(filePath, sourceSheetName, sourceColumnName_Brand, sourceColumnName_AssetID, destinationSheetName,  sourceColumnName_Brand, LookupConstants.getBrands());
-
-        //Lookup for Sub Brand
-        ExcelTransformationUtility.parseAndLookup(filePath, sourceSheetName, sourceColumnName_SubBrand, sourceColumnName_AssetID, destinationSheetName, "SubBrand", LookupConstants.getSubBrandNames());
-
-        String destinationColumnName_Combined = "BrandSubBrandHierarchy";
-        ExcelTransformationUtility.pickAndConcatenate(filePath, sourceSheetName, destinationSheetName,sourceColumnName_Brand, sourceColumnName_SubBrand, destinationColumnName_Combined,';',"/DAM/DivisionBrandSubBrandHierarchy/PetNutrition/", LookupConstants.getBrands(), LookupConstants.getSubBrandNames());
+        //ExcelTransformationUtility.pickAndConcatenate(filePath, sourceSheetName, destinationSheetName,sourceColumnName_Region, sourceColumnName_MarketingCountry, destinationColumnName1,';',"/DAM/MRegionMCountryHierarchy/",LookupConstants.getRegions(), LookupConstants.getMarketingCountries());
+        ExcelTransformationUtility.pickAndConcatenatePropertyLookup2Columns(filePath, sourceSheetName, destinationSheetName, sourceColumnName_Region, sourceColumnName_MarketingCountry, destinationColumnName1, FileConstants.configFilePath3);
 
 
         //Additional Transformations

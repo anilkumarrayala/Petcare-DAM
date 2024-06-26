@@ -273,4 +273,11 @@ public class LookupConstants {
 
             ));
 
+    public static ArrayList<String> getDivision() {
+        return division;
+    }
+
+    static ArrayList<String> division = new ArrayList<>(Arrays.asList(
+            "PetNutrition", "RoyalCanin"
+    ));
 }

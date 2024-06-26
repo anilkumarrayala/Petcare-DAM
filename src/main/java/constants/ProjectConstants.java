@@ -31,9 +31,9 @@ public class ProjectConstants {
                     "CustomerSpecific","DataClassification","Description" /*,"Keywords"*/,"OriginalFileName","HealthBenefit", "TransparentBackground",
                     "NetWeight","PetLifestage","PieceCount","PlatformSpecifications","RightsRestricted","RestrictDownload","PetSize","BrightcoveAssetID","BrightcoveAssetName","BrightcoveRemovedBy","BrightcoveRemovedDate",
                     "BrightcoveAssetStatus", "MasterOrLocalizationAdaptation","Flavor","ProductCategory",
-                    "RightsManagementType","RightsManagementType2","RightsManagementType3","RightsManagementType4","RightsManagementType5","RightsManagementType6","RightsManagementType7","RightsManagementType8",
-                    "Recipe","Region","Region/MarketingCountry","ProductImageAngle",
-                    "Occasion","OccasionYear","OriginatingCountry","FERT","Claims", "DisplayPackType","CampaignPromotionalYear","AssetOwnerEmail",
+                    "RightsManagementType","RightsManagementType2","RightsManagementType3","RightsManagementType4","RightsManagementType5","RightsManagementType6","RightsManagementType7","RightsManagementType8"
+                    ,"Region","Region/MarketingCountry","ProductImageAngle",
+                    "Occasion","OccasionYear","OriginatingCountry","FERT", "DisplayPackType","CampaignPromotionalYear","AssetOwnerEmail",
                     /*"Keywords",*/"InPerpetuity","InPerpetuity2","InPerpetuity3","InPerpetuity4","InPerpetuity5","InPerpetuity6","InPerpetuity7","InPerpetuity8","Languages","GTINEANUPC","ImagePosition",
                     "VERP","BrandSubBrandHierarchy","CoverageStartDate","CoverageStartDate2","CoverageStartDate3","CoverageStartDate4","CoverageStartDate5",
                     "CoverageStartDate6","CoverageStartDate7","CoverageStartDate8","CoverageEndDate","CoverageEndDate2","CoverageEndDate3","CoverageEndDate4","CoverageEndDate5","CoverageEndDate6",
@@ -52,13 +52,13 @@ public class ProjectConstants {
             Arrays.asList(new String[] {"ID", "Name" , "Asset Version"
                    ,"Category/Type/Sub-Type 2", "Category/Type/Sub-Type 3", "Asset Status","Description"
                     ,"Description/Keywords","Original File Name","Health Benefit","Net Weight","Pet Lifestage","Piece Count","Pet Size","Brightcove Asset ID",
-                    "Brightcove Asset Name","Removed By","Brightcove Asset Status","Segment/Product Category 2","Recipe",
-                    "Occasion 1","Occasion Year","Originating Country","Claims","Campaign/Promotional Year","Asset Owner"});
+                    "Brightcove Asset Name","Removed By","Brightcove Asset Status","Segment/Product Category 2",
+                    "Occasion 1","Occasion Year","Originating Country","Campaign/Promotional Year","Asset Owner"});
 
     private List AprimoColumnName = Arrays.asList(new String[] {"LighthouseAssetID", "Title" , "LegacyAssetVersion"
             ,"AssetType","AssetSubType","Status","Description","Keywords","OriginalFileName","HealthBenefit",
             "NetWeight","PetLifestage","PieceCount","PetSize","BrightcoveAssetID","BrightcoveAssetName","BrightcoveRemovedBy",
-            "BrightcoveAssetStatus","ProductCategory","Recipe", "Occasion","OccasionYear","OriginatingCountry","Claims","CampaignPromotionalYear","AssetOwnerEmail"});
+            "BrightcoveAssetStatus","ProductCategory", "Occasion","OccasionYear","OriginatingCountry","CampaignPromotionalYear","AssetOwnerEmail"});
 
     public List getAprimoDateColumnName() {
         return AprimoDateColumnName;

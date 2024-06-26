@@ -29,5 +29,9 @@ public class PropertiesMatcher {
         String key = A + "," + B +"," + C;
         return propertiesMap.getOrDefault(key, "No match found");
     }
+    public String getMatchingValue2(String A, String B) {
+        String key = A + "," + B ;
+        return propertiesMap.getOrDefault(key, "No match found");
+    }
 
 }

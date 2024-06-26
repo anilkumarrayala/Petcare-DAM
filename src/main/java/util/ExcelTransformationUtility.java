@@ -708,12 +708,12 @@ public class ExcelTransformationUtility {
     public static String dateFormatter(String dateColumnValue, String columnName) throws ParseException {
         // US date formatter
         String targetFormatStr = "MM/dd/yyyy HH:mm";
-        String simpleDateFormatStr = "MM/dd/yyyy";
+       // String simpleDateFormatStr = "MM/dd/yyyy";
         String originalFormatStr1 = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
         String originalFormatStr2 = "yyyy-MM-dd HH:mm:ss.SSS";
 
         DateFormat targetFormat = new SimpleDateFormat(targetFormatStr);
-        DateFormat simpleDateFormat = new SimpleDateFormat(simpleDateFormatStr);
+      //  DateFormat simpleDateFormat = new SimpleDateFormat(simpleDateFormatStr);
         String formattedDate = null;
 
         try {
@@ -739,13 +739,9 @@ public class ExcelTransformationUtility {
                         throw new ParseException("Unparseable date: " + dateColumnValue, 0);
                     }
                 }
-                if (parsed) {
-                    if ("AssetCreationDate".equals(columnName)) {
-                        formattedDate = simpleDateFormat.format(date);
-                    } else {
+
                         formattedDate = targetFormat.format(date);
-                    }
-                }
+
             }
         } catch (ParseException pe) {
             // If parsing fails, print the error and return null
@@ -1453,11 +1449,11 @@ public class ExcelTransformationUtility {
             lookupMap.put("GK", "GKGraphics");
             lookupMap.put("ThisisPegasus", "ThisIsPegasus");
             lookupMap.put("SGSUSA", "SGSUS");
-            lookupMap.put("TheAndPartnership", "TheandPartnership");
+            lookupMap.put("TheAndPartnership", "ThePartnership");
             lookupMap.put("MediaCom", "EssenceMediaCom");
             lookupMap.put("POS", "POSCollateral");
             lookupMap.put("eCommerceEnhancedContent", "ECommerceEnhancedContent");
-
+            lookupMap.put("POS", "POSCollateral");
             // Process rows and update transformationStatusMap
             for (int i = 1; i <= sourceSheet.getLastRowNum(); i++) {
                 Row sourceRow = sourceSheet.getRow(i);
@@ -1504,12 +1500,12 @@ public class ExcelTransformationUtility {
                                     System.out.println(failureMessage);
                                     // Set the destination cell value to the cleaned value
                                     if (formattedValue.length() > 0) {
-                                        formattedValue.append("; ");
+                                        formattedValue.append(";");
                                     }
                                     formattedValue.append(cleanedValue); // Append the cleaned value
                                 } else {
                                     if (formattedValue.length() > 0) {
-                                        formattedValue.append("; ");
+                                        formattedValue.append(";");
                                     }
                                     formattedValue.append(cleanedValue);
                                 }
@@ -1986,10 +1982,10 @@ public class ExcelTransformationUtility {
     // destinationColumnName_Category,destinationColumnName_AssetType, destinationColumnName_AssetSubType,
     // sourceColumnName_OriginalAssetID, destinationColumnName_ACatATypeASubTypeHierarchy ,"/DAM/ACatATypeASubTypeHierarchy");
 
-    public static void pickAndConcatenatePropertyLookup(String filePath, String sourceSheetName, String destinationSheetName,
+    public static void pickAndConcatenatePropertyLookupThreeColumn(String filePath, String sourceSheetName, String destinationSheetName,
                                                         String sourceColumnName1, String sourceColumnName2, String sourceColumnName3,
-                                                        String destinationColumnName) throws IOException {
-        System.out.println("Pick and Concatenate Property Lookup");
+                                                        String destinationColumnName, String path) throws IOException {
+        System.out.println("Pick and Concatenate Property Lookup 3 columns");
         FileInputStream fis = null;
         FileOutputStream outputStream = null;
         Workbook workbook = null;
@@ -2034,8 +2030,8 @@ public class ExcelTransformationUtility {
                 // Check if value2 and value3 are the same and log the information
                 String concatenatedValue;
                 // Check from property file
-                PropertiesMatcher matcher = new PropertiesMatcher("C://Project//MARS//LookUpConfig.properties");
-                concatenatedValue = matcher.getMatchingValue(value1, value2, value3);
+                PropertiesMatcher matcher = new PropertiesMatcher(path);
+                concatenatedValue = matcher.getMatchingValue(value1, value2,value3);
                 // Create new cell in destination sheet and set the concatenated value
                 Cell destCell = destinationRow.createCell(destinationColumnIndex);
                 destCell.setCellValue(concatenatedValue);
@@ -2045,6 +2041,76 @@ public class ExcelTransformationUtility {
             outputStream = new FileOutputStream(filePath);
             workbook.write(outputStream);
             System.out.println("Pick and Concatenate Lookup --> Columns " + sourceColumnName1 + ", " + sourceColumnName2 + ", " + sourceColumnName3 + ", and "   + " mapped successfully to column " + destinationColumnName );
+
+        }catch (IOException e) {
+            e.printStackTrace();
+        }finally {
+            try {
+                if (fis != null) fis.close();
+                if (workbook != null) workbook.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public static void pickAndConcatenatePropertyLookup2Columns(String filePath, String sourceSheetName, String destinationSheetName,
+                                                        String sourceColumnName1, String sourceColumnName2,
+                                                        String destinationColumnName, String path) throws IOException {
+        System.out.println("Pick and Concatenate Property Lookup two columns");
+        FileInputStream fis = null;
+        FileOutputStream outputStream = null;
+        Workbook workbook = null;
+        Properties properties = new Properties();
+        FileInputStream fileInputStream = null;
+        try {
+            fis = new FileInputStream(filePath);
+            workbook = new XSSFWorkbook(fis);
+
+            Sheet sourceSheet = workbook.getSheet(sourceSheetName);
+            Sheet destinationSheet = workbook.getSheet(destinationSheetName);
+
+            // Get column indices by column names
+            int sourceColumnIndex1 = getColumnIndex(sourceSheet, sourceColumnName1);
+            int sourceColumnIndex2 = getColumnIndex(sourceSheet, sourceColumnName2);
+            int destinationColumnIndex = getColumnIndex(destinationSheet, destinationColumnName);
+
+            if (destinationColumnIndex == -1) {
+                destinationColumnIndex = createColumn(destinationSheet, destinationColumnName);
+            }
+
+            if (sourceColumnIndex1 == -1 || sourceColumnIndex2 == -1) {
+                throw new IllegalArgumentException("Given source column name not found in the source sheet.");
+            }
+
+            // Iterate through each row in the source sheet
+            for (int i = 1; i <= sourceSheet.getLastRowNum(); i++) {
+                Row sourceRow = sourceSheet.getRow(i);
+                if (sourceRow == null) continue;
+
+                Row destinationRow = destinationSheet.getRow(i);
+                if (destinationRow == null) {
+                    destinationRow = destinationSheet.createRow(i);
+                }
+
+                // Get values from the columns
+                String value1 = sourceRow.getCell(sourceColumnIndex1).getStringCellValue();
+                String value2 = sourceRow.getCell(sourceColumnIndex2).getStringCellValue();
+                // Check if value2 and value3 are the same and log the information
+                String concatenatedValue;
+                // Check from property file
+                PropertiesMatcher matcher = new PropertiesMatcher(path);
+                    concatenatedValue = matcher.getMatchingValue2(value1, value2);
+
+                // Create new cell in destination sheet and set the concatenated value
+                Cell destCell = destinationRow.createCell(destinationColumnIndex);
+                destCell.setCellValue(concatenatedValue);
+            }
+
+            // Write the destination workbook to a file
+            outputStream = new FileOutputStream(filePath);
+            workbook.write(outputStream);
+            System.out.println("Pick and Concatenate Lookup --> Columns " + sourceColumnName1 + ", " + sourceColumnName2 + "," +" and "   + " mapped successfully to column " + destinationColumnName );
 
         }catch (IOException e) {
             e.printStackTrace();
