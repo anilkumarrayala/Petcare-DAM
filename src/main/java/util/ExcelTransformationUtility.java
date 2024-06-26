@@ -592,7 +592,7 @@ public class ExcelTransformationUtility {
                         }
 
                         // Checking for the condition and append the value
-                        if (destinationColumnName.equals("BrandSubBrandHierarchy") && part2.equals("NA")) {
+                        if (destinationColumnName.equals("DivisionBrandSubBrandHierarchy") && part2.equals("NA")) {
                             concatenatedValues.append(appendStringValue)
                                     .append(part1)
                                     .append("/")
@@ -1983,14 +1983,12 @@ public class ExcelTransformationUtility {
     // sourceColumnName_OriginalAssetID, destinationColumnName_ACatATypeASubTypeHierarchy ,"/DAM/ACatATypeASubTypeHierarchy");
 
     public static void pickAndConcatenatePropertyLookupThreeColumn(String filePath, String sourceSheetName, String destinationSheetName,
-                                                        String sourceColumnName1, String sourceColumnName2, String sourceColumnName3,
-                                                        String destinationColumnName, String path) throws IOException {
+                                                                   String sourceColumnName1, String sourceColumnName2, String sourceColumnName3,
+                                                                   String destinationColumnName, String path) throws IOException {
         System.out.println("Pick and Concatenate Property Lookup 3 columns");
         FileInputStream fis = null;
         FileOutputStream outputStream = null;
         Workbook workbook = null;
-        Properties properties = new Properties();
-        FileInputStream fileInputStream = null;
         try {
             fis = new FileInputStream(filePath);
             workbook = new XSSFWorkbook(fis);
@@ -2027,24 +2025,54 @@ public class ExcelTransformationUtility {
                 String value2 = sourceRow.getCell(sourceColumnIndex2).getStringCellValue();
                 String value3 = sourceRow.getCell(sourceColumnIndex3).getStringCellValue();
 
-                // Check if value2 and value3 are the same and log the information
-                String concatenatedValue;
-                // Check from property file
+                // Split and process values
+                String[] splitValues1 = value1.split("\\|\\|");
+                String[] splitValues2 = value2.split("\\|\\|");
+                String[] splitValues3 = value3.split("\\|\\|");
+
+                for (int j = 0; j < splitValues1.length; j++) {
+                    splitValues1[j] = splitValues1[j].replaceAll("[/&'’\\-\\s]", "");
+                }
+
+                for (int j = 0; j < splitValues2.length; j++) {
+                    splitValues2[j] = splitValues2[j].replaceAll("[/&'’\\-\\s]", "");
+                }
+
+                for (int j = 0; j < splitValues3.length; j++) {
+                    splitValues3[j] = splitValues3[j].replaceAll("[/&'’\\-\\s]", "");
+                }
+
+                // Create concatenated value for destination
+                StringBuilder concatenatedValueBuilder = new StringBuilder();
+
                 PropertiesMatcher matcher = new PropertiesMatcher(path);
-                concatenatedValue = matcher.getMatchingValue(value1, value2,value3);
+
+                // Process the elements
+                for (int j = 0; j < splitValues1.length; j++) {
+                    String valueA = splitValues1[j];
+                    String valueB = splitValues2[j];
+                    String valueC = splitValues3[j];
+
+                    String matchingValue = matcher.getMatchingValue(valueA, valueB, valueC, i, sourceColumnName1, sourceColumnName2, sourceColumnName3);
+                    concatenatedValueBuilder.append(matchingValue);
+                    if (j < splitValues1.length - 1) {
+                        concatenatedValueBuilder.append(";");
+                    }
+                }
+
                 // Create new cell in destination sheet and set the concatenated value
                 Cell destCell = destinationRow.createCell(destinationColumnIndex);
-                destCell.setCellValue(concatenatedValue);
+                destCell.setCellValue(concatenatedValueBuilder.toString());
             }
 
             // Write the destination workbook to a file
             outputStream = new FileOutputStream(filePath);
             workbook.write(outputStream);
-            System.out.println("Pick and Concatenate Lookup --> Columns " + sourceColumnName1 + ", " + sourceColumnName2 + ", " + sourceColumnName3 + ", and "   + " mapped successfully to column " + destinationColumnName );
+            System.out.println("Pick and Concatenate Lookup --> Columns " + sourceColumnName1 + ", " + sourceColumnName2 + ", " + sourceColumnName3 + ", and " + " mapped successfully to column " + destinationColumnName);
 
-        }catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             try {
                 if (fis != null) fis.close();
                 if (workbook != null) workbook.close();
@@ -2054,15 +2082,13 @@ public class ExcelTransformationUtility {
         }
     }
 
-    public static void pickAndConcatenatePropertyLookup2Columns(String filePath, String sourceSheetName, String destinationSheetName,
-                                                        String sourceColumnName1, String sourceColumnName2,
-                                                        String destinationColumnName, String path) throws IOException {
-        System.out.println("Pick and Concatenate Property Lookup two columns");
+    public static void pickAndConcatenatePropertyLookupTwoColumn(String filePath, String sourceSheetName, String destinationSheetName,
+                                                                   String sourceColumnName1, String sourceColumnName2,
+                                                                   String destinationColumnName, String path) throws IOException {
+        System.out.println("Pick and Concatenate Property Lookup 2 columns");
         FileInputStream fis = null;
         FileOutputStream outputStream = null;
         Workbook workbook = null;
-        Properties properties = new Properties();
-        FileInputStream fileInputStream = null;
         try {
             fis = new FileInputStream(filePath);
             workbook = new XSSFWorkbook(fis);
@@ -2079,7 +2105,7 @@ public class ExcelTransformationUtility {
                 destinationColumnIndex = createColumn(destinationSheet, destinationColumnName);
             }
 
-            if (sourceColumnIndex1 == -1 || sourceColumnIndex2 == -1) {
+            if (sourceColumnIndex1 == -1 || sourceColumnIndex2 == -1){
                 throw new IllegalArgumentException("Given source column name not found in the source sheet.");
             }
 
@@ -2096,25 +2122,49 @@ public class ExcelTransformationUtility {
                 // Get values from the columns
                 String value1 = sourceRow.getCell(sourceColumnIndex1).getStringCellValue();
                 String value2 = sourceRow.getCell(sourceColumnIndex2).getStringCellValue();
-                // Check if value2 and value3 are the same and log the information
-                String concatenatedValue;
-                // Check from property file
+
+                // Split and process values
+                String[] splitValues1 = value1.split("\\|\\|");
+                String[] splitValues2 = value2.split("\\|\\|");
+
+                for (int j = 0; j < splitValues1.length; j++) {
+                    splitValues1[j] = splitValues1[j].replaceAll("[/&'’\\-\\s]", "");
+                }
+
+                for (int j = 0; j < splitValues2.length; j++) {
+                    splitValues2[j] = splitValues2[j].replaceAll("[/&'’\\-\\s]", "");
+                }
+
+                // Create concatenated value for destination
+                StringBuilder concatenatedValueBuilder = new StringBuilder();
+
                 PropertiesMatcher matcher = new PropertiesMatcher(path);
-                    concatenatedValue = matcher.getMatchingValue2(value1, value2);
+
+                for (int j = 0; j < splitValues1.length; j++) {
+                    String valueA = splitValues1[j];
+                    String valueB = splitValues2[j];
+
+                    String matchingValue = matcher.getMatchingValue2(valueA, valueB, i, sourceColumnName1, sourceColumnName2);
+                    concatenatedValueBuilder.append(matchingValue);
+                    if (j < splitValues1.length - 1) {
+                        concatenatedValueBuilder.append(";");
+                    }
+                }
 
                 // Create new cell in destination sheet and set the concatenated value
                 Cell destCell = destinationRow.createCell(destinationColumnIndex);
-                destCell.setCellValue(concatenatedValue);
+                destCell.setCellValue(concatenatedValueBuilder.toString());
             }
+
 
             // Write the destination workbook to a file
             outputStream = new FileOutputStream(filePath);
             workbook.write(outputStream);
-            System.out.println("Pick and Concatenate Lookup --> Columns " + sourceColumnName1 + ", " + sourceColumnName2 + "," +" and "   + " mapped successfully to column " + destinationColumnName );
+            System.out.println("Pick and Concatenate Lookup --> Columns " + sourceColumnName1 + ", " + sourceColumnName2 + ", and " + " mapped successfully to column " + destinationColumnName);
 
-        }catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             try {
                 if (fis != null) fis.close();
                 if (workbook != null) workbook.close();

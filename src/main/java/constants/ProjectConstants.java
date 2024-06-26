@@ -35,7 +35,7 @@ public class ProjectConstants {
                     ,"Region","Region/MarketingCountry","ProductImageAngle",
                     "Occasion","OccasionYear","OriginatingCountry","FERT", "DisplayPackType","CampaignPromotionalYear","AssetOwnerEmail",
                     /*"Keywords",*/"InPerpetuity","InPerpetuity2","InPerpetuity3","InPerpetuity4","InPerpetuity5","InPerpetuity6","InPerpetuity7","InPerpetuity8","Languages","GTINEANUPC","ImagePosition",
-                    "VERP","BrandSubBrandHierarchy","CoverageStartDate","CoverageStartDate2","CoverageStartDate3","CoverageStartDate4","CoverageStartDate5",
+                    "VERP","DivisionBrandSubBrandHierarchy","CoverageStartDate","CoverageStartDate2","CoverageStartDate3","CoverageStartDate4","CoverageStartDate5",
                     "CoverageStartDate6","CoverageStartDate7","CoverageStartDate8","CoverageEndDate","CoverageEndDate2","CoverageEndDate3","CoverageEndDate4","CoverageEndDate5","CoverageEndDate6",
                     "CoverageEndDate7","CoverageEndDate8","InternalZREP","GlobalRegionalLocal","GlobalRegionalLocal2","GlobalRegionalLocal3","GlobalRegionalLocal4"
                     ,"GlobalRegionalLocal5","GlobalRegionalLocal6","GlobalRegionalLocal7","GlobalRegionalLocal8","IncludedCountries","IncludedCountries2","IncludedCountries3","IncludedCountries4",

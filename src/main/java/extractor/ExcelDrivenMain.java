@@ -15,7 +15,10 @@ public class ExcelDrivenMain {
 
     public static void main(String[] args) throws IOException,Exception {
 
-        String filePath = "C://Project//MARS//test-Extract-PetNutrition.xlsx";
+        //String filePath = "C://Project//MARS//Pet Nutrition Migration Extracts//Pedigree//PN-Pedigree-1-10k.xlsx";
+        String filePath = "C://Project//MARS//Pet Nutrition Migration Extracts//test-Extract-PetNutrition-new.xlsx";
+
+
         String extension = "Transformed-" +ExcelTransformationUtility.getCurrentTimestamp()+".xlsx";
         String destFilePath =System.getProperty("user.home")+ extension;
         String sourceSheetName = "Data";
@@ -102,7 +105,7 @@ public class ExcelDrivenMain {
         //Lookup for Division
         ExcelTransformationUtility.parseAndLookup(filePath, sourceSheetName, sourceColumnName_Division, sourceColumnName_AssetID, destinationSheetName, "Segment", LookupConstants.getDivision());
 
-        String destinationColumnName_Combined = "BrandSubBrandHierarchy";
+        String destinationColumnName_Combined = "DivisionBrandSubBrandHierarchy";
         // ExcelTransformationUtility.pickAndConcatenate(filePath, sourceSheetName, destinationSheetName,sourceColumnName_Brand, sourceColumnName_SubBrand, destinationColumnName_Combined,';',"/DAM/DivisionBrandSubBrandHierarchy/PetNutrition/", LookupConstants.getBrands(), LookupConstants.getSubBrandNames());
         ExcelTransformationUtility.pickAndConcatenatePropertyLookupThreeColumn(filePath, sourceSheetName, destinationSheetName, sourceColumnName_Division,sourceColumnName_Brand, sourceColumnName_SubBrand, destinationColumnName_Combined,FileConstants.configFilePath2);
         //Lookup for Region & MarketingCountries
@@ -116,7 +119,7 @@ public class ExcelDrivenMain {
 
         String destinationColumnName1 = "Region/MarketingCountry";
         //ExcelTransformationUtility.pickAndConcatenate(filePath, sourceSheetName, destinationSheetName,sourceColumnName_Region, sourceColumnName_MarketingCountry, destinationColumnName1,';',"/DAM/MRegionMCountryHierarchy/",LookupConstants.getRegions(), LookupConstants.getMarketingCountries());
-        ExcelTransformationUtility.pickAndConcatenatePropertyLookup2Columns(filePath, sourceSheetName, destinationSheetName, sourceColumnName_Region, sourceColumnName_MarketingCountry, destinationColumnName1, FileConstants.configFilePath3);
+        ExcelTransformationUtility.pickAndConcatenatePropertyLookupTwoColumn(filePath, sourceSheetName, destinationSheetName, sourceColumnName_Region, sourceColumnName_MarketingCountry, destinationColumnName1, FileConstants.configFilePath3);
 
 
         //Additional Transformations

@@ -25,13 +25,24 @@ public class PropertiesMatcher {
         }
     }
 
-    public String getMatchingValue(String A, String B, String C) {
-        String key = A + "," + B +"," + C;
-        return propertiesMap.getOrDefault(key, "No match found");
+    public String getMatchingValue(String A, String B, String C, int rowNum, String colName1, String colName2, String colName3) {
+        String key = A + "," + B + "," + C;
+        String match = propertiesMap.get(key);
+        if (match == null) {
+            System.out.println("No match found for: " + key + " in row: " + rowNum + " columns: " + colName1 + ", " + colName2 + ", " + colName3);
+            return "No match found for: " + key;
+        }
+        return match;
     }
-    public String getMatchingValue2(String A, String B) {
-        String key = A + "," + B ;
-        return propertiesMap.getOrDefault(key, "No match found");
+
+    public String getMatchingValue2(String A, String B, int rowNum, String colName1, String colName2) {
+        String key = A + "," + B;
+        String match = propertiesMap.get(key);
+        if (match == null) {
+            System.out.println("No match found for: " + key + " in row: " + rowNum + " columns: " + colName1 + ", " + colName2);
+            return "No match found for: " + key;
+        }
+        return match;
     }
 
 }
