@@ -25,16 +25,16 @@ public class ProjectConstants {
     }
 
     private    List ColumnOrder =
-            Arrays.asList(new String[] {"OriginalAssetID","LighthouseSecurityPolicy","uniqueId","LighthouseAssetID", "Title" ,
+            Arrays.asList(new String[] {"OriginalID","LighthouseSecurityPolicy","uniqueId","LighthouseAssetID", "Title" ,
                     "LegacyAssetVersion","ImportedDate", "EmbargoDate","ExpirationDate","IsLatestVersion",
                     "AgencyPartner", "AssetCategory",/*"AssetType","AssetSubType",*/ "ACatATypeASubTypeHierarchy", "AssetCreationDate","AssetDate","Status","DeliverableType","CampaignPromotionalName", "MarsCampaignCode","CampaignEndDate","CampaignStartDate",
-                    "CustomerSpecific","DataClassification","Description" /*,"Keywords"*/,"OriginalFileName","HealthBenefit", "TransparentBackground",
+                    "CustomerSpecific","DataClassification","Description" /*,"Keywords","OriginalFileName"*/,"HealthBenefit", "TransparentBackground",
                     "NetWeight","PetLifestage","PieceCount","PlatformSpecifications","RightsRestricted","RestrictDownload","PetSize","BrightcoveAssetID","BrightcoveAssetName","BrightcoveRemovedBy","BrightcoveRemovedDate",
                     "BrightcoveAssetStatus", "MasterOrLocalizationAdaptation","Flavor","ProductCategory",
                     "RightsManagementType","RightsManagementType2","RightsManagementType3","RightsManagementType4","RightsManagementType5","RightsManagementType6","RightsManagementType7","RightsManagementType8"
                     ,"Region","Region/MarketingCountry","ProductImageAngle",
                     "Occasion","OccasionYear","OriginatingCountry","FERT", "DisplayPackType","CampaignPromotionalYear","AssetOwnerEmail",
-                    /*"Keywords",*/"InPerpetuity","InPerpetuity2","InPerpetuity3","InPerpetuity4","InPerpetuity5","InPerpetuity6","InPerpetuity7","InPerpetuity8","Languages","GTINEANUPC","ImagePosition",
+                    /*"Keywords",*/"InPerpetuity","InPerpetuity2","InPerpetuity3","InPerpetuity4","InPerpetuity5","InPerpetuity6","InPerpetuity7","InPerpetuity8","Languages","GTINEANUPC","ImagePositionSlot",
                     "VERP","DivisionBrandSubBrandHierarchy","CoverageStartDate","CoverageStartDate2","CoverageStartDate3","CoverageStartDate4","CoverageStartDate5",
                     "CoverageStartDate6","CoverageStartDate7","CoverageStartDate8","CoverageEndDate","CoverageEndDate2","CoverageEndDate3","CoverageEndDate4","CoverageEndDate5","CoverageEndDate6",
                     "CoverageEndDate7","CoverageEndDate8","InternalZREP","GlobalRegionalLocal","GlobalRegionalLocal2","GlobalRegionalLocal3","GlobalRegionalLocal4"
@@ -51,12 +51,12 @@ public class ProjectConstants {
     private    List LightHouseColumnName =
             Arrays.asList(new String[] {"ID", "Name" , "Asset Version"
                    ,"Category/Type/Sub-Type 2", "Category/Type/Sub-Type 3", "Asset Status","Description"
-                    ,"Description/Keywords","Original File Name","Health Benefit","Net Weight","Pet Lifestage","Piece Count","Pet Size","Brightcove Asset ID",
+                    ,"Description/Keywords","Health Benefit","Net Weight","Pet Lifestage","Piece Count","Pet Size","Brightcove Asset ID",
                     "Brightcove Asset Name","Removed By","Brightcove Asset Status","Segment/Product Category 2",
                     "Occasion 1","Occasion Year","Originating Country","Campaign/Promotional Year","Asset Owner"});
 
     private List AprimoColumnName = Arrays.asList(new String[] {"LighthouseAssetID", "Title" , "LegacyAssetVersion"
-            ,"AssetType","AssetSubType","Status","Description","Keywords","OriginalFileName","HealthBenefit",
+            ,"AssetType","AssetSubType","Status","Description","Keywords","HealthBenefit",
             "NetWeight","PetLifestage","PieceCount","PetSize","BrightcoveAssetID","BrightcoveAssetName","BrightcoveRemovedBy",
             "BrightcoveAssetStatus","ProductCategory", "Occasion","OccasionYear","OriginatingCountry","CampaignPromotionalYear","AssetOwnerEmail"});
 
@@ -94,10 +94,10 @@ public class ProjectConstants {
 
 
 
-    private  List AprimoSplitReplaceColumnNames = Arrays.asList(new String[] { "&OBJECT_TYPE",	"&ACTION","OriginalAssetID","&FOLDER_TYPE","&MODEL","&PARENTS","Title","LighthouseSecurityPolicy","uniqueId",
+    private  List AprimoSplitReplaceColumnNames = Arrays.asList(new String[] { "&OBJECT_TYPE",	"&ACTION","OriginalID","&FOLDER_TYPE","&MODEL","&PARENTS","Title","LighthouseSecurityPolicy","uniqueId",
             "Keywords","InPerpetuity","InPerpetuity2","InPerpetuity3","InPerpetuity4","InPerpetuity5","InPerpetuity6","InPerpetuity7","InPerpetuity8",
             "CustomerSpecific","CampaignPromotionalName", "MarsCampaignCode","RightsRestricted","IsLatestVersion",
-            "TransparentBackground","PlatformSpecifications","SourceFile","DataClassification","Languages","ImagePosition","Brand","SubBrand","Segment",
+            "TransparentBackground","PlatformSpecifications","SourceFile","DataClassification","Languages","ImagePositionSlot","Brand","SubBrand","Segment",
             "MasterOrLocalizationAdaptation","ProductImageAngle","GlobalRegionalLocal","GlobalRegionalLocal2","GlobalRegionalLocal3","GlobalRegionalLocal4"
             ,"GlobalRegionalLocal5","GlobalRegionalLocal6","GlobalRegionalLocal7","GlobalRegionalLocal8","IncludedCountries","IncludedCountries2","IncludedCountries3","IncludedCountries4",
             "IncludedCountries5","IncludedCountries6","IncludedCountries7","IncludedCountries8", "ExcludedCountries", "ExcludedCountries2", "ExcludedCountries3", "ExcludedCountries4", "ExcludedCountries5",

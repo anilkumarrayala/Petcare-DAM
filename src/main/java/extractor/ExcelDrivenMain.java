@@ -15,8 +15,8 @@ public class ExcelDrivenMain {
 
     public static void main(String[] args) throws IOException,Exception {
 
-        //String filePath = "C://Project//MARS//Pet Nutrition Migration Extracts//Pedigree//PN-Pedigree-1-10k.xlsx";
-        String filePath = "C://Project//MARS//Pet Nutrition Migration Extracts//test-Extract-PetNutrition-new.xlsx";
+        //String filePath = "C://Project//MARS//Pet Nutrition Migration Extracts//Pedigree//PN-Pedigree-30k-35k.xlsx";
+        String filePath = "C://Project//MARS/Pet Nutrition Migration Extracts//PN//PN_Set_170k_to_175k.xlsx";
 
 
         String extension = "Transformed-" +ExcelTransformationUtility.getCurrentTimestamp()+".xlsx";
@@ -25,7 +25,7 @@ public class ExcelDrivenMain {
         String destinationSheetName = "Transformed";
         String destinationSheetName1 = "Final";
         String sourceSheetName_Transformed = "Transformed";
-        String sourceColumnName_OriginalAssetID= "OriginalAssetID";
+        String sourceColumnName_OriginalAssetID= "OriginalID";
         String sourceColumnName_AssetID= "&ASSET_ID";
         ProjectConstants projectConstants = new ProjectConstants();
         // Get current size of heap in bytes.

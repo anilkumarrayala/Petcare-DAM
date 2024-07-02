@@ -204,10 +204,22 @@ public class LookupConstants {
             "QuartettNA",
             "PetNutrition",
             "RoyalCanin",
-            "CraveNA"
+            "CraveNA",
+            "Core",
+            "ClassicSoups",
+            "ClassicsInTerrine",
+            "FineFlakes",
+            "Kitten",
+            "ShebaNA",
+            "NaturesCollection",
+            "SauceCollection",
+            "SelectSlices",
+            "PromanageNA",
+            "FarmsHarvestCore"
 
 
-            ));
+
+    ));
 
     static ArrayList<String> AssetCategories = new ArrayList<>(Arrays.asList(
             "3DRenders", "BrandAssets", "CorporateAssets", "Digital", "LighthouseTemplating", "Print", "SalesMaterials",

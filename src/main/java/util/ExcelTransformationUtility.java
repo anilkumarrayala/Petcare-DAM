@@ -1453,6 +1453,9 @@ public class ExcelTransformationUtility {
             lookupMap.put("MediaCom", "EssenceMediaCom");
             lookupMap.put("POS", "POSCollateral");
             lookupMap.put("eCommerceEnhancedContent", "ECommerceEnhancedContent");
+            lookupMap.put("eCommerceSecondaryImages", "ECommerce");
+            //lookupMap.put("CreativeSupportElement", "CreativeSupportElements");
+
             lookupMap.put("POS", "POSCollateral");
             // Process rows and update transformationStatusMap
             for (int i = 1; i <= sourceSheet.getLastRowNum(); i++) {
