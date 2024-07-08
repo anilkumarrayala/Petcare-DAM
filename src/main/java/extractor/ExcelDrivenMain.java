@@ -15,8 +15,7 @@ public class ExcelDrivenMain {
 
     public static void main(String[] args) throws IOException,Exception {
 
-        //String filePath = "C://Project//MARS//Pet Nutrition Migration Extracts//Pedigree//PN-Pedigree-30k-35k.xlsx";
-        String filePath = "C://Project//MARS/Pet Nutrition Migration Extracts//PN//PN_Set_170k_to_175k.xlsx";
+        String filePath = "C:/Project/MARS/Pet Nutrition Migration Extracts/Pedigree/Pedigree_Set_30k_to_35k.xlsx";
 
 
         String extension = "Transformed-" +ExcelTransformationUtility.getCurrentTimestamp()+".xlsx";
@@ -117,7 +116,7 @@ public class ExcelDrivenMain {
         String destinationColumnName_MarketingCountry = "MarketingCountry";
         ExcelTransformationUtility.parseAndLookup(filePath, sourceSheetName, sourceColumnName_MarketingCountry,sourceColumnName_AssetID, destinationSheetName, destinationColumnName_MarketingCountry, LookupConstants.getMarketingCountries());
 
-        String destinationColumnName1 = "Region/MarketingCountry";
+        String destinationColumnName1 = "MRegionMCountryHierarchy";
         //ExcelTransformationUtility.pickAndConcatenate(filePath, sourceSheetName, destinationSheetName,sourceColumnName_Region, sourceColumnName_MarketingCountry, destinationColumnName1,';',"/DAM/MRegionMCountryHierarchy/",LookupConstants.getRegions(), LookupConstants.getMarketingCountries());
         ExcelTransformationUtility.pickAndConcatenatePropertyLookupTwoColumn(filePath, sourceSheetName, destinationSheetName, sourceColumnName_Region, sourceColumnName_MarketingCountry, destinationColumnName1, FileConstants.configFilePath3);
 

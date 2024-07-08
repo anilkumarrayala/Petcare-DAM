@@ -1454,9 +1454,29 @@ public class ExcelTransformationUtility {
             lookupMap.put("POS", "POSCollateral");
             lookupMap.put("eCommerceEnhancedContent", "ECommerceEnhancedContent");
             lookupMap.put("eCommerceSecondaryImages", "ECommerce");
-            //lookupMap.put("CreativeSupportElement", "CreativeSupportElements");
+            lookupMap.put("Dentabits","Dentabites");
+            lookupMap.put("Sckmackos","Schmackos");
+            lookupMap.put("CreamyPurrrree","CreamyPurrree");
+            lookupMap.put("SchawkInc.","SGK");
+            lookupMap.put("PathFinder23","BrandNewGalaxy");
+            lookupMap.put("ThePartnershipUK","ThePartnership");
+            lookupMap.put("MarsCreativeServices","DesignLab");
+            lookupMap.put("xpdInc.","Xpdinc");
+            lookupMap.put("TribalWorldwide","22feetTribalWorldwide");
+            //lookupMap.put("EDER","Eder");
+            lookupMap.put("DDBAdamEve","DDBAdamandEve");
+            //lookupMap.put("Rodnya","Russia");
+            lookupMap.put("TenderChickenandOatmealdinner","TenderChickenandOatmealDinner");
+            lookupMap.put("TenderLambandRiceRecipe","TenderlambandRiceRecipe");
+            lookupMap.put("SignatureBeefandPotatoEntrée","SignatureBeefandPotatoEntree");
+            lookupMap.put("SavoryLambandGardenVarietyEntrée","SavoryLambandGardenVarietyEntree");
+            lookupMap.put("RoastedTurkeyandVegetableEntrée","RoastedTurkeyandVegetableEntree");
 
-            lookupMap.put("POS", "POSCollateral");
+
+
+
+
+
             // Process rows and update transformationStatusMap
             for (int i = 1; i <= sourceSheet.getLastRowNum(); i++) {
                 Row sourceRow = sourceSheet.getRow(i);

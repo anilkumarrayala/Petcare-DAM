@@ -25,17 +25,17 @@ public class ProjectConstants {
     }
 
     private    List ColumnOrder =
-            Arrays.asList(new String[] {"OriginalID","LighthouseSecurityPolicy","uniqueId","LighthouseAssetID", "Title" ,
+            Arrays.asList(new String[] {"OriginalID","LighthouseSecurityPolicy","uniqueId","LighthouseAssetID", "DisplayTitle" ,
                     "LegacyAssetVersion","ImportedDate", "EmbargoDate","ExpirationDate","IsLatestVersion",
                     "AgencyPartner", "AssetCategory",/*"AssetType","AssetSubType",*/ "ACatATypeASubTypeHierarchy", "AssetCreationDate","AssetDate","Status","DeliverableType","CampaignPromotionalName", "MarsCampaignCode","CampaignEndDate","CampaignStartDate",
                     "CustomerSpecific","DataClassification","Description" /*,"Keywords","OriginalFileName"*/,"HealthBenefit", "TransparentBackground",
                     "NetWeight","PetLifestage","PieceCount","PlatformSpecifications","RightsRestricted","RestrictDownload","PetSize","BrightcoveAssetID","BrightcoveAssetName","BrightcoveRemovedBy","BrightcoveRemovedDate",
                     "BrightcoveAssetStatus", "MasterOrLocalizationAdaptation","Flavor","ProductCategory",
                     "RightsManagementType","RightsManagementType2","RightsManagementType3","RightsManagementType4","RightsManagementType5","RightsManagementType6","RightsManagementType7","RightsManagementType8"
-                    ,"Region","Region/MarketingCountry","ProductImageAngle",
+                    ,"Region","MRegionMCountryHierarchy","ProductImageAngle",
                     "Occasion","OccasionYear","OriginatingCountry","FERT", "DisplayPackType","CampaignPromotionalYear","AssetOwnerEmail",
-                    /*"Keywords",*/"InPerpetuity","InPerpetuity2","InPerpetuity3","InPerpetuity4","InPerpetuity5","InPerpetuity6","InPerpetuity7","InPerpetuity8","Languages","GTINEANUPC","ImagePositionSlot",
-                    "VERP","DivisionBrandSubBrandHierarchy","CoverageStartDate","CoverageStartDate2","CoverageStartDate3","CoverageStartDate4","CoverageStartDate5",
+                    /*"Keywords",*/"InPerpetuity","InPerpetuity2","InPerpetuity3","InPerpetuity4","InPerpetuity5","InPerpetuity6","InPerpetuity7","InPerpetuity8","Language","GTINEANUPC","ImagePositionSlot",
+                    "VERP","Division","DivisionBrandSubBrandHierarchy","CoverageStartDate","CoverageStartDate2","CoverageStartDate3","CoverageStartDate4","CoverageStartDate5",
                     "CoverageStartDate6","CoverageStartDate7","CoverageStartDate8","CoverageEndDate","CoverageEndDate2","CoverageEndDate3","CoverageEndDate4","CoverageEndDate5","CoverageEndDate6",
                     "CoverageEndDate7","CoverageEndDate8","InternalZREP","GlobalRegionalLocal","GlobalRegionalLocal2","GlobalRegionalLocal3","GlobalRegionalLocal4"
                     ,"GlobalRegionalLocal5","GlobalRegionalLocal6","GlobalRegionalLocal7","GlobalRegionalLocal8","IncludedCountries","IncludedCountries2","IncludedCountries3","IncludedCountries4",
@@ -94,10 +94,10 @@ public class ProjectConstants {
 
 
 
-    private  List AprimoSplitReplaceColumnNames = Arrays.asList(new String[] { "&OBJECT_TYPE",	"&ACTION","OriginalID","&FOLDER_TYPE","&MODEL","&PARENTS","Title","LighthouseSecurityPolicy","uniqueId",
+    private  List AprimoSplitReplaceColumnNames = Arrays.asList(new String[] { "&OBJECT_TYPE",	"&ACTION","OriginalID","&FOLDER_TYPE","&MODEL","&PARENTS","DisplayTitle","LighthouseSecurityPolicy","uniqueId",
             "Keywords","InPerpetuity","InPerpetuity2","InPerpetuity3","InPerpetuity4","InPerpetuity5","InPerpetuity6","InPerpetuity7","InPerpetuity8",
             "CustomerSpecific","CampaignPromotionalName", "MarsCampaignCode","RightsRestricted","IsLatestVersion",
-            "TransparentBackground","PlatformSpecifications","SourceFile","DataClassification","Languages","ImagePositionSlot","Brand","SubBrand","Segment",
+            "TransparentBackground","PlatformSpecifications","SourceFile","DataClassification","Language","ImagePositionSlot","Brand","SubBrand","Segment",
             "MasterOrLocalizationAdaptation","ProductImageAngle","GlobalRegionalLocal","GlobalRegionalLocal2","GlobalRegionalLocal3","GlobalRegionalLocal4"
             ,"GlobalRegionalLocal5","GlobalRegionalLocal6","GlobalRegionalLocal7","GlobalRegionalLocal8","IncludedCountries","IncludedCountries2","IncludedCountries3","IncludedCountries4",
             "IncludedCountries5","IncludedCountries6","IncludedCountries7","IncludedCountries8", "ExcludedCountries", "ExcludedCountries2", "ExcludedCountries3", "ExcludedCountries4", "ExcludedCountries5",
