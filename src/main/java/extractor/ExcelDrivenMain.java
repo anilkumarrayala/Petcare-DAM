@@ -15,7 +15,7 @@ public class ExcelDrivenMain {
 
     public static void main(String[] args) throws IOException,Exception {
 
-        String filePath = "C:/Project/MARS/Pet Nutrition Migration Extracts/Pedigree/Pedigree_Set_30k_to_35k.xlsx";
+        String filePath = "C:/Project/MARS/Pet Nutrition Migration Extracts/Pedigree/Pedigree_Set_10k_to_20k.xlsx";
 
 
         String extension = "Transformed-" +ExcelTransformationUtility.getCurrentTimestamp()+".xlsx";
@@ -232,7 +232,8 @@ public class ExcelDrivenMain {
                 "contains", "is-child-of", "derivative", "is-place-graphic-of", "belong-to", "has-video-clips",
                 "copy-contains", "is-parent-of", "extracted-xml-child", "placed-graphics"};
         String destinationColumnName = "AssociatedAssets";
-        ExcelTransformationUtility.pickAndConcatenateAssociatedAssets(filePath, sourceSheetName_Transformed, destinationSheetName, sourceColumnNames, destinationColumnName);
+        String mainSourceColumn = "uniqueId";
+        ExcelTransformationUtility.pickAndConcatenateAssociatedAssets(filePath, sourceSheetName_Transformed, destinationSheetName, sourceColumnNames, destinationColumnName, mainSourceColumn);
 
         String sourceColumnName_File= "uniqueId";
         ExcelTransformationUtility.findAndPrintDuplicates(filePath,sourceSheetName_Transformed, sourceColumnName_File, sourceColumnName_OriginalAssetID );

@@ -1802,7 +1802,8 @@ public class ExcelTransformationUtility {
     }
 
     public static void pickAndConcatenateAssociatedAssets(String filePath, String sourceSheetName, String destinationSheetName,
-                                                          String[] sourceColumnNames, String destinationColumnName) throws IOException {
+                                                          String[] sourceColumnNames, String destinationColumnName,
+                                                          String mainSourceColumn) throws IOException {
         FileInputStream fis = null;
         FileOutputStream outputStream = null;
         Workbook workbook = null;
@@ -1827,6 +1828,11 @@ public class ExcelTransformationUtility {
                 destinationColumnIndex = createColumn(destinationSheet, destinationColumnName);
             }
 
+            int mainSourceColumnIndex = getColumnIndex(sourceSheet, mainSourceColumn);
+            if (mainSourceColumnIndex == -1) {
+                throw new IllegalArgumentException("Given main source column name " + mainSourceColumn + " not found in the source sheet.");
+            }
+
             // Iterate through each row in the source sheet
             for (int i = 1; i <= sourceSheet.getLastRowNum(); i++) {
                 Row sourceRow = sourceSheet.getRow(i);
@@ -1849,8 +1855,21 @@ public class ExcelTransformationUtility {
                     }
                 }
 
+                String concatenatedString = concatenatedValue.toString();
+                Cell mainSourceCell = sourceRow.getCell(mainSourceColumnIndex);
+                if (mainSourceCell != null) {
+                    String mainSourceValue = mainSourceCell.getStringCellValue().replaceAll(":N|:Y", "");
+                    concatenatedString = concatenatedString.replace(mainSourceValue, "").replaceAll(";;", ";");
+                    if (concatenatedString.startsWith(";")) {
+                        concatenatedString = concatenatedString.substring(1);
+                    }
+                    if (concatenatedString.endsWith(";")) {
+                        concatenatedString = concatenatedString.substring(0, concatenatedString.length() - 1);
+                    }
+                }
+
                 Cell destCell = destinationRow.createCell(destinationColumnIndex);
-                destCell.setCellValue(concatenatedValue.toString());
+                destCell.setCellValue(concatenatedString);
             }
 
             // Write the destination workbook to a file
