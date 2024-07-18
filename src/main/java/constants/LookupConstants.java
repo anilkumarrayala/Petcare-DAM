@@ -1113,7 +1113,7 @@ public class LookupConstants {
             "BusinessStationery",
             "Channel",
             "Character",
-            "CinemaexclusivelyforCinemause",
+            "CinemaExclusivelyForCinemause",
             "Claims",
             "CodeofConduct",
             "ContentUpload",

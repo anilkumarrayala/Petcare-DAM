@@ -33,9 +33,10 @@ public class LookUpConstants2 {
     ));
 
     static ArrayList<String> MasterOrLocalised = new ArrayList<>(Arrays.asList(
-            "Master File",
-            "Localized File",
-            "Adapted File"
+            "MasterFile",
+            "LocalizationFile",
+            "AdaptationFile",
+            "LocalizationAdaptationFile"
     ));
 
     static ArrayList<String> PetLifeStage = new ArrayList<>(Arrays.asList(
@@ -308,7 +309,7 @@ public class LookUpConstants2 {
     static ArrayList<String> Occasion = new ArrayList<>(Arrays.asList(
             "BackToSchool",
             "Christmas",
-            "CNY",
+            "ChineseNewYear",
             "DentalHealthMonth",
             "Easter",
             "Fall",

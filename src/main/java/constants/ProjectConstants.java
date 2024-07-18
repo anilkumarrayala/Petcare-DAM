@@ -25,7 +25,7 @@ public class ProjectConstants {
     }
 
     private    List ColumnOrder =
-            Arrays.asList(new String[] {"OriginalID","LighthouseSecurityPolicy","uniqueId","LighthouseAssetID", "DisplayTitle" ,
+            Arrays.asList(new String[] {"OriginalID","LighthouseSecurityPolicy","ImportPath","LighthouseAssetID", "DisplayTitle" ,
                     "LegacyAssetVersion","ImportedDate", "EmbargoDate","ExpirationDate","IsLatestVersion",
                     "AgencyPartner", "AssetCategory",/*"AssetType","AssetSubType",*/ "ACatATypeASubTypeHierarchy", "AssetCreationDate","AssetDate","Status","DeliverableType","CampaignPromotionalName", "MarsCampaignCode","CampaignEndDate","CampaignStartDate",
                     "CustomerSpecific","DataClassification","Description" /*,"Keywords","OriginalFileName"*/,"HealthBenefit", "TransparentBackground",
@@ -94,7 +94,7 @@ public class ProjectConstants {
 
 
 
-    private  List AprimoSplitReplaceColumnNames = Arrays.asList(new String[] { "&OBJECT_TYPE",	"&ACTION","OriginalID","&FOLDER_TYPE","&MODEL","&PARENTS","DisplayTitle","LighthouseSecurityPolicy","uniqueId",
+    private  List AprimoSplitReplaceColumnNames = Arrays.asList(new String[] { "&OBJECT_TYPE",	"&ACTION","OriginalID","&FOLDER_TYPE","&MODEL","&PARENTS","DisplayTitle","LighthouseSecurityPolicy","ImportPath",
             "Keywords","InPerpetuity","InPerpetuity2","InPerpetuity3","InPerpetuity4","InPerpetuity5","InPerpetuity6","InPerpetuity7","InPerpetuity8",
             "CustomerSpecific","CampaignPromotionalName", "MarsCampaignCode","RightsRestricted","IsLatestVersion",
             "TransparentBackground","PlatformSpecifications","SourceFile","DataClassification","Language","ImagePositionSlot","Brand","SubBrand","Segment",

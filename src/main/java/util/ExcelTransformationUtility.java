@@ -1458,7 +1458,7 @@ public class ExcelTransformationUtility {
             lookupMap.put("Sckmackos","Schmackos");
             lookupMap.put("CreamyPurrrree","CreamyPurrree");
             lookupMap.put("SchawkInc.","SGK");
-            lookupMap.put("PathFinder23","BrandNewGalaxy");
+            lookupMap.put("Pathfinder23","BrandNewGalaxy");
             lookupMap.put("ThePartnershipUK","ThePartnership");
             lookupMap.put("MarsCreativeServices","DesignLab");
             lookupMap.put("xpdInc.","Xpdinc");
@@ -1471,11 +1471,10 @@ public class ExcelTransformationUtility {
             lookupMap.put("SignatureBeefandPotatoEntrée","SignatureBeefandPotatoEntree");
             lookupMap.put("SavoryLambandGardenVarietyEntrée","SavoryLambandGardenVarietyEntree");
             lookupMap.put("RoastedTurkeyandVegetableEntrée","RoastedTurkeyandVegetableEntree");
-
-
-
-
-
+            lookupMap.put("CinemaexclusivelyforCinemause","CinemaExclusivelyForCinemause");
+            lookupMap.put("Master", "MasterFile");
+            lookupMap.put("LocalizationAdaptation", "LocalizationAdaptationFile");
+            lookupMap.put("Purée","Puree");
 
             // Process rows and update transformationStatusMap
             for (int i = 1; i <= sourceSheet.getLastRowNum(); i++) {

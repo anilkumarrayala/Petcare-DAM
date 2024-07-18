@@ -15,7 +15,7 @@ public class ExcelDrivenMain {
 
     public static void main(String[] args) throws IOException,Exception {
 
-        String filePath = "C:/Project/MARS/Pet Nutrition Migration Extracts/Pedigree/Pedigree_Set_10k_to_20k.xlsx";
+        String filePath = "C:/Project/MARS/Pet Nutrition Migration Extracts/PN/PN_Non_Pedigree_Failed_ReRun_180724.xlsx";
 
 
         String extension = "Transformed-" +ExcelTransformationUtility.getCurrentTimestamp()+".xlsx";
@@ -221,6 +221,11 @@ public class ExcelDrivenMain {
         String ColumnName_GlobalRegionalLocal = "Global/Regional/Local";
         ExcelTransformationUtility.parseAndLookup(filePath, sourceSheetName, ColumnName_GlobalRegionalLocal, sourceColumnName_AssetID, destinationSheetName, ColumnName_GlobalRegionalLocal, LookUpConstants2.getGlobalRegionalLocal());
 
+        //Lookup for MasterOrLocalised
+        String ColumnName_MasterOrLocalised = "Master or Localization/Adaptation?";
+        String destinationColumnName_MasterOrLocalizationAdaptation= "MasterOrLocalizationAdaptation";
+        ExcelTransformationUtility.parseAndLookup(filePath, sourceSheetName, ColumnName_MasterOrLocalised, sourceColumnName_AssetID, destinationSheetName, destinationColumnName_MasterOrLocalizationAdaptation, LookUpConstants2.getMasterOrLocalised());
+
 //        //Lookup for Rights Management Type
 //        String sourceColumnName_RightsManagementType = "Rights Management Type 1";
 //        String destinationColumnName_RightsManagementType = "RightsManagementType";
@@ -232,10 +237,10 @@ public class ExcelDrivenMain {
                 "contains", "is-child-of", "derivative", "is-place-graphic-of", "belong-to", "has-video-clips",
                 "copy-contains", "is-parent-of", "extracted-xml-child", "placed-graphics"};
         String destinationColumnName = "AssociatedAssets";
-        String mainSourceColumn = "uniqueId";
+        String mainSourceColumn = "ImportPath";
         ExcelTransformationUtility.pickAndConcatenateAssociatedAssets(filePath, sourceSheetName_Transformed, destinationSheetName, sourceColumnNames, destinationColumnName, mainSourceColumn);
 
-        String sourceColumnName_File= "uniqueId";
+        String sourceColumnName_File= "ImportPath";
         ExcelTransformationUtility.findAndPrintDuplicates(filePath,sourceSheetName_Transformed, sourceColumnName_File, sourceColumnName_OriginalAssetID );
 
         //Rearranging column order
